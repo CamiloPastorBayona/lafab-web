@@ -3,8 +3,6 @@ import Ico from "@/components/LandingIcons";
 
 const WHATSAPP =
   "https://api.whatsapp.com/send/?phone=573054602395&text=Hola%20LaFab";
-const CATALOGO =
-  "https://api.whatsapp.com/send/?phone=573054602395&text=Hola%20LaFab,%20quiero%20solicitar%20el%20cat%C3%A1logo";
 
 const SEALS = [
   { t: "Garantía", s: "por fabricación", icon: "shieldCheck" },
@@ -83,12 +81,12 @@ export default function Footer() {
           {/* Explora */}
           <div className={col}>
             <h4 className={head}>Explora</h4>
-            <Link href="/shop" className={`block ${link}`}>Productos</Link>
+            <Link href="/sofas" className={`block ${link}`}>Sofás</Link>
+            <Link href="/comedores" className={`block ${link}`}>Comedores</Link>
+            <Link href="/camas" className={`block ${link}`}>Camas</Link>
+            <Link href="/poltronas" className={`block ${link}`}>Poltronas</Link>
             <Link href="/proyectos" className={`block ${link}`}>Proyectos</Link>
             <Link href="/nosotros" className={`block ${link}`}>Nosotros</Link>
-            <a href={CATALOGO} target="_blank" rel="noopener noreferrer" className={`block ${link}`}>
-              Solicitar catálogo
-            </a>
           </div>
 
           {/* Servicios */}

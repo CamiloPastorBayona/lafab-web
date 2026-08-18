@@ -26,20 +26,28 @@ export async function generateMetadata({
   const product = await getProductBySlug(params.slug);
   if (!product) return { title: "Producto no encontrado" };
 
-  const desc =
-    stripHtml(product.short_description) ||
-    stripHtml(product.description) ||
-    `${product.name} fabricado a la medida por LaFab en Medellín.`;
+  // Mismo título/meta que dejamos optimizados en Rank Math (coherencia total).
+  const title = `${product.name} a la medida en Medellín`;
+  const description = `${product.name}, fabricado a la medida por LaFab en Medellín. Diseño propio, materiales de calidad y envío a todo el país. ¡Cotiza el tuyo!`;
 
   return {
-    title: product.name,
-    description: desc.slice(0, 160),
+    title,
+    description,
+    keywords: [
+      product.name,
+      `${product.name} Medellín`,
+      "muebles a la medida Medellín",
+      product.categories?.[0]?.name
+        ? `${product.categories[0].name} a la medida`
+        : "muebles a la medida",
+    ],
     alternates: { canonical: `/producto/${product.slug}` },
     openGraph: {
-      title: product.name,
-      description: desc.slice(0, 160),
+      title: `${title} | LaFab`,
+      description,
       images: product.images?.[0]?.src ? [product.images[0].src] : [],
       type: "website",
+      locale: "es_CO",
     },
   };
 }
@@ -62,8 +70,36 @@ export default async function ProductPage({
       ).slice(0, 4)
     : [];
 
+  // Datos estructurados (Product schema) para resultados enriquecidos en Google.
+  const jsonLd = {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    name: product.name,
+    image: product.images?.map((i) => i.src) ?? [],
+    description: (
+      stripHtml(product.short_description) ||
+      stripHtml(product.description) ||
+      `${product.name} fabricado a la medida por LaFab en Medellín.`
+    ).slice(0, 320),
+    brand: { "@type": "Brand", name: "LaFab" },
+    offers: {
+      "@type": "Offer",
+      priceCurrency: p.currency_code || "COP",
+      price: parseInt(product.on_sale ? p.sale_price : p.price, 10),
+      availability: product.is_in_stock
+        ? "https://schema.org/InStock"
+        : "https://schema.org/OutOfStock",
+      itemCondition: "https://schema.org/NewCondition",
+      url: `https://lafab.com.co/producto/${product.slug}`,
+    },
+  };
+
   return (
     <div className="mx-auto max-w-site px-4 py-10 md:px-6">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Breadcrumb */}
       <nav className="mb-6 text-sm text-ink/50">
         <Link href="/" className="hover:text-ink">

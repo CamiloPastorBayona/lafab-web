@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import PageHeader from "@/components/PageHeader";
 import { WHATSAPP } from "@/lib/content";
 import WpImage from "@/components/WpImage";
+import Reveal from "@/components/Reveal";
 
 export const metadata: Metadata = {
   title: "Nosotros",
@@ -65,15 +66,17 @@ export default function NosotrosPage() {
       />
 
       <section className="mx-auto grid max-w-site items-center gap-10 px-4 py-16 md:grid-cols-2 md:px-6">
-        <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
-          <WpImage
-            src="https://lafab.com.co/wp-content/uploads/2026/07/3-1000x1242.webp"
-            alt="Muebles fabricados por LaFab"
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-        </div>
-        <div>
-          <h2 className="text-3xl font-semibold text-ink">
+        <Reveal>
+          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
+            <WpImage
+              src="https://lafab.com.co/wp-content/uploads/2026/07/3-1000x1242.webp"
+              alt="Muebles fabricados por LaFab"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          </div>
+        </Reveal>
+        <Reveal delay={120}>
+          <h2 className="text-3xl font-light text-ink">
             Del taller a tu hogar
           </h2>
           <p className="mt-4 text-ink/70">
@@ -87,17 +90,19 @@ export default function NosotrosPage() {
             principio a fin y ofrecerte precios justos por muebles hechos a la
             medida.
           </p>
-        </div>
+        </Reveal>
       </section>
 
       <section className="bg-cream">
         <div className="mx-auto max-w-site px-4 py-16 md:px-6">
           <div className="grid gap-6 md:grid-cols-4">
-            {VALUES.map((v) => (
-              <div key={v.title} className="rounded-2xl bg-white p-6">
-                <h3 className="text-lg font-semibold text-ink">{v.title}</h3>
-                <p className="mt-2 text-sm text-ink/70">{v.text}</p>
-              </div>
+            {VALUES.map((v, i) => (
+              <Reveal key={v.title} delay={(i % 4) * 90}>
+                <div className="h-full rounded-2xl bg-white p-6">
+                  <h3 className="text-lg font-light text-ink">{v.title}</h3>
+                  <p className="mt-2 text-sm text-ink/70">{v.text}</p>
+                </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -105,21 +110,23 @@ export default function NosotrosPage() {
 
       {/* Proceso */}
       <section className="mx-auto max-w-site px-4 py-16 md:px-6 md:py-20">
-        <p className="text-sm font-medium uppercase tracking-wide text-gold-dark">
-          Nuestro proceso
-        </p>
-        <h2 className="mt-1 text-3xl font-semibold text-ink md:text-4xl">
-          Del corte al acabado final
-        </h2>
+        <Reveal>
+          <p className="text-sm font-medium uppercase tracking-wide text-gold-dark">
+            Nuestro proceso
+          </p>
+          <h2 className="mt-1 text-3xl font-light text-ink md:text-4xl">
+            Del corte al acabado final
+          </h2>
+        </Reveal>
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {PROCESO.map((p, i) => (
-            <div key={p.title} className="rounded-2xl border border-ink/10 p-6">
-              <span className="text-2xl font-bold text-gold">
-                0{i + 1}
-              </span>
-              <h3 className="mt-2 text-lg font-semibold text-ink">{p.title}</h3>
-              <p className="mt-1 text-sm text-ink/60">{p.text}</p>
-            </div>
+            <Reveal key={p.title} delay={(i % 4) * 90}>
+              <div className="h-full rounded-2xl border border-ink/10 p-6">
+                <span className="text-2xl font-light text-gold">0{i + 1}</span>
+                <h3 className="mt-2 text-lg font-light text-ink">{p.title}</h3>
+                <p className="mt-1 text-sm text-ink/60">{p.text}</p>
+              </div>
+            </Reveal>
           ))}
         </div>
         <div className="mt-8 flex flex-wrap gap-3">
@@ -136,17 +143,19 @@ export default function NosotrosPage() {
 
       <section className="bg-ink">
         <div className="mx-auto max-w-site px-4 py-16 text-center md:px-6 md:py-20">
-          <h2 className="text-3xl font-semibold text-white">
-            Diseñemos tu mueble juntos
-          </h2>
-          <a
-            href={WHATSAPP}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-6 inline-block rounded-full bg-gold px-8 py-3 font-semibold text-ink transition-transform hover:scale-105"
-          >
-            Escríbenos por WhatsApp
-          </a>
+          <Reveal>
+            <h2 className="text-3xl font-light text-white">
+              Diseñemos tu mueble juntos
+            </h2>
+            <a
+              href={WHATSAPP}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 inline-block rounded-full bg-gold px-8 py-3 font-semibold text-ink transition-transform hover:scale-105"
+            >
+              Escríbenos por WhatsApp
+            </a>
+          </Reveal>
         </div>
       </section>
     </>

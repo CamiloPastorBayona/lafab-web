@@ -14,6 +14,10 @@ const poppins = Poppins({
   display: "swap",
 });
 
+// Mientras el sitio esté en *.vercel.app (sin dominio) lo dejamos NO indexable
+// para evitar contenido duplicado. En el cutover se pone NEXT_PUBLIC_ALLOW_INDEX=true.
+const INDEXABLE = process.env.NEXT_PUBLIC_ALLOW_INDEX === "true";
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://lafab.com.co"),
   title: {
@@ -22,11 +26,41 @@ export const metadata: Metadata = {
   },
   description:
     "Fabricamos muebles a la medida en Medellín: sofás, comedores, camas y closets. Diseño propio, materiales de calidad y envío a todo el país.",
+  icons: {
+    icon: "https://lafab.com.co/wp-content/uploads/2024/11/cropped-favicon-lafab-270x270.png",
+  },
+  robots: INDEXABLE
+    ? { index: true, follow: true }
+    : { index: false, follow: false },
   openGraph: {
     type: "website",
     locale: "es_CO",
     siteName: "LaFab",
   },
+};
+
+const BUSINESS_JSONLD = {
+  "@context": "https://schema.org",
+  "@type": "FurnitureStore",
+  name: "LaFab · La Fábrica de Muebles",
+  image:
+    "https://lafab.com.co/wp-content/uploads/2022/12/LaFab-negro.png",
+  url: "https://lafab.com.co",
+  telephone: "+573054602395",
+  email: "info@lafab.com.co",
+  priceRange: "$$",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "Cl. 64 #44-74, Barrio La Esmeralda",
+    addressLocality: "Itagüí",
+    addressRegion: "Antioquia",
+    addressCountry: "CO",
+  },
+  areaServed: "Medellín y Colombia",
+  sameAs: [
+    "https://www.instagram.com/lafabricamed/",
+    "https://www.facebook.com/LaFabricaMed",
+  ],
 };
 
 export default function RootLayout({
@@ -46,6 +80,10 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://lafab.com.co" />
       </head>
       <body className="font-sans">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(BUSINESS_JSONLD) }}
+        />
         <Analytics />
         <CartProvider>
           <Header />

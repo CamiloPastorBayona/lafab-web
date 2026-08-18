@@ -61,7 +61,7 @@ export const SPACES = [
     catId: 102,
     description:
       "Sofás lineales, angulares y poltronas diseñados para tu sala.",
-    href: "/shop",
+    href: "/sofas",
     image: "https://lafab.com.co/wp-content/uploads/2026/07/3-825x1024.webp",
   },
   {
@@ -69,7 +69,7 @@ export const SPACES = [
     slug: "dormitorio",
     catId: 95,
     description: "Camas tapizadas y muebles que hacen de tu alcoba un refugio.",
-    href: "/shop",
+    href: "/camas",
     image: "https://lafab.com.co/wp-content/uploads/2025/05/VASSUE-1024x768.jpg",
   },
   {
@@ -78,7 +78,7 @@ export const SPACES = [
     catId: 154,
     description:
       "Mesas de comedor en maderas cálidas para reunir a los tuyos.",
-    href: "/shop",
+    href: "/comedores",
     image: "https://lafab.com.co/wp-content/uploads/2025/01/WITTEN-1-1024x578.jpg",
   },
 ];
