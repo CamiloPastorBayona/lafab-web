@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 import { getProducts } from "@/lib/woocommerce";
+import { ARTICLES } from "@/lib/blog";
 
 const SITE = "https://lafab.com.co";
 
@@ -18,11 +19,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/proyectos",
     "/nosotros",
     "/showrooms",
+    "/blog",
     "/preguntas-frecuentes",
     "/contacto",
     "/terminos-y-condiciones",
     "/politica-de-datos",
   ];
+
+  const blogEntries: MetadataRoute.Sitemap = ARTICLES.map((a) => ({
+    url: `${SITE}/blog/${a.slug}`,
+    lastModified: new Date(a.date),
+    changeFrequency: "monthly",
+    priority: 0.6,
+  }));
 
   const staticEntries: MetadataRoute.Sitemap = staticPaths.map((path) => ({
     url: `${SITE}${path}`,
@@ -45,5 +54,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  return [...staticEntries, ...productEntries];
+  return [...staticEntries, ...blogEntries, ...productEntries];
 }

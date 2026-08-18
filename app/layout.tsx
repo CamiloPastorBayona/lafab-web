@@ -78,6 +78,10 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link rel="dns-prefetch" href="https://lafab.com.co" />
+        {/* Adelanta DNS de scripts de terceros (analítica) sin bloquear el render */}
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.clarity.ms" />
+        <link rel="dns-prefetch" href="https://connect.facebook.net" />
       </head>
       <body className="font-sans">
         <script
