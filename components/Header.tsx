@@ -34,6 +34,7 @@ const WHATSAPP =
 type NavItem = { label: string; href: string; children?: { label: string; href: string }[] };
 
 const NAV: NavItem[] = [
+  { label: "Inicio", href: "/" },
   {
     label: "Tienda",
     href: "/shop",
