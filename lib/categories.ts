@@ -13,6 +13,7 @@ export type CategoryConfig = {
   image: string;
   intro: string[];
   faq: { q: string; a: string }[];
+  subcategories?: { label: string; href: string }[];
 };
 
 export const CATEGORIES: Record<string, CategoryConfig> = {
@@ -41,6 +42,70 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       { q: "¿Qué telas manejan?", a: "Telas seleccionadas por su resistencia y fácil mantenimiento, con opciones antifluido y pet friendly, ideales para hogares con mascotas." },
       { q: "¿Cuánto tarda la fabricación?", a: "Depende del modelo y las especificaciones; te confirmamos el plazo exacto al momento de la cotización y te mantenemos informado." },
       { q: "¿Hacen envíos?", a: "Sí: envío incluido en Medellín y área metropolitana, y despacho a ciudades capitales del país." },
+    ],
+    subcategories: [
+      { label: "Sofás lineales", href: "/sofas-lineales" },
+      { label: "Sofás en L (angulares)", href: "/sofas-en-l" },
+    ],
+  },
+
+  "sofas-lineales": {
+    slug: "sofas-lineales",
+    catId: 105, // Sofás Lineales
+    eyebrow: "Sofás lineales",
+    h1: "Sofás lineales a la medida en Medellín",
+    metaTitle: "Sofás lineales a la medida en Medellín",
+    metaDescription:
+      "Sofás lineales a la medida en Medellín: el clásico que funciona en cualquier sala. Telas antifluido y pet friendly, fabricación propia. ¡Cotiza el tuyo!",
+    keywords: [
+      "sofás lineales Medellín",
+      "sofá lineal a la medida",
+      "sofá de 3 puestos Medellín",
+    ],
+    image: `${U}/2026/07/3.webp`,
+    intro: [
+      "Fabricamos sofás lineales a la medida en Medellín, ese clásico que le sienta bien a cualquier sala. Un solo cuerpo, líneas limpias y toda la comodidad, con las dimensiones exactas de tu espacio.",
+      "Eliges el largo, la tela y el color. Trabajamos telas antifluido y pet friendly, espumas de buena densidad y estructuras en madera para que el sofá dure. Fabricación propia en nuestro taller de Itagüí y envío incluido en Medellín.",
+    ],
+    faq: [
+      { q: "¿De cuántos puestos hacen los sofás lineales?", a: "Los fabricamos a la medida: desde dos puestos hasta el largo que necesites para tu sala." },
+      { q: "¿Qué telas puedo elegir?", a: "Telas antifluido y pet friendly, fáciles de limpiar, en varios colores." },
+      { q: "¿Cuánto tarda la fabricación?", a: "Depende del modelo; te confirmamos el plazo exacto al cotizar." },
+      { q: "¿Incluye envío?", a: "Envío incluido en Medellín y área metropolitana; también despachamos a otras ciudades." },
+    ],
+    subcategories: [
+      { label: "Ver todos los sofás", href: "/sofas" },
+      { label: "Sofás en L (angulares)", href: "/sofas-en-l" },
+    ],
+  },
+
+  "sofas-en-l": {
+    slug: "sofas-en-l",
+    catId: 118, // Sofás Angulares
+    eyebrow: "Sofás en L",
+    h1: "Sofás en L (angulares) a la medida en Medellín",
+    metaTitle: "Sofás en L y angulares a la medida en Medellín",
+    metaDescription:
+      "Sofás en L y angulares a la medida en Medellín: aprovechan la esquina y suman puestos. Telas antifluido y pet friendly, fabricación propia. ¡Cotízalo!",
+    keywords: [
+      "sofás en L Medellín",
+      "sofás angulares Medellín",
+      "sofá en L a la medida",
+    ],
+    image: `${U}/2026/07/6.webp`,
+    intro: [
+      "Fabricamos sofás en L (angulares) a la medida en Medellín, ideales para aprovechar la esquina y sumar puestos sin ocupar de más. Perfectos para familias y para las tardes de película en casa.",
+      "Los adaptamos al lado que necesites (izquierdo o derecho) y a las dimensiones de tu sala. Telas antifluido y pet friendly, espumas de calidad y estructura en madera. Fabricación propia en Itagüí y envío incluido en Medellín.",
+    ],
+    faq: [
+      { q: "¿El sofá en L viene con la esquina a la izquierda o a la derecha?", a: "Como quieras: lo fabricamos a la medida con la esquina del lado que mejor se acomode a tu sala." },
+      { q: "¿Cuántos puestos tiene un sofá en L?", a: "Depende de la medida que elijas; al ser a la medida, ajustamos el largo de cada lado." },
+      { q: "¿Qué telas manejan?", a: "Telas antifluido y pet friendly, resistentes y fáciles de limpiar, en varios tonos." },
+      { q: "¿Hacen envíos?", a: "Envío incluido en Medellín y área metropolitana; despacho a ciudades capitales del país." },
+    ],
+    subcategories: [
+      { label: "Ver todos los sofás", href: "/sofas" },
+      { label: "Sofás lineales", href: "/sofas-lineales" },
     ],
   },
 

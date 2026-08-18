@@ -57,6 +57,23 @@ export default function CategoryPage({
           </div>
         </Reveal>
 
+        {cfg.subcategories && cfg.subcategories.length > 0 && (
+          <Reveal>
+            <div className="mt-6 flex flex-wrap items-center gap-2">
+              <span className="text-sm text-ink/50">Explora también:</span>
+              {cfg.subcategories.map((sc) => (
+                <Link
+                  key={sc.href}
+                  href={sc.href}
+                  className="rounded-full border border-ink/15 px-4 py-2 text-sm font-medium text-ink/70 transition-colors hover:border-ink hover:text-ink"
+                >
+                  {sc.label}
+                </Link>
+              ))}
+            </div>
+          </Reveal>
+        )}
+
         {/* Beneficios */}
         <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4">
           {BENEFITS.map((b, i) => (

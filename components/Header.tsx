@@ -40,6 +40,8 @@ const NAV: NavItem[] = [
     children: [
       { label: "Todos los productos", href: "/shop" },
       { label: "Sofás", href: "/sofas" },
+      { label: "Sofás lineales", href: "/sofas-lineales" },
+      { label: "Sofás en L", href: "/sofas-en-l" },
       { label: "Comedores", href: "/comedores" },
       { label: "Camas", href: "/camas" },
       { label: "Poltronas", href: "/poltronas" },

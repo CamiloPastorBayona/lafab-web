@@ -11,6 +11,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "",
     "/shop",
     "/sofas",
+    "/sofas-lineales",
+    "/sofas-en-l",
     "/comedores",
     "/camas",
     "/poltronas",
