@@ -1,9 +1,16 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getProductBySlug, getProducts, money } from "@/lib/woocommerce";
+import {
+  getProductBySlug,
+  getProducts,
+  getVariations,
+  money,
+  type WCProductAttribute,
+} from "@/lib/woocommerce";
 import ProductGallery from "@/components/ProductGallery";
 import AddToCart from "@/components/AddToCart";
+import ProductConfigurator from "@/components/ProductConfigurator";
 import ProductCard from "@/components/ProductCard";
 import Reveal from "@/components/Reveal";
 import Ico from "@/components/LandingIcons";
@@ -76,6 +83,20 @@ export default async function ProductPage({
       ).slice(0, 4)
     : [];
 
+  // Producto variable: resolvemos las variaciones (con precio) y armamos los
+  // atributos que se pueden seleccionar (Tela, Puestos, etc.).
+  const isVariable = product.type === "variable";
+  const variations = isVariable ? await getVariations(product) : [];
+  const variableAttrs = isVariable
+    ? (product.attributes as WCProductAttribute[])
+        .filter((a) => a.has_variations && a.terms?.length)
+        .map((a) => ({
+          name: a.name,
+          terms: a.terms.map((t) => ({ name: t.name, slug: t.slug })),
+        }))
+    : [];
+  const showConfigurator = isVariable && variations.length > 0 && variableAttrs.length > 0;
+
   // Datos estructurados (Product schema) para resultados enriquecidos en Google.
   const jsonLd = {
     "@context": "https://schema.org/",
@@ -142,28 +163,32 @@ export default async function ProductPage({
 
           <ReviewsBadge className="mt-3" />
 
-          <div className="mt-4 flex flex-wrap items-baseline gap-3">
-            {product.on_sale ? (
-              <>
-                <span className="text-3xl font-semibold text-ink">
-                  {money(p.sale_price, p)}
-                </span>
-                <span className="text-lg text-ink/40 line-through">
-                  {money(p.regular_price, p)}
-                </span>
-                <span className="rounded-full bg-sale/10 px-3 py-1 text-xs font-semibold text-sale">
-                  Oferta
-                </span>
-              </>
-            ) : (
-              <span className="text-3xl font-semibold text-ink">
-                {money(p.price, p)}
-              </span>
-            )}
-          </div>
-          <p className="mt-1 text-sm text-ink/50">
-            IVA incluido · Envío incluido en Medellín
-          </p>
+          {!showConfigurator && (
+            <>
+              <div className="mt-4 flex flex-wrap items-baseline gap-3">
+                {product.on_sale ? (
+                  <>
+                    <span className="text-3xl font-semibold text-ink">
+                      {money(p.sale_price, p)}
+                    </span>
+                    <span className="text-lg text-ink/40 line-through">
+                      {money(p.regular_price, p)}
+                    </span>
+                    <span className="rounded-full bg-sale/10 px-3 py-1 text-xs font-semibold text-sale">
+                      Oferta
+                    </span>
+                  </>
+                ) : (
+                  <span className="text-3xl font-semibold text-ink">
+                    {money(p.price, p)}
+                  </span>
+                )}
+              </div>
+              <p className="mt-1 text-sm text-ink/50">
+                IVA incluido · Envío incluido en Medellín
+              </p>
+            </>
+          )}
 
           {product.slug === "sofa-san-diego" && (
             <Link
@@ -183,20 +208,37 @@ export default async function ProductPage({
           )}
 
           <div className="mt-8">
-            <AddToCart
-              product={{
-                id: product.id,
-                name: product.name,
-                slug: product.slug,
-                image:
-                  product.images?.[0]?.thumbnail ||
-                  product.images?.[0]?.src ||
-                  "",
-                price: parseInt(product.on_sale ? p.sale_price : p.price, 10),
-              }}
-              purchasable={product.is_purchasable}
-              inStock={product.is_in_stock}
-            />
+            {showConfigurator ? (
+              <ProductConfigurator
+                product={{
+                  id: product.id,
+                  name: product.name,
+                  slug: product.slug,
+                  image:
+                    product.images?.[0]?.thumbnail ||
+                    product.images?.[0]?.src ||
+                    "",
+                  attributes: variableAttrs,
+                  prices: p,
+                }}
+                variations={variations}
+              />
+            ) : (
+              <AddToCart
+                product={{
+                  id: product.id,
+                  name: product.name,
+                  slug: product.slug,
+                  image:
+                    product.images?.[0]?.thumbnail ||
+                    product.images?.[0]?.src ||
+                    "",
+                  price: parseInt(product.on_sale ? p.sale_price : p.price, 10),
+                }}
+                purchasable={product.is_purchasable}
+                inStock={product.is_in_stock}
+              />
+            )}
           </div>
 
           {/* Asesoría */}

@@ -68,6 +68,31 @@ export interface WCProduct {
   formatted_dimensions: string;
 }
 
+// Atributo del producto (forma real de la Store API para productos variables).
+export interface WCProductAttribute {
+  id: number;
+  name: string;
+  taxonomy: string | null;
+  has_variations: boolean;
+  terms: { id: number; name: string; slug: string }[];
+}
+
+// Referencia de variación dentro del producto padre.
+export interface WCVariationRef {
+  id: number;
+  attributes: { name: string; value: string }[];
+}
+
+// Variación resuelta (con precio) lista para el selector.
+export interface WCVariation {
+  id: number;
+  prices: WCPrices;
+  on_sale: boolean;
+  is_in_stock: boolean;
+  image?: string;
+  attributes: { name: string; value: string }[];
+}
+
 // ---- Price formatting ----
 // COP has currency_minor_unit = 0 and prices arrive as integer-strings ("3400000").
 export function money(amount: string | number, prices: WCPrices): string {
@@ -153,6 +178,32 @@ export async function getProductById(id: number): Promise<WCProduct> {
 
 export async function getCategories(): Promise<WCCategory[]> {
   return get<WCCategory[]>(`/products/categories?per_page=100`);
+}
+
+// Resuelve las variaciones (con precio) de un producto variable. El padre trae
+// solo id + atributos por variación; el precio se obtiene consultando cada
+// variación como producto. Se cachea en el servidor (ISR).
+export async function getVariations(product: WCProduct): Promise<WCVariation[]> {
+  if (product.type !== "variable") return [];
+  const refs = (product.variations as WCVariationRef[]) ?? [];
+  const resolved = await Promise.all(
+    refs.map(async (ref) => {
+      try {
+        const vp = await get<WCProduct>(`/products/${ref.id}`);
+        return {
+          id: ref.id,
+          prices: vp.prices,
+          on_sale: vp.on_sale,
+          is_in_stock: vp.is_in_stock,
+          image: vp.images?.[0]?.src,
+          attributes: ref.attributes,
+        } as WCVariation;
+      } catch {
+        return null;
+      }
+    })
+  );
+  return resolved.filter((v): v is WCVariation => v !== null);
 }
 
 // Hybrid checkout: hand off to WooCommerce native add-to-cart, which lands the
