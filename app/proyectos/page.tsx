@@ -1,9 +1,9 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import PageHeader from "@/components/PageHeader";
 import { getProducts } from "@/lib/woocommerce";
 import { WHATSAPP } from "@/lib/content";
+import WpImage from "@/components/WpImage";
 
 export const revalidate = 300;
 
@@ -34,11 +34,11 @@ export default async function ProyectosPage() {
               href={`/producto/${p.slug}`}
               className="group relative block break-inside-avoid overflow-hidden rounded-2xl"
             >
-              <Image
-                src={p.images[0].src}
+              <WpImage
+                src={p.images[0].thumbnail || p.images[0].src}
+                srcSet={p.images[0].thumbnail_srcset}
+                sizes="(max-width: 768px) 50vw, 33vw"
                 alt={p.images[0].alt || p.name}
-                width={600}
-                height={750}
                 className="w-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute inset-0 flex items-end bg-gradient-to-t from-ink/70 to-transparent opacity-0 transition-opacity group-hover:opacity-100">

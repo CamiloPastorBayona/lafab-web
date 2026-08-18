@@ -1,9 +1,10 @@
 import Link from "next/link";
-import Image from "next/image";
 import { getProducts } from "@/lib/woocommerce";
 import { SPACES, WHATSAPP } from "@/lib/content";
 import ProductCard from "@/components/ProductCard";
 import Reviews from "@/components/Reviews";
+import Hero from "@/components/Hero";
+import WpImage from "@/components/WpImage";
 
 export const revalidate = 300;
 
@@ -12,44 +13,7 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* Hero */}
-      <section className="relative -mt-[64px] flex min-h-[92vh] items-end overflow-hidden">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="https://lafab.com.co/wp-content/uploads/2026/07/3.webp"
-          alt="Muebles a la medida LaFab"
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/30 to-ink/40" />
-        <div className="relative z-10 mx-auto w-full max-w-site px-4 pb-20 md:px-6">
-          <p className="mb-3 text-sm font-medium uppercase tracking-[0.2em] text-gold-light">
-            La Fábrica de Muebles · Medellín
-          </p>
-          <h1 className="max-w-2xl text-4xl font-semibold leading-tight text-white md:text-6xl">
-            Muebles a la medida, hechos para tu espacio
-          </h1>
-          <p className="mt-4 max-w-xl text-lg text-white/80">
-            Diseñamos y fabricamos sofás, comedores, camas y closets con
-            materiales de calidad y acabados impecables.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-4">
-            <Link
-              href="/shop"
-              className="rounded-full bg-gold px-7 py-3 font-semibold text-ink transition-transform hover:scale-105"
-            >
-              Ver la tienda
-            </Link>
-            <a
-              href={WHATSAPP}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full border border-white/40 px-7 py-3 font-semibold text-white transition-colors hover:bg-white/10"
-            >
-              Cotizar por WhatsApp
-            </a>
-          </div>
-        </div>
-      </section>
+      <Hero />
 
       {/* Espacios */}
       <section className="mx-auto max-w-site px-4 py-16 md:px-6 md:py-24">
@@ -68,12 +32,10 @@ export default async function HomePage() {
               href={s.href}
               className="group relative flex aspect-[4/3] items-end overflow-hidden rounded-2xl"
             >
-              <Image
+              <WpImage
                 src={s.image}
                 alt={s.name}
-                fill
-                sizes="(max-width: 768px) 100vw, 33vw"
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-ink/80 to-transparent" />
               <div className="relative z-10 p-6 text-white">

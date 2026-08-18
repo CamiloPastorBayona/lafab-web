@@ -60,21 +60,21 @@ export const SPACES = [
     slug: "asientos",
     description: "Sofás lineales, angulares y poltronas a la medida.",
     href: "/shop",
-    image: "https://lafab.com.co/wp-content/uploads/2026/07/3.webp",
+    image: "https://lafab.com.co/wp-content/uploads/2026/07/3-825x1024.webp",
   },
   {
     name: "Dormitorio",
     slug: "dormitorio",
     description: "Camas tapizadas y muebles para tu alcoba.",
     href: "/shop",
-    image: "https://lafab.com.co/wp-content/uploads/2025/05/VASSUE.jpg",
+    image: "https://lafab.com.co/wp-content/uploads/2025/05/VASSUE-1024x768.jpg",
   },
   {
     name: "Comedor",
     slug: "comedor",
     description: "Mesas de comedor en maderas cálidas y atemporales.",
     href: "/shop",
-    image: "https://lafab.com.co/wp-content/uploads/2025/01/WITTEN-1.jpg",
+    image: "https://lafab.com.co/wp-content/uploads/2025/01/WITTEN-1-1024x578.jpg",
   },
 ];
 

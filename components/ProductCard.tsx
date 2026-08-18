@@ -1,6 +1,6 @@
 import Link from "next/link";
-import Image from "next/image";
 import { WCProduct, money } from "@/lib/woocommerce";
+import WpImage from "@/components/WpImage";
 
 export default function ProductCard({ product }: { product: WCProduct }) {
   const img = product.images?.[0];
@@ -13,12 +13,12 @@ export default function ProductCard({ product }: { product: WCProduct }) {
     >
       <div className="relative aspect-[4/5] overflow-hidden bg-white">
         {img ? (
-          <Image
-            src={img.src}
-            alt={img.alt || product.name}
-            fill
+          <WpImage
+            src={img.thumbnail || img.src}
+            srcSet={img.thumbnail_srcset}
             sizes="(max-width: 768px) 50vw, 25vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            alt={img.alt || product.name}
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
           <div className="flex h-full items-center justify-center text-gold-dark/40">

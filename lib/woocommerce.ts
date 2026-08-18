@@ -28,6 +28,8 @@ export interface WCImage {
   thumbnail: string;
   srcset: string;
   sizes: string;
+  thumbnail_srcset: string;
+  thumbnail_sizes: string;
   name: string;
   alt: string;
 }

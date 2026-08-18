@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import PageHeader from "@/components/PageHeader";
 import { SPACES, WHATSAPP } from "@/lib/content";
+import WpImage from "@/components/WpImage";
 
 export const metadata: Metadata = {
   title: "Espacios",
@@ -27,12 +27,10 @@ export default function EspaciosPage() {
               href={s.href}
               className="group relative flex aspect-[4/5] items-end overflow-hidden rounded-2xl"
             >
-              <Image
+              <WpImage
                 src={s.image}
                 alt={s.name}
-                fill
-                sizes="(max-width: 768px) 100vw, 33vw"
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-ink/80 to-transparent" />
               <div className="relative z-10 p-6 text-white">

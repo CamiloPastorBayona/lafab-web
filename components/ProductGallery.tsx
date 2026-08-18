@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { WCImage } from "@/lib/woocommerce";
 
 export default function ProductGallery({
@@ -18,13 +17,15 @@ export default function ProductGallery({
     <div>
       <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-cream">
         {main ? (
-          <Image
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
             src={main.src}
-            alt={main.alt || name}
-            fill
-            priority
+            srcSet={main.srcset || undefined}
             sizes="(max-width: 768px) 100vw, 50vw"
-            className="object-cover"
+            alt={main.alt || name}
+            className="absolute inset-0 h-full w-full object-cover"
+            decoding="async"
+            fetchPriority="high"
           />
         ) : (
           <div className="flex h-full items-center justify-center text-ink/30">
@@ -43,12 +44,13 @@ export default function ProductGallery({
                 i === active ? "ring-gold" : "ring-transparent hover:ring-gold/40"
               }`}
             >
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src={img.thumbnail || img.src}
                 alt={img.alt || `${name} ${i + 1}`}
-                fill
-                sizes="80px"
-                className="object-cover"
+                className="absolute inset-0 h-full w-full object-cover"
+                loading="lazy"
+                decoding="async"
               />
             </button>
           ))}

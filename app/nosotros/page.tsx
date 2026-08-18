@@ -1,7 +1,7 @@
 import { Metadata } from "next";
-import Image from "next/image";
 import PageHeader from "@/components/PageHeader";
 import { WHATSAPP } from "@/lib/content";
+import WpImage from "@/components/WpImage";
 
 export const metadata: Metadata = {
   title: "Nosotros",
@@ -39,12 +39,10 @@ export default function NosotrosPage() {
 
       <section className="mx-auto grid max-w-site items-center gap-10 px-4 py-16 md:grid-cols-2 md:px-6">
         <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
-          <Image
-            src="https://lafab.com.co/wp-content/uploads/2026/07/3.webp"
+          <WpImage
+            src="https://lafab.com.co/wp-content/uploads/2026/07/3-1000x1242.webp"
             alt="Muebles fabricados por LaFab"
-            fill
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className="object-cover"
+            className="absolute inset-0 h-full w-full object-cover"
           />
         </div>
         <div>
