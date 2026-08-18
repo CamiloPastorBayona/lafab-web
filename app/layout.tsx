@@ -3,10 +3,13 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { CartProvider } from "@/lib/cart";
+import CartDrawer from "@/components/CartDrawer";
+import Analytics from "@/components/Analytics";
 
 const poppins = Poppins({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-poppins",
   display: "swap",
 });
@@ -33,10 +36,23 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es-CO" className={poppins.variable}>
+      <head>
+        {/* Adelanta la conexión (DNS + TLS) al host de imágenes para que carguen antes */}
+        <link
+          rel="preconnect"
+          href="https://lafab.com.co"
+          crossOrigin="anonymous"
+        />
+        <link rel="dns-prefetch" href="https://lafab.com.co" />
+      </head>
       <body className="font-sans">
-        <Header />
-        <main className="min-h-screen">{children}</main>
-        <Footer />
+        <Analytics />
+        <CartProvider>
+          <Header />
+          <CartDrawer />
+          <main className="min-h-screen">{children}</main>
+          <Footer />
+        </CartProvider>
       </body>
     </html>
   );

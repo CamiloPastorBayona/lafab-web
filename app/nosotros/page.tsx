@@ -28,6 +28,32 @@ const VALUES = [
   },
 ];
 
+const PROCESO = [
+  { title: "Corte", text: "Telas y piezas cortadas a medida, con precisión." },
+  {
+    title: "Costura",
+    text: "Puntada a puntada, costuras reforzadas para el uso diario.",
+  },
+  {
+    title: "Esqueletería",
+    text: "Construimos el esqueleto en madera: la base firme y duradera.",
+  },
+  {
+    title: "Ensamble",
+    text: "Ensamble y refuerzo de la estructura antes del tapizado.",
+  },
+];
+
+const WHY = [
+  "Más de 12 años fabricando",
+  "Taller propio en Itagüí",
+  "Diseños exclusivos",
+  "Garantía estructural",
+  "Materiales certificados",
+  "Envíos nacionales",
+  "Atención postventa",
+];
+
 export default function NosotrosPage() {
   return (
     <>
@@ -35,6 +61,7 @@ export default function NosotrosPage() {
         eyebrow="Nosotros"
         title="Fabricamos los muebles que imaginas"
         subtitle="Somos La Fábrica de Muebles: un taller en Itagüí donde el diseño y la fabricación propia se unen para crear piezas hechas a tu medida."
+        image="https://lafab.com.co/wp-content/uploads/2026/06/taller1-1.webp"
       />
 
       <section className="mx-auto grid max-w-site items-center gap-10 px-4 py-16 md:grid-cols-2 md:px-6">
@@ -73,6 +100,37 @@ export default function NosotrosPage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Proceso */}
+      <section className="mx-auto max-w-site px-4 py-16 md:px-6 md:py-20">
+        <p className="text-sm font-medium uppercase tracking-wide text-gold-dark">
+          Nuestro proceso
+        </p>
+        <h2 className="mt-1 text-3xl font-semibold text-ink md:text-4xl">
+          Del corte al acabado final
+        </h2>
+        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {PROCESO.map((p, i) => (
+            <div key={p.title} className="rounded-2xl border border-ink/10 p-6">
+              <span className="text-2xl font-bold text-gold">
+                0{i + 1}
+              </span>
+              <h3 className="mt-2 text-lg font-semibold text-ink">{p.title}</h3>
+              <p className="mt-1 text-sm text-ink/60">{p.text}</p>
+            </div>
+          ))}
+        </div>
+        <div className="mt-8 flex flex-wrap gap-3">
+          {WHY.map((w) => (
+            <span
+              key={w}
+              className="rounded-full border border-ink/15 px-4 py-2 text-sm text-ink/70"
+            >
+              {w}
+            </span>
+          ))}
         </div>
       </section>
 

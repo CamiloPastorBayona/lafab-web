@@ -1,16 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { STORE_URL } from "@/lib/woocommerce";
-
-const CART_URL = `${STORE_URL}/carrito/`;
+import { useCart } from "@/lib/cart";
+import { isLandingPath } from "@/lib/landings";
 
 function CartIcon() {
+  const { count, openCart } = useCart();
   return (
-    <a
-      href={CART_URL}
-      aria-label="Carrito"
+    <button
+      onClick={openCart}
+      aria-label="Abrir carrito"
       className="relative flex h-10 w-10 items-center justify-center text-white transition-colors hover:text-gold-light"
     >
       <svg
@@ -27,7 +28,12 @@ function CartIcon() {
         <circle cx="20" cy="21" r="1" />
         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
       </svg>
-    </a>
+      {count > 0 && (
+        <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-gold px-1 text-xs font-bold text-ink">
+          {count}
+        </span>
+      )}
+    </button>
   );
 }
 
@@ -45,6 +51,7 @@ const NAV = [
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -52,6 +59,9 @@ export default function Header() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // En las landings de producto usamos un header propio (LandingHeader).
+  if (isLandingPath(pathname)) return null;
 
   return (
     <header
@@ -67,7 +77,7 @@ export default function Header() {
           <img
             src="https://lafab.com.co/wp-content/uploads/2022/12/lafab-blanco.png"
             alt="LaFab"
-            className="h-8 w-auto md:h-9"
+            className="h-6 w-auto md:h-7"
           />
         </Link>
 

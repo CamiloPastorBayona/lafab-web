@@ -64,6 +64,8 @@ export interface WCProduct {
   has_options: boolean;
   is_purchasable: boolean;
   is_in_stock: boolean;
+  dimensions: { length: string; width: string; height: string };
+  formatted_dimensions: string;
 }
 
 // ---- Price formatting ----

@@ -20,6 +20,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["var(--font-poppins)", "system-ui", "sans-serif"],
+        morality: ["morality", "var(--font-poppins)", "sans-serif"],
       },
       maxWidth: {
         site: "1280px",

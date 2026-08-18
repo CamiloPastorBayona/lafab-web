@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Fuente propia de LaFab (misma que usa el sitio actual) */
+@font-face {
+  font-family: "morality";
+  src: url("/fonts/morality.woff2") format("woff2"),
+    url("/fonts/morality.woff") format("woff");
+  font-weight: 300 700;
+  font-display: swap;
+}
+
+.font-morality {
+  font-family: "morality", var(--font-poppins), sans-serif;
+}
+
 :root {
   --ink: #151515;
   --gold: #b0a080;
@@ -20,6 +33,18 @@ body {
   color: var(--ink);
   background: #ffffff;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Coherencia de marca: todos los títulos usan la fuente propia (morality).
+   font-synthesis:none evita negritas sintéticas feas (la fuente es de un solo peso). */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "morality", var(--font-poppins), sans-serif;
+  font-synthesis: none;
 }
 
 /* Fade-in on scroll utility */

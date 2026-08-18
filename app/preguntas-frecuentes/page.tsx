@@ -15,6 +15,7 @@ export default function FaqPage() {
         eyebrow="Ayuda"
         title="Preguntas frecuentes"
         subtitle="Todo lo que necesitas saber antes de encargar tu mueble a la medida."
+        image="https://lafab.com.co/wp-content/uploads/2026/06/sofa3.webp"
       />
 
       <section className="mx-auto max-w-3xl px-4 py-14 md:px-6">

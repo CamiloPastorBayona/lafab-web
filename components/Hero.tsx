@@ -8,6 +8,7 @@ const BASE = "https://lafab.com.co/wp-content/uploads";
 
 type Slide = {
   img: string;
+  srcSet: string;
   eyebrow: string;
   title: React.ReactNode;
   sub: string;
@@ -16,23 +17,28 @@ type Slide = {
   external?: boolean;
 };
 
+// srcset con los tamaños que ya genera WordPress (768/1024/1536): el navegador
+// baja solo el que necesita en vez del original de 1920px.
+const srcset = (dir: string, base: string, sizes: [number, string][]) =>
+  sizes.map(([w, file]) => `${BASE}/${dir}/${file} ${w}w`).join(", ");
+
 const SLIDES: Slide[] = [
   {
-    img: `${BASE}/2024/12/lafab-30.jpg`,
-    eyebrow: "La Fábrica de Muebles",
-    title: (
-      <>
-        Tus espacios,
-        <br />
-        nuestras soluciones.
-      </>
-    ),
-    sub: "Diseño y fabricación propia para amueblar tu hogar a la medida.",
-    ctaLabel: "Descubre",
-    href: "/shop",
+    img: `${BASE}/2026/06/SANDIEGO.webp`,
+    srcSet: `${BASE}/2026/06/SANDIEGO.webp 1600w`,
+    eyebrow: "Nuestro sofá insignia",
+    title: <>Sofá San Diego</>,
+    sub: "Confort superior para disfrutar todos los días. Diséñalo a tu medida y cómpralo en línea.",
+    ctaLabel: "Descubrir el San Diego",
+    href: "/san-diego",
   },
   {
-    img: `${BASE}/2024/11/Banner-2@4x-100.jpg`,
+    img: `${BASE}/2024/11/Banner-2@4x-100-1024x490.jpg`,
+    srcSet: srcset("2024/11", "Banner-2@4x-100", [
+      [768, "Banner-2@4x-100-768x368.jpg"],
+      [1024, "Banner-2@4x-100-1024x490.jpg"],
+      [1536, "Banner-2@4x-100-1536x735.jpg"],
+    ]),
     eyebrow: "Cocinas",
     title: (
       <>
@@ -47,7 +53,12 @@ const SLIDES: Slide[] = [
     external: true,
   },
   {
-    img: `${BASE}/2024/12/closets-2.jpg`,
+    img: `${BASE}/2024/12/closets-2-1-1024x683.jpg`,
+    srcSet: srcset("2024/12", "closets-2-1", [
+      [768, "closets-2-1-768x512.jpg"],
+      [1024, "closets-2-1-1024x683.jpg"],
+      [1536, "closets-2-1-1536x1025.jpg"],
+    ]),
     eyebrow: "Closets",
     title: <>Closets a tu medida.</>,
     sub: "Estilo y funcionalidad en perfecta armonía.",
@@ -56,7 +67,12 @@ const SLIDES: Slide[] = [
     external: true,
   },
   {
-    img: `${BASE}/2024/11/Banner-4@4x-100.jpg`,
+    img: `${BASE}/2024/11/Banner-4@4x-100-1024x490.jpg`,
+    srcSet: srcset("2024/11", "Banner-4@4x-100", [
+      [768, "Banner-4@4x-100-768x367.jpg"],
+      [1024, "Banner-4@4x-100-1024x490.jpg"],
+      [1536, "Banner-4@4x-100-1536x734.jpg"],
+    ]),
     eyebrow: "Sofás",
     title: (
       <>
@@ -70,7 +86,12 @@ const SLIDES: Slide[] = [
     href: "/shop",
   },
   {
-    img: `${BASE}/2024/11/Banner-5_1@4x-100.jpg`,
+    img: `${BASE}/2024/11/Banner-5_1@4x-100-1024x490.jpg`,
+    srcSet: srcset("2024/11", "Banner-5_1@4x-100", [
+      [768, "Banner-5_1@4x-100-768x368.jpg"],
+      [1024, "Banner-5_1@4x-100-1024x490.jpg"],
+      [1536, "Banner-5_1@4x-100-1536x735.jpg"],
+    ]),
     eyebrow: "Alcobas",
     title: <>Alcoba Kenia.</>,
     sub: "Donde la comodidad se une a la relajación.",
@@ -107,8 +128,7 @@ export default function Hero() {
 
   return (
     <section
-      className="relative -mt-[64px] w-full overflow-hidden bg-ink"
-      style={{ height: "clamp(560px, 86vh, 880px)" }}
+      className="relative -mt-[64px] min-h-screen w-full overflow-hidden bg-ink"
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
@@ -122,11 +142,14 @@ export default function Hero() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={s.img}
+            srcSet={s.srcSet}
+            sizes="100vw"
             alt=""
             className="absolute inset-0 h-full w-full object-cover transition-transform duration-[7000ms] ease-out"
             style={{ transform: i === active ? "scale(1)" : "scale(1.06)" }}
             loading={i === 0 ? "eager" : "lazy"}
             decoding="async"
+            fetchPriority={i === 0 ? "high" : undefined}
           />
           <span
             className="absolute inset-0"
@@ -138,19 +161,16 @@ export default function Hero() {
         </div>
       ))}
 
-      {/* Contenido del slide activo */}
-      <div className="relative z-10 mx-auto flex h-full max-w-site items-end px-4 pb-20 md:px-6">
-        <div
-          key={active}
-          className="lf-fade max-w-2xl text-white"
-        >
-          <span className="mb-3 block text-sm font-medium uppercase tracking-[0.2em] text-gold-light">
+      {/* Contenido del slide activo (centrado) */}
+      <div className="relative z-10 mx-auto flex min-h-screen max-w-site items-center justify-center px-4 text-center md:px-6">
+        <div key={active} className="lf-fade mx-auto max-w-2xl text-white">
+          <span className="mb-3 block text-xs font-medium uppercase tracking-[0.28em] text-gold-light md:text-sm">
             {SLIDES[active].eyebrow}
           </span>
-          <h1 className="text-4xl font-semibold leading-tight md:text-6xl">
+          <h1 className="text-3xl font-light leading-tight md:text-5xl">
             {SLIDES[active].title}
           </h1>
-          <p className="mt-4 max-w-xl text-lg text-white/85">
+          <p className="mx-auto mt-4 max-w-lg text-base text-white/85 md:text-lg">
             {SLIDES[active].sub}
           </p>
           <div className="mt-8">

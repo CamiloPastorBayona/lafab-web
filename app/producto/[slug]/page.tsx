@@ -5,6 +5,7 @@ import { getProductBySlug, getProducts, money } from "@/lib/woocommerce";
 import ProductGallery from "@/components/ProductGallery";
 import AddToCart from "@/components/AddToCart";
 import ProductCard from "@/components/ProductCard";
+import Reveal from "@/components/Reveal";
 
 export const revalidate = 300;
 
@@ -106,6 +107,15 @@ export default async function ProductPage({
           </div>
           <p className="mt-1 text-sm text-ink/50">IVA incluido</p>
 
+          {product.slug === "sofa-san-diego" && (
+            <Link
+              href="/san-diego"
+              className="mt-4 inline-flex items-center gap-2 rounded-full bg-gold/20 px-4 py-2 text-sm font-semibold text-gold-dark transition-colors hover:bg-gold/30"
+            >
+              ✨ Ver la experiencia completa del Sofá San Diego →
+            </Link>
+          )}
+
           {product.short_description && (
             <div
               className="prose prose-sm mt-6 max-w-none text-ink/70"
@@ -115,7 +125,16 @@ export default async function ProductPage({
 
           <div className="mt-8">
             <AddToCart
-              productId={product.id}
+              product={{
+                id: product.id,
+                name: product.name,
+                slug: product.slug,
+                image: product.images?.[0]?.thumbnail || product.images?.[0]?.src || "",
+                price: parseInt(
+                  product.on_sale ? p.sale_price : p.price,
+                  10
+                ),
+              }}
               purchasable={product.is_purchasable}
               inStock={product.is_in_stock}
             />
@@ -133,24 +152,30 @@ export default async function ProductPage({
 
       {/* Description */}
       {product.description && (
-        <section className="mt-16 max-w-3xl">
-          <h2 className="mb-4 text-2xl font-semibold text-ink">Descripción</h2>
-          <div
-            className="prose max-w-none text-ink/70"
-            dangerouslySetInnerHTML={{ __html: product.description }}
-          />
-        </section>
+        <Reveal>
+          <section className="mt-16 max-w-3xl">
+            <h2 className="mb-4 text-2xl font-light text-ink">Descripción</h2>
+            <div
+              className="prose max-w-none text-ink/70"
+              dangerouslySetInnerHTML={{ __html: product.description }}
+            />
+          </section>
+        </Reveal>
       )}
 
       {/* Related */}
       {related.length > 0 && (
         <section className="mt-20">
-          <h2 className="mb-8 text-2xl font-semibold text-ink">
-            Completa tu espacio
-          </h2>
+          <Reveal>
+            <h2 className="mb-8 text-2xl font-light text-ink">
+              Completa tu espacio
+            </h2>
+          </Reveal>
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
-            {related.map((r) => (
-              <ProductCard key={r.id} product={r} />
+            {related.map((r, i) => (
+              <Reveal key={r.id} delay={(i % 4) * 90}>
+                <ProductCard product={r} />
+              </Reveal>
             ))}
           </div>
         </section>
