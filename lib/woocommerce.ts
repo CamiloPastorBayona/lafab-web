@@ -92,10 +92,27 @@ export function money(amount: string | number, prices: WCPrices): string {
 // Cache on the server and revalidate periodically (ISR). Adjust as needed.
 const REVALIDATE = 300; // seconds
 
+// Basic Auth opcional (solo servidor). Úsalo para leer un staging protegido con
+// usuario/contraseña sin exponerlo al público: define WC_STORE_BASIC_AUTH="user:pass"
+// como variable de entorno en Vercel (NO uses el prefijo NEXT_PUBLIC_, debe ser secreta).
+const BASIC_AUTH = process.env.WC_STORE_BASIC_AUTH;
+
+function authHeaders(): Record<string, string> {
+  const h: Record<string, string> = { Accept: "application/json" };
+  if (BASIC_AUTH) {
+    const token =
+      typeof Buffer !== "undefined"
+        ? Buffer.from(BASIC_AUTH).toString("base64")
+        : btoa(BASIC_AUTH);
+    h.Authorization = `Basic ${token}`;
+  }
+  return h;
+}
+
 async function get<T>(path: string): Promise<T> {
   const res = await fetch(`${API}${path}`, {
     next: { revalidate: REVALIDATE },
-    headers: { Accept: "application/json" },
+    headers: authHeaders(),
   });
   if (!res.ok) {
     throw new Error(`Store API ${res.status} for ${path}`);
