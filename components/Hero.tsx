@@ -24,8 +24,8 @@ const srcset = (dir: string, base: string, sizes: [number, string][]) =>
 
 const SLIDES: Slide[] = [
   {
-    img: `${BASE}/2026/06/SANDIEGO.webp`,
-    srcSet: `${BASE}/2026/06/SANDIEGO.webp 1600w`,
+    img: `${BASE}/2026/07/4.webp`,
+    srcSet: `${BASE}/2026/07/4.webp 1600w`,
     eyebrow: "Nuestro sofá insignia",
     title: <>Sofá San Diego</>,
     sub: "Confort superior para disfrutar todos los días. Diséñalo a tu medida y cómpralo en línea.",
@@ -155,7 +155,7 @@ export default function Hero() {
             className="absolute inset-0"
             style={{
               background:
-                "linear-gradient(180deg, rgba(0,0,0,.42) 0%, rgba(0,0,0,.15) 40%, rgba(0,0,0,.55) 100%)",
+                "radial-gradient(62% 60% at 50% 50%, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 100%), linear-gradient(180deg, rgba(0,0,0,.5) 0%, rgba(0,0,0,.28) 45%, rgba(0,0,0,.62) 100%)",
             }}
           />
         </div>
