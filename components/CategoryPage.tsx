@@ -3,6 +3,7 @@ import PageHeader from "@/components/PageHeader";
 import Reveal from "@/components/Reveal";
 import ProductCard from "@/components/ProductCard";
 import Ico from "@/components/LandingIcons";
+import Reviews from "@/components/Reviews";
 import { WHATSAPP } from "@/lib/content";
 import type { CategoryConfig } from "@/lib/categories";
 import type { WCProduct } from "@/lib/woocommerce";
@@ -135,6 +136,11 @@ export default function CategoryPage({
             ))}
           </div>
         </section>
+
+        {/* Reseñas */}
+        <div className="mt-16 -mx-4 md:-mx-6">
+          <Reviews />
+        </div>
 
         {/* CTA */}
         <Reveal>

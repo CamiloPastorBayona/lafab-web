@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCart, formatCOP } from "@/lib/cart";
+import TrustStrip from "@/components/TrustStrip";
 
 export default function CartPage() {
   const { items, subtotal, setQty, remove } = useCart();
@@ -91,6 +92,8 @@ export default function CartPage() {
             >
               ← Seguir comprando
             </Link>
+
+            <TrustStrip className="mt-8" />
           </div>
 
           {/* Resumen */}

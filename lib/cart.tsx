@@ -8,6 +8,7 @@ import {
   useState,
   ReactNode,
 } from "react";
+import { trackAddToCart } from "./analytics";
 
 export type CartItem = {
   id: number;
@@ -65,6 +66,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [items, hydrated]);
 
   const add: CartContextType["add"] = (item, qty = 1) => {
+    trackAddToCart({ id: item.id, name: item.name, price: item.price }, qty);
     setItems((prev) => {
       const found = prev.find((i) => i.id === item.id);
       if (found) {

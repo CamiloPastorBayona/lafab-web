@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useCart, formatCOP } from "@/lib/cart";
 import { STORE_URL } from "@/lib/woocommerce";
 import Ico from "@/components/LandingIcons";
+import { trackBeginCheckout } from "@/lib/analytics";
 
 const ENVIOS = [
   { key: "medellin", label: "Medellín y Área Metropolitana", note: "Envío incluido" },
@@ -24,6 +25,17 @@ export default function CheckoutPage() {
     direccion: "",
     notas: "",
   });
+
+  // begin_checkout una sola vez, cuando el carrito ya está hidratado con items.
+  const fired = useRef(false);
+  useEffect(() => {
+    if (fired.current || items.length === 0) return;
+    fired.current = true;
+    trackBeginCheckout(
+      items.map((it) => ({ id: it.id, name: it.name, price: it.price, qty: it.qty })),
+      subtotal
+    );
+  }, [items, subtotal]);
 
   const set =
     (k: keyof typeof form) =>

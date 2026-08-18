@@ -15,6 +15,7 @@ import SanDiegoHero from "@/components/SanDiegoHero";
 import SanDiegoLifestyle from "@/components/SanDiegoLifestyle";
 import SanDiegoFabrics from "@/components/SanDiegoFabrics";
 import SanDiegoWhy from "@/components/SanDiegoWhy";
+import TrackView from "@/components/TrackView";
 
 export const metadata: Metadata = {
   title: "Sofá San Diego",
@@ -30,6 +31,7 @@ export default function SanDiegoLanding() {
   return (
     <div className="font-morality">
       <LandingHeader productName="Sofá San Diego" />
+      <TrackView id={SANDIEGO.productId} name={SANDIEGO.name} price={SANDIEGO.price} />
 
       {/* Hero */}
       <SanDiegoHero />

@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import { CartProvider } from "@/lib/cart";
 import CartDrawer from "@/components/CartDrawer";
 import Analytics from "@/components/Analytics";
+import WhatsAppFab from "@/components/WhatsAppFab";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -57,6 +58,13 @@ const BUSINESS_JSONLD = {
     addressCountry: "CO",
   },
   areaServed: "Medellín y Colombia",
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: "4.9",
+    reviewCount: "29",
+    bestRating: "5",
+    worstRating: "1",
+  },
   sameAs: [
     "https://www.instagram.com/lafabricamed/",
     "https://www.facebook.com/LaFabricaMed",
@@ -94,6 +102,7 @@ export default function RootLayout({
           <CartDrawer />
           <main className="min-h-screen">{children}</main>
           <Footer />
+          <WhatsAppFab />
         </CartProvider>
       </body>
     </html>

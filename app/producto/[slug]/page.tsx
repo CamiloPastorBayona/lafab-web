@@ -7,6 +7,10 @@ import AddToCart from "@/components/AddToCart";
 import ProductCard from "@/components/ProductCard";
 import Reveal from "@/components/Reveal";
 import Ico from "@/components/LandingIcons";
+import TrustStrip from "@/components/TrustStrip";
+import TrackView from "@/components/TrackView";
+import ReviewsBadge from "@/components/ReviewsBadge";
+import Reviews from "@/components/Reviews";
 import { WHATSAPP } from "@/lib/content";
 
 export const revalidate = 300;
@@ -102,6 +106,11 @@ export default async function ProductPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <TrackView
+        id={product.id}
+        name={product.name}
+        price={parseInt(product.on_sale ? p.sale_price : p.price, 10)}
+      />
       {/* Breadcrumb */}
       <nav className="mb-6 text-sm text-ink/50">
         <Link href="/" className="hover:text-ink">
@@ -130,6 +139,8 @@ export default async function ProductPage({
           <h1 className="mt-2 text-3xl font-light text-ink md:text-5xl">
             {product.name}
           </h1>
+
+          <ReviewsBadge className="mt-3" />
 
           <div className="mt-4 flex flex-wrap items-baseline gap-3">
             {product.on_sale ? (
@@ -199,6 +210,9 @@ export default async function ProductPage({
             con un asesor
           </a>
 
+          {/* Franja de confianza / envío */}
+          <TrustStrip className="mt-6" />
+
           {/* Sellos con iconos */}
           <div className="mt-8 grid grid-cols-2 gap-4 border-t border-ink/10 pt-6 text-center sm:grid-cols-4">
             {[
@@ -253,6 +267,11 @@ export default async function ProductPage({
           </div>
         </section>
       )}
+
+      {/* Reseñas */}
+      <div className="mt-20 -mx-4 md:-mx-6">
+        <Reviews />
+      </div>
 
       {/* Cómo comprar */}
       <section className="mt-20">
