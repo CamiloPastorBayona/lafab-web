@@ -15,18 +15,29 @@ export default function ProductGallery({
 
   return (
     <div>
-      <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-cream">
+      <div
+        data-protect-img
+        className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-cream"
+      >
         {main ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={main.src}
-            srcSet={main.srcset || undefined}
-            sizes="(max-width: 768px) 100vw, 50vw"
-            alt={main.alt || name}
-            className="absolute inset-0 h-full w-full object-cover"
-            decoding="async"
-            fetchPriority="high"
-          />
+          <>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={main.src}
+              srcSet={main.srcset || undefined}
+              sizes="(max-width: 768px) 100vw, 50vw"
+              alt={main.alt || name}
+              className="absolute inset-0 h-full w-full object-cover"
+              decoding="async"
+              fetchPriority="high"
+            />
+            {/* Capa transparente: intercepta clic derecho / pulsación larga sobre la foto */}
+            <span
+              aria-hidden
+              className="absolute inset-0 z-10 block"
+              style={{ background: "transparent" }}
+            />
+          </>
         ) : (
           <div className="flex h-full items-center justify-center text-ink/30">
             Sin imagen

@@ -7,6 +7,7 @@ import { CartProvider } from "@/lib/cart";
 import CartDrawer from "@/components/CartDrawer";
 import Analytics from "@/components/Analytics";
 import WhatsAppFab from "@/components/WhatsAppFab";
+import ImageGuard from "@/components/ImageGuard";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -103,6 +104,7 @@ export default function RootLayout({
           <main className="min-h-screen">{children}</main>
           <Footer />
           <WhatsAppFab />
+          <ImageGuard />
         </CartProvider>
       </body>
     </html>
