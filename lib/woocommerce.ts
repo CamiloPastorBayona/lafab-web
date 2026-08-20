@@ -206,6 +206,50 @@ export async function getVariations(product: WCProduct): Promise<WCVariation[]> 
   return resolved.filter((v): v is WCVariation => v !== null);
 }
 
+// ---- Ficha de producto (ACF, endpoint propio /wp-json/lafab/v1) ----
+export interface WCProductExtra {
+  destacados: string[];
+  medidas: { etiqueta: string; valor: string }[];
+  materiales: string;
+  tiempo_fabricacion: string;
+  garantia: string;
+  cuidados: string;
+  faqs: { pregunta: string; respuesta: string }[];
+  looks: { url: string; alt: string; srcset: string }[];
+}
+
+// Trae la ficha enriquecida (medidas, materiales, garantía, looks, FAQs…) que el
+// equipo edita con ACF en WordPress. Devuelve null si no hay datos o falla.
+export async function getProductExtra(
+  id: number
+): Promise<WCProductExtra | null> {
+  try {
+    const res = await fetch(
+      `${STORE_URL}/wp-json/lafab/v1/product-extra?id=${id}`,
+      { next: { revalidate: REVALIDATE }, headers: authHeaders() }
+    );
+    if (!res.ok) return null;
+    return (await res.json()) as WCProductExtra;
+  } catch {
+    return null;
+  }
+}
+
+// ¿La ficha trae algún dato para mostrar?
+export function hasExtraContent(e: WCProductExtra | null): boolean {
+  if (!e) return false;
+  return Boolean(
+    e.destacados?.length ||
+      e.medidas?.length ||
+      e.materiales ||
+      e.tiempo_fabricacion ||
+      e.garantia ||
+      e.cuidados ||
+      e.faqs?.length ||
+      e.looks?.length
+  );
+}
+
 // Hybrid checkout: hand off to WooCommerce native add-to-cart, which lands the
 // customer in the WordPress cart/checkout where Bold Pagos completes payment.
 export function addToCartUrl(productId: number, quantity = 1): string {

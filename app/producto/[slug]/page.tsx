@@ -5,12 +5,16 @@ import {
   getProductBySlug,
   getProducts,
   getVariations,
+  getProductExtra,
+  hasExtraContent,
   money,
   type WCProductAttribute,
 } from "@/lib/woocommerce";
 import ProductGallery from "@/components/ProductGallery";
 import AddToCart from "@/components/AddToCart";
 import ProductConfigurator from "@/components/ProductConfigurator";
+import ProductHighlights from "@/components/ProductHighlights";
+import ProductExtras from "@/components/ProductExtras";
 import ProductCard from "@/components/ProductCard";
 import Reveal from "@/components/Reveal";
 import Ico from "@/components/LandingIcons";
@@ -96,6 +100,9 @@ export default async function ProductPage({
         }))
     : [];
   const showConfigurator = isVariable && variations.length > 0 && variableAttrs.length > 0;
+
+  // Ficha enriquecida (ACF): medidas, materiales, garantía, looks, FAQs…
+  const extra = await getProductExtra(product.id);
 
   // Datos estructurados (Product schema) para resultados enriquecidos en Google.
   const jsonLd = {
@@ -207,6 +214,8 @@ export default async function ProductPage({
             />
           )}
 
+          <ProductHighlights items={extra?.destacados} />
+
           <div className="mt-8">
             {showConfigurator ? (
               <ProductConfigurator
@@ -291,6 +300,9 @@ export default async function ProductPage({
           </section>
         </Reveal>
       )}
+
+      {/* Ficha enriquecida (ACF): especificaciones, looks y FAQs */}
+      {hasExtraContent(extra) && <ProductExtras extra={extra!} name={product.name} />}
 
       {/* Related */}
       {related.length > 0 && (
