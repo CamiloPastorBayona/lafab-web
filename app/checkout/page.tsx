@@ -179,13 +179,24 @@ export default function CheckoutPage() {
                 <span className={stepNum}>2</span> Envío
               </h2>
               <div className="grid gap-4 sm:grid-cols-2">
-                <select className={field} value={form.departamento} onChange={set("departamento")}>
-                  {CO_DEPARTMENTS.map((d) => (
-                    <option key={d.code} value={d.code}>
-                      {d.name}
-                    </option>
-                  ))}
-                </select>
+                <div className="relative">
+                  <select
+                    className={`${field} appearance-none pr-11`}
+                    value={form.departamento}
+                    onChange={set("departamento")}
+                  >
+                    {CO_DEPARTMENTS.map((d) => (
+                      <option key={d.code} value={d.code}>
+                        {d.name}
+                      </option>
+                    ))}
+                  </select>
+                  <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-ink/40">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  </span>
+                </div>
                 <input className={field} placeholder="Ciudad *" value={form.ciudad} onChange={set("ciudad")} />
                 <input className={`${field} sm:col-span-2`} placeholder="Dirección *" value={form.direccion} onChange={set("direccion")} />
                 <input className={field} placeholder="Código postal (opcional)" value={form.postcode} onChange={set("postcode")} />
