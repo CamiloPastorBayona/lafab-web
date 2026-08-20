@@ -3,26 +3,30 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useCart, formatCOP } from "@/lib/cart";
-import { STORE_URL } from "@/lib/woocommerce";
+import { CO_DEPARTMENTS } from "@/lib/departments";
+import {
+  syncCart,
+  updateCustomer,
+  selectShipping,
+  placeOrder,
+  type Address,
+} from "@/lib/headlessCheckout";
 import Ico from "@/components/LandingIcons";
 import { trackBeginCheckout } from "@/lib/analytics";
 
-const ENVIOS = [
-  { key: "medellin", label: "Medellín y Área Metropolitana", note: "Envío incluido" },
-  { key: "nacional", label: "Nacional · ciudad capital", note: "Envío incluido" },
-  { key: "otra", label: "Otra ciudad / municipio", note: "Se cotiza según destino" },
-];
-
 export default function CheckoutPage() {
-  const { items, subtotal, count } = useCart();
+  const { items, subtotal, count, clear } = useCart();
   const [loading, setLoading] = useState(false);
-  const [envio, setEnvio] = useState("medellin");
+  const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({
     nombre: "",
+    apellidos: "",
     email: "",
     telefono: "",
+    departamento: "CO-ANT",
     ciudad: "",
     direccion: "",
+    postcode: "",
     notas: "",
   });
 
@@ -39,22 +43,78 @@ export default function CheckoutPage() {
 
   const set =
     (k: keyof typeof form) =>
-    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    (
+      e: React.ChangeEvent<
+        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+      >
+    ) =>
       setForm((f) => ({ ...f, [k]: e.target.value }));
 
-  const canPay = items.length > 0 && form.nombre && form.email && form.telefono;
+  const canPay =
+    items.length > 0 &&
+    form.nombre &&
+    form.apellidos &&
+    form.email &&
+    form.telefono &&
+    form.departamento &&
+    form.ciudad &&
+    form.direccion;
 
-  const handlePay = () => {
-    if (!canPay) return;
+  const handlePay = async () => {
+    if (!canPay || loading) return;
+    setError(null);
     setLoading(true);
-    // Carrito codificado como "id:cantidad,id:cantidad".
-    const payload = items.map((it) => `${it.id}:${it.qty}`).join(",");
-    const params = new URLSearchParams({ lafab_cart: payload });
-    if (form.email) params.set("billing_email", form.email);
-    if (form.telefono) params.set("billing_phone", form.telefono);
-    // Navegación first-party a WooCommerce: un snippet arma el carrito y
-    // redirige al checkout real, donde el cliente paga con Bold.
-    window.location.href = `${STORE_URL}/?${params.toString()}`;
+    try {
+      const billing: Address = {
+        first_name: form.nombre,
+        last_name: form.apellidos,
+        company: "",
+        address_1: form.direccion,
+        address_2: "",
+        city: form.ciudad,
+        state: form.departamento,
+        postcode: form.postcode || "",
+        country: "CO",
+        email: form.email,
+        phone: form.telefono,
+      };
+      const shipping: Address = { ...billing };
+
+      // 1) Sincroniza el carrito local con WooCommerce.
+      const sync = await syncCart(items.map((i) => ({ id: i.id, qty: i.qty })));
+      if (sync && !sync.ok)
+        throw new Error(sync.error || "No pudimos preparar tu carrito.");
+
+      // 2) Fija los datos del cliente → devuelve las opciones de envío.
+      const cust = await updateCustomer(billing, shipping);
+      if (!cust.ok || !cust.data)
+        throw new Error(cust.error || "Revisa tus datos de envío.");
+
+      // 3) Selecciona la primera opción de envío disponible.
+      const pkg = cust.data.shipping_rates?.[0];
+      if (pkg && pkg.shipping_rates.length) {
+        await selectShipping(pkg.package_id, pkg.shipping_rates[0].rate_id);
+      }
+
+      // 4) Crea el pedido y paga con Bold.
+      const order = await placeOrder(billing, shipping, "bold_co", form.notas);
+      if (!order.ok || !order.data)
+        throw new Error(order.error || "No pudimos crear tu pedido. Intenta de nuevo.");
+
+      // El pedido ya existe en WooCommerce; vaciamos el carrito local.
+      clear();
+      const redirect = order.data.payment_result?.redirect_url;
+      if (redirect) {
+        window.location.href = redirect; // → página de pago de Bold
+        return;
+      }
+      window.location.href = `/gracias?pedido=${order.data.order_id}`;
+    } catch (e) {
+      setError(
+        e instanceof Error ? e.message : "Ocurrió un error. Intenta de nuevo."
+      );
+      setLoading(false);
+    }
   };
 
   if (items.length === 0) {
@@ -77,15 +137,13 @@ export default function CheckoutPage() {
 
   const field =
     "w-full rounded-xl border border-ink/15 bg-white px-4 py-3 text-ink outline-none transition-colors placeholder:text-ink/35 focus:border-gold";
-  const stepHead =
-    "mb-5 flex items-center gap-3 text-lg font-light text-ink";
+  const stepHead = "mb-5 flex items-center gap-3 text-lg font-light text-ink";
   const stepNum =
     "flex h-8 w-8 items-center justify-center rounded-full bg-ink text-sm font-medium text-white";
 
   return (
     <div className="bg-cream/40">
       <div className="mx-auto max-w-site px-4 py-12 md:px-6 md:py-16">
-        {/* Encabezado */}
         <div className="mb-8">
           <Link href="/carrito" className="text-sm text-ink/50 hover:text-ink">
             ← Volver al carrito
@@ -103,14 +161,14 @@ export default function CheckoutPage() {
         </div>
 
         <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr]">
-          {/* Formulario */}
           <div className="space-y-6">
             <div className="rounded-2xl bg-white p-6 md:p-8">
               <h2 className={stepHead}>
                 <span className={stepNum}>1</span> Datos de contacto
               </h2>
               <div className="grid gap-4 sm:grid-cols-2">
-                <input className={`${field} sm:col-span-2`} placeholder="Nombre completo *" value={form.nombre} onChange={set("nombre")} />
+                <input className={field} placeholder="Nombre *" value={form.nombre} onChange={set("nombre")} />
+                <input className={field} placeholder="Apellidos *" value={form.apellidos} onChange={set("apellidos")} />
                 <input className={field} type="email" placeholder="Correo electrónico *" value={form.email} onChange={set("email")} />
                 <input className={field} placeholder="Teléfono / WhatsApp *" value={form.telefono} onChange={set("telefono")} />
               </div>
@@ -120,43 +178,25 @@ export default function CheckoutPage() {
               <h2 className={stepHead}>
                 <span className={stepNum}>2</span> Envío
               </h2>
-              <div className="grid gap-3">
-                {ENVIOS.map((e) => (
-                  <button
-                    key={e.key}
-                    type="button"
-                    onClick={() => setEnvio(e.key)}
-                    className={`flex items-center justify-between rounded-xl border px-4 py-3 text-left transition-colors ${
-                      envio === e.key
-                        ? "border-ink bg-cream"
-                        : "border-ink/15 hover:border-ink/40"
-                    }`}
-                  >
-                    <span className="flex items-center gap-3">
-                      <span
-                        className={`flex h-5 w-5 items-center justify-center rounded-full border ${
-                          envio === e.key ? "border-ink" : "border-ink/30"
-                        }`}
-                      >
-                        {envio === e.key && (
-                          <span className="h-2.5 w-2.5 rounded-full bg-ink" />
-                        )}
-                      </span>
-                      <span className="text-sm text-ink">{e.label}</span>
-                    </span>
-                    <span className="text-xs text-gold-dark">{e.note}</span>
-                  </button>
-                ))}
-              </div>
-              <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                <input className={field} placeholder="Ciudad" value={form.ciudad} onChange={set("ciudad")} />
-                <input className={field} placeholder="Dirección" value={form.direccion} onChange={set("direccion")} />
+              <div className="grid gap-4 sm:grid-cols-2">
+                <select className={field} value={form.departamento} onChange={set("departamento")}>
+                  {CO_DEPARTMENTS.map((d) => (
+                    <option key={d.code} value={d.code}>
+                      {d.name}
+                    </option>
+                  ))}
+                </select>
+                <input className={field} placeholder="Ciudad *" value={form.ciudad} onChange={set("ciudad")} />
+                <input className={`${field} sm:col-span-2`} placeholder="Dirección *" value={form.direccion} onChange={set("direccion")} />
+                <input className={field} placeholder="Código postal (opcional)" value={form.postcode} onChange={set("postcode")} />
                 <textarea className={`${field} sm:col-span-2`} rows={3} placeholder="Notas del pedido (opcional)" value={form.notas} onChange={set("notas")} />
               </div>
+              <p className="mt-3 text-sm text-gold-dark">
+                Envío incluido en Medellín y área metropolitana. A otras ciudades se coordina el despacho.
+              </p>
             </div>
           </div>
 
-          {/* Resumen sticky */}
           <aside className="lg:sticky lg:top-24 lg:self-start">
             <div className="rounded-2xl bg-white p-6 shadow-sm">
               <h2 className="text-lg font-light text-ink">
@@ -189,16 +229,20 @@ export default function CheckoutPage() {
                 </div>
                 <div className="flex justify-between text-ink/70">
                   <span>Envío</span>
-                  <span>{envio === "otra" ? "Se cotiza" : "Incluido"}</span>
+                  <span>Incluido</span>
                 </div>
               </div>
               <div className="mt-4 flex items-baseline justify-between border-t border-ink/10 pt-4">
                 <span className="font-medium text-ink">Total</span>
-                <span className="text-2xl font-semibold text-ink">
-                  {formatCOP(subtotal)}
-                </span>
+                <span className="text-2xl font-semibold text-ink">{formatCOP(subtotal)}</span>
               </div>
               <p className="mt-1 text-right text-xs text-ink/40">IVA incluido</p>
+
+              {error && (
+                <p className="mt-4 rounded-xl bg-sale/10 px-4 py-3 text-sm text-sale">
+                  {error}
+                </p>
+              )}
 
               <button
                 onClick={handlePay}
@@ -206,15 +250,14 @@ export default function CheckoutPage() {
                 className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-ink px-6 py-4 text-sm font-medium uppercase tracking-[0.12em] text-white transition-transform hover:scale-[1.02] disabled:cursor-not-allowed disabled:bg-ink/40"
               >
                 <Ico name="lock" className="h-4 w-4" />
-                {loading ? "Redirigiendo…" : "Pagar con Bold"}
+                {loading ? "Procesando…" : "Pagar con Bold"}
               </button>
               {!canPay && (
                 <p className="mt-2 text-center text-xs text-ink/40">
-                  Completa nombre, correo y teléfono para continuar.
+                  Completa tus datos y dirección para continuar.
                 </p>
               )}
 
-              {/* Sellos */}
               <div className="mt-6 grid grid-cols-2 gap-3 border-t border-ink/10 pt-5 text-xs text-ink/60">
                 <span className="flex items-center gap-2"><Ico name="lock" className="h-4 w-4 text-gold-dark" /> Pago 100% seguro</span>
                 <span className="flex items-center gap-2"><Ico name="shieldCheck" className="h-4 w-4 text-gold-dark" /> Garantía LaFab</span>
