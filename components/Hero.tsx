@@ -83,7 +83,7 @@ const SLIDES: Slide[] = [
     ),
     sub: "Diseñados para adaptarse a tu estilo y a tus espacios.",
     ctaLabel: "Ver sofás",
-    href: "/shop",
+    href: "/sofas",
   },
   {
     img: `${BASE}/2024/11/Banner-5_1@4x-100-1024x490.jpg`,
@@ -95,8 +95,8 @@ const SLIDES: Slide[] = [
     eyebrow: "Alcobas",
     title: <>Alcoba Kenia.</>,
     sub: "Donde la comodidad se une a la relajación.",
-    ctaLabel: "Ver colección",
-    href: "/shop",
+    ctaLabel: "Ver camas",
+    href: "/camas",
   },
 ];
 
