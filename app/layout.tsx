@@ -8,6 +8,7 @@ import CartDrawer from "@/components/CartDrawer";
 import Analytics from "@/components/Analytics";
 import WhatsAppFab from "@/components/WhatsAppFab";
 import ImageGuard from "@/components/ImageGuard";
+import IntroLoader from "@/components/IntroLoader";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -98,6 +99,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(BUSINESS_JSONLD) }}
         />
         <Analytics />
+        <IntroLoader />
         <CartProvider>
           <Header />
           <CartDrawer />
