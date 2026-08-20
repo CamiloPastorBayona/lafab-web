@@ -11,10 +11,13 @@ export default function ProductCard({ product }: { product: WCProduct }) {
   const { add } = useCart();
 
   const href = `/producto/${product.slug}`;
+  // Los productos variables (tela, puestos…) no se pueden agregar directo: hay que
+  // elegir la variación en la ficha. Si no, se agregaría el "padre" sin opciones.
+  const isVariable = product.type === "variable" || product.has_options;
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (!product.is_purchasable || !product.is_in_stock) {
+    if (isVariable || !product.is_purchasable || !product.is_in_stock) {
       window.location.href = href;
       return;
     }
@@ -84,7 +87,11 @@ export default function ProductCard({ product }: { product: WCProduct }) {
           onClick={handleAdd}
           className="pointer-events-auto mt-3 translate-y-1 rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-ink opacity-100 transition-all hover:bg-gold md:translate-y-2 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100"
         >
-          {product.is_in_stock ? "Agregar al carrito" : "Ver producto"}
+          {isVariable
+            ? "Elegir opciones"
+            : product.is_in_stock
+              ? "Agregar al carrito"
+              : "Ver producto"}
         </button>
       </div>
     </div>
