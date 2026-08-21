@@ -96,6 +96,10 @@ h6 {
   animation: lf-loader-wash 1.45s ease-out forwards;
 }
 
+.lf-loader--quick.lf-loader--playing .lf-loader-wash {
+  animation-duration: 0.95s;
+}
+
 @keyframes lf-loader-wash {
   0% {
     opacity: 0;
@@ -231,6 +235,10 @@ h6 {
   animation: lf-lamp-beam 1.35s ease-out forwards;
 }
 
+.lf-loader--quick.lf-loader--playing .lf-lamp-beam {
+  animation-duration: 0.95s;
+}
+
 .lf-loader-prompt {
   position: absolute;
   left: 50%;
@@ -297,6 +305,10 @@ h6 {
   animation: lf-sofa-draw 1.25s cubic-bezier(0.55, 0, 0.1, 1) forwards;
 }
 
+.lf-loader--quick.lf-loader--playing .lf-sofa-line {
+  animation-duration: 0.85s;
+}
+
 .lf-sofa {
   stroke: #f2d9ae;
   filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.55));
@@ -333,6 +345,10 @@ h6 {
 .lf-loader--playing .lf-loader-glow {
   animation: lf-loader-glow 1.8s ease-out forwards;
 }
+
+.lf-loader--quick.lf-loader--playing .lf-loader-glow {
+  animation-duration: 1.1s;
+}
 @keyframes lf-loader-glow {
   0% {
     transform: translate(-50%, -50%) scale(0.2);
@@ -362,6 +378,9 @@ h6 {
   opacity: 0;
   animation: lf-loader-logo 0.95s ease 1.55s forwards;
 }
+.lf-loader--quick.lf-loader--playing .lf-loader-logo {
+  animation: lf-loader-logo 0.65s ease 0.55s forwards;
+}
 @keyframes lf-loader-logo {
   0% {
     opacity: 0;
@@ -384,6 +403,9 @@ h6 {
 .lf-loader--playing .lf-loader-line {
   animation: lf-loader-line 0.55s cubic-bezier(0.4, 0, 0.2, 1) 2.45s forwards;
 }
+.lf-loader--quick.lf-loader--playing .lf-loader-line {
+  animation: lf-loader-line 0.45s cubic-bezier(0.4, 0, 0.2, 1) 1.65s forwards;
+}
 @keyframes lf-loader-line {
   to {
     transform: scaleX(1);
@@ -391,12 +413,19 @@ h6 {
 }
 
 .lf-loader-tag {
+  max-width: min(84vw, 360px);
   opacity: 1;
+  line-height: 1.7;
+  text-align: center;
+  text-wrap: balance;
   text-shadow: 0 10px 24px rgba(0, 0, 0, 0.72);
 }
 .lf-loader--playing .lf-loader-tag {
   opacity: 0;
   animation: lf-fade-up 0.65s ease 2.75s forwards;
+}
+.lf-loader--quick.lf-loader--playing .lf-loader-tag {
+  animation: lf-fade-up 0.5s ease 1.95s forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {

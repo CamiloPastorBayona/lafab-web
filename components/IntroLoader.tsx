@@ -18,8 +18,8 @@ const LOGO = "https://lafab.com.co/wp-content/uploads/2022/12/lafab-blanco.png";
 const AUDIO_SRC = "/audiologo.mp3";
 const HOME_PATHS = new Set(["/", "/inicio"]);
 const LAMP_INTRO_KEY = "lafab:intro-lamp-seen";
-// La animación visual queda 1.5s más corta; el audiologo conserva su duración real.
-const INTRO_DURATION_MS = 4540;
+const LAMP_INTRO_DURATION_MS = 4540;
+const QUICK_INTRO_DURATION_MS = 3000;
 const AUDIO_START_GUARD_MS = 1200;
 
 // ---- Audiologo ----------------------------------------------------------
@@ -97,6 +97,7 @@ export default function IntroLoader() {
   const [visible, setVisible] = useState(true);
   const [loaderState, setLoaderState] = useState<LoaderState>("ready");
   const [showLampIntro, setShowLampIntro] = useState(false);
+  const [loaderDurationMs, setLoaderDurationMs] = useState(QUICK_INTRO_DURATION_MS);
   const [cycle, setCycle] = useState(0);
 
   const loaderRef = useRef<HTMLDivElement | null>(null);
@@ -122,22 +123,24 @@ export default function IntroLoader() {
   );
 
   const scheduleHide = useCallback(
-    (runId: number) => {
+    (runId: number, durationMs: number) => {
       const reduce =
         typeof window !== "undefined" &&
         window.matchMedia &&
         window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      hideTimerRef.current = setTimeout(() => finishRun(runId), reduce ? 800 : INTRO_DURATION_MS);
+      hideTimerRef.current = setTimeout(() => finishRun(runId), reduce ? 800 : durationMs);
     },
     [finishRun]
   );
 
   const startVisualLoader = useCallback(
-    (runId: number) => {
+    (runId: number, withLampIntro = false) => {
+      const durationMs = withLampIntro ? LAMP_INTRO_DURATION_MS : QUICK_INTRO_DURATION_MS;
       clearScheduledHide();
+      setLoaderDurationMs(durationMs);
       setCycle((current) => current + 1);
       setLoaderState("playing");
-      scheduleHide(runId);
+      scheduleHide(runId, durationMs);
     },
     [clearScheduledHide, scheduleHide]
   );
@@ -168,7 +171,7 @@ export default function IntroLoader() {
     (runId: number) => {
       // El play() se invoca dentro del gesto real del usuario y la animación
       // arranca en el mismo frame para que luz + audiologo entren juntos.
-      startVisualLoader(runId);
+      startVisualLoader(runId, true);
       playHomeSound();
     },
     [playHomeSound, startVisualLoader]
@@ -231,6 +234,7 @@ export default function IntroLoader() {
       setShowLampIntro(shouldShowLampIntro);
 
       if (shouldShowLampIntro) {
+        setLoaderDurationMs(LAMP_INTRO_DURATION_MS);
         setCycle((current) => current + 1);
         setLoaderState("waiting-for-sound");
       } else {
@@ -287,7 +291,7 @@ export default function IntroLoader() {
   if (!visible) return null;
 
   const loaderStyle = {
-    "--lf-loader-duration": `${INTRO_DURATION_MS}ms`,
+    "--lf-loader-duration": `${loaderDurationMs}ms`,
   } as CSSProperties;
 
   return (
@@ -296,7 +300,7 @@ export default function IntroLoader() {
       key={cycle}
       className={`lf-loader fixed inset-0 z-[200] flex items-center justify-center overflow-hidden bg-ink ${
         isPlaying ? "lf-loader--playing pointer-events-none" : "lf-loader--ready"
-      } ${showLampIntro ? "lf-loader--with-lamp" : "lf-loader--without-lamp"} ${isWaitingForSound ? "lf-loader--waiting cursor-pointer" : ""}`}
+      } ${showLampIntro ? "lf-loader--with-lamp" : "lf-loader--without-lamp lf-loader--quick"} ${isWaitingForSound ? "lf-loader--waiting cursor-pointer" : ""}`}
       style={loaderStyle}
       aria-hidden={isWaitingForSound ? undefined : true}
       aria-label={isWaitingForSound ? "Encender intro sonora de LaFab" : undefined}
@@ -367,8 +371,8 @@ export default function IntroLoader() {
           </svg>
 
           <span className="lf-loader-line mt-6 h-px w-24 bg-gold" />
-          <span className="lf-loader-tag mt-4 text-[11px] uppercase tracking-[0.35em] text-white/55">
-            Muebles a la medida
+          <span className="lf-loader-tag mt-4 text-[10px] uppercase tracking-[0.18em] text-white/60 sm:text-[11px] sm:tracking-[0.28em]">
+            diseño y fábrica de muebles
           </span>
         </div>
       </div>
