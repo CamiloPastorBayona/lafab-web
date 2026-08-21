@@ -4,7 +4,14 @@
 // cálida, se DIBUJA un sofá en línea dorada y aparece el logo; luego se revela el
 // sitio. Corre en cada cambio de página.
 
-import { type CSSProperties, useCallback, useEffect, useRef, useState } from "react";
+import {
+  type CSSProperties,
+  type KeyboardEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { usePathname } from "next/navigation";
 
 const LOGO = "https://lafab.com.co/wp-content/uploads/2022/12/lafab-blanco.png";
@@ -13,8 +20,7 @@ const HOME_PATHS = new Set(["/", "/inicio"]);
 const AUDIO_SESSION_KEY = "lafab:audiologo:intro-played";
 // La animación visual queda 1.5s más corta; el audiologo conserva su duración real.
 const INTRO_DURATION_MS = 4540;
-const AUDIO_RETRY_INTERVAL_MS = 700;
-const AUDIO_RETRY_WINDOW_MS = 12000;
+const AUDIO_START_TIMEOUT_MS = 900;
 
 // ---- Audiologo ----------------------------------------------------------
 // Objetivo: intentar el audiologo automáticamente una sola vez en home. Si el
@@ -22,8 +28,7 @@ const AUDIO_RETRY_WINDOW_MS = 12000;
 // Inicio para dispararlo sin mostrar un botón extra.
 let audioEl: HTMLAudioElement | null = null;
 let audioPlayedInRuntime = false;
-let audioPlayInFlight = false;
-let audioUnlockInFlight = false;
+type LoaderState = "ready" | "playing" | "waiting-for-sound";
 
 function prepareAudio(audio: HTMLAudioElement) {
   audio.volume = 1;
@@ -38,15 +43,6 @@ function getAudio() {
   return audioEl;
 }
 
-function setAudioElement(audio: HTMLAudioElement) {
-  if (audioEl && audioEl !== audio) {
-    resetAudio(audioEl);
-  }
-
-  audioEl = audio;
-  prepareAudio(audioEl);
-}
-
 function resetAudio(audio: HTMLAudioElement) {
   audio.pause();
   try {
@@ -56,14 +52,10 @@ function resetAudio(audio: HTMLAudioElement) {
   }
 }
 
-function playAudiologoFromStart({ muted = false }: { muted?: boolean } = {}) {
+function playAudiologoFromStart() {
   const audio = getAudio();
-  if (!audio.paused && !audio.ended && audio.currentTime > 0 && audio.muted === muted) {
-    return Promise.resolve();
-  }
-
   resetAudio(audio);
-  audio.muted = muted;
+  audio.muted = false;
   return audio.play();
 }
 
@@ -100,85 +92,21 @@ function setAudioStatus(status: "playing" | "played" | "blocked" | "unlocked") {
   (window as unknown as Record<string, string>).__lafabAudiologo = status;
 }
 
-function playAudiologoOnce() {
-  if (wasAudioAlreadyPlayed() || audioPlayInFlight) return;
-
-  audioPlayInFlight = true;
-  setAudioStatus("playing");
-  void playAudiologoFromStart({ muted: false })
-    .then(() => {
-      markAudioPlayed();
-      setAudioStatus("played");
-    })
-    .catch(() => {
-      setAudioStatus("blocked");
-    })
-    .finally(() => {
-      audioPlayInFlight = false;
-    });
-}
-
-function tryPlayAudiologoOnHome(pathname: string) {
-  if (!isHomePath(pathname)) return;
-  playAudiologoOnce();
-}
-
-function unlockAudioForLater() {
-  if (wasAudioAlreadyPlayed() || audioUnlockInFlight) return;
-
-  const audio = getAudio();
-  audioUnlockInFlight = true;
-
-  void playAudiologoFromStart({ muted: true })
-    .then(() => {
-      resetAudio(audio);
-      setAudioStatus("unlocked");
-    })
-    .catch(() => {
-      setAudioStatus("blocked");
-    })
-    .finally(() => {
-      audio.muted = false;
-      audioUnlockInFlight = false;
-    });
-}
-
-function getGestureTargetPath(event: Event) {
-  const target = event.target;
-  if (!(target instanceof Element)) return window.location.pathname;
-
-  const link = target.closest<HTMLAnchorElement>("a[href]");
-  if (!link) return window.location.pathname;
-
-  try {
-    return new URL(link.href, window.location.href).pathname;
-  } catch {
-    return window.location.pathname;
-  }
-}
-
 export default function IntroLoader() {
   const pathname = usePathname();
   const isHome = isHomePath(pathname);
   const [visible, setVisible] = useState(true);
+  const [loaderState, setLoaderState] = useState<LoaderState>("ready");
   const [cycle, setCycle] = useState(0);
 
-  const audioRef = useRef<HTMLAudioElement | null>(null);
   const runIdRef = useRef(0);
+  const soundStartInFlightRef = useRef(false);
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const audioRetryRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const clearScheduledHide = useCallback(() => {
     if (hideTimerRef.current) {
       clearTimeout(hideTimerRef.current);
       hideTimerRef.current = null;
-    }
-  }, []);
-
-  const clearAudioRetry = useCallback(() => {
-    if (audioRetryRef.current) {
-      clearInterval(audioRetryRef.current);
-      audioRetryRef.current = null;
     }
   }, []);
 
@@ -202,112 +130,128 @@ export default function IntroLoader() {
     [finishRun]
   );
 
-  const startHomeAudioRetry = useCallback(() => {
-    clearAudioRetry();
-    if (!isHomePath(window.location.pathname) || wasAudioAlreadyPlayed()) return;
+  const startVisualLoader = useCallback(
+    (runId: number) => {
+      clearScheduledHide();
+      setCycle((current) => current + 1);
+      setLoaderState("playing");
+      scheduleHide(runId);
+    },
+    [clearScheduledHide, scheduleHide]
+  );
 
-    const startedAt = Date.now();
-    audioRetryRef.current = setInterval(() => {
-      const expired = Date.now() - startedAt > AUDIO_RETRY_WINDOW_MS;
-      if (!isHomePath(window.location.pathname) || wasAudioAlreadyPlayed() || expired) {
-        clearAudioRetry();
+  const startHomeSoundAndLoader = useCallback(
+    (runId: number) => {
+      if (wasAudioAlreadyPlayed()) {
+        startVisualLoader(runId);
         return;
       }
 
-      playAudiologoOnce();
-    }, AUDIO_RETRY_INTERVAL_MS);
-  }, [clearAudioRetry]);
+      if (soundStartInFlightRef.current) return;
+      soundStartInFlightRef.current = true;
 
-  const handleAudioPlaying = () => {
-    const audio = audioRef.current;
-    if (!audio || audio.muted || !isHomePath(window.location.pathname)) return;
+      setAudioStatus("playing");
+      let settled = false;
+      const startTimeout = setTimeout(() => {
+        if (settled || runIdRef.current !== runId) return;
 
-    markAudioPlayed();
-    setAudioStatus("played");
-    clearAudioRetry();
-  };
+        soundStartInFlightRef.current = false;
+        setAudioStatus("blocked");
+        setLoaderState("waiting-for-sound");
+      }, AUDIO_START_TIMEOUT_MS);
+
+      void playAudiologoFromStart()
+        .then(() => {
+          settled = true;
+          clearTimeout(startTimeout);
+          if (runIdRef.current !== runId) return;
+
+          markAudioPlayed();
+          setAudioStatus("played");
+          startVisualLoader(runId);
+        })
+        .catch(() => {
+          settled = true;
+          clearTimeout(startTimeout);
+          if (runIdRef.current !== runId) return;
+
+          setAudioStatus("blocked");
+          setLoaderState("waiting-for-sound");
+        })
+        .finally(() => {
+          soundStartInFlightRef.current = false;
+        });
+    },
+    [startVisualLoader]
+  );
 
   useEffect(() => {
-    if (audioRef.current) {
-      setAudioElement(audioRef.current);
-    }
-
-    const audio = getAudio();
-    audio.load();
-    const events = ["pointerdown", "touchstart", "keydown"];
-
-    const onGesture = (event: Event) => {
-      if (wasAudioAlreadyPlayed()) return;
-
-      const targetPath = getGestureTargetPath(event);
-      if (isHomePath(targetPath) || isHomePath(window.location.pathname)) {
-        playAudiologoOnce();
-        return;
-      }
-
-      unlockAudioForLater();
-    };
-
-    events.forEach((eventName) => {
-      window.addEventListener(eventName, onGesture, { capture: true, passive: true });
-    });
+    getAudio().load();
 
     return () => {
-      events.forEach((eventName) => {
-        window.removeEventListener(eventName, onGesture, true);
-      });
       clearScheduledHide();
-      clearAudioRetry();
     };
-  }, [clearScheduledHide, clearAudioRetry]);
+  }, [clearScheduledHide]);
 
   useEffect(() => {
     const runId = runIdRef.current + 1;
     runIdRef.current = runId;
+    soundStartInFlightRef.current = false;
 
     clearScheduledHide();
     setVisible(true);
-    setCycle((current) => current + 1);
-    scheduleHide(runId);
+    setLoaderState("ready");
 
     if (isHomePath(pathname)) {
-      tryPlayAudiologoOnHome(pathname);
-      startHomeAudioRetry();
+      startHomeSoundAndLoader(runId);
     } else {
-      clearAudioRetry();
       stopAudiologo();
+      startVisualLoader(runId);
     }
 
     return () => {
       clearScheduledHide();
     };
-  }, [pathname, clearScheduledHide, scheduleHide, clearAudioRetry, startHomeAudioRetry]);
+  }, [pathname, clearScheduledHide, startHomeSoundAndLoader, startVisualLoader]);
+
+  const handleSoundGesture = () => {
+    if (!isHome || loaderState !== "waiting-for-sound") return;
+
+    const runId = runIdRef.current + 1;
+    runIdRef.current = runId;
+    startHomeSoundAndLoader(runId);
+  };
+
+  const handleSoundKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    handleSoundGesture();
+  };
 
   if (!visible) return null;
 
   const loaderStyle = {
     "--lf-loader-duration": `${INTRO_DURATION_MS}ms`,
   } as CSSProperties;
-  const shouldUseDomAutoplay = isHome && !audioPlayInFlight && !audioPlayedInRuntime;
+  const isWaitingForSound = loaderState === "waiting-for-sound";
+  const isPlaying = loaderState === "playing";
 
   return (
     <div
       key={cycle}
-      className="lf-loader lf-loader--playing pointer-events-none fixed inset-0 z-[200] flex items-center justify-center overflow-hidden bg-ink"
+      className={`lf-loader fixed inset-0 z-[200] flex items-center justify-center overflow-hidden bg-ink ${
+        isPlaying ? "lf-loader--playing pointer-events-none" : "lf-loader--ready"
+      } ${isWaitingForSound ? "cursor-pointer" : ""}`}
       style={loaderStyle}
-      aria-hidden
+      aria-hidden={isWaitingForSound ? undefined : true}
+      aria-label={isWaitingForSound ? "Activar intro sonora de LaFab" : undefined}
+      role={isWaitingForSound ? "button" : undefined}
+      tabIndex={isWaitingForSound ? 0 : undefined}
+      onClick={handleSoundGesture}
+      onPointerDown={handleSoundGesture}
+      onTouchStart={handleSoundGesture}
+      onKeyDown={handleSoundKeyDown}
     >
-      {shouldUseDomAutoplay ? (
-        <audio
-          ref={audioRef}
-          src={AUDIO_SRC}
-          preload="auto"
-          autoPlay
-          aria-hidden="true"
-          onPlaying={handleAudioPlaying}
-        />
-      ) : null}
-
       {/* Luz cálida que se enciende */}
       <span className="lf-loader-glow" />
 
