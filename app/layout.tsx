@@ -92,6 +92,8 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.clarity.ms" />
         <link rel="dns-prefetch" href="https://connect.facebook.net" />
+        {/* Pre-carga el audiologo para que suene sin lag apenas aparece el loader */}
+        <link rel="preload" as="audio" href="/audiologo.mp3" type="audio/mpeg" />
       </head>
       <body className="font-sans">
         <script

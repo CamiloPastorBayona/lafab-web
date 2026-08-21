@@ -6,61 +6,78 @@
 // Sonido: el audiologo suena una vez por carga, al primer gesto del usuario
 // (clic/tap/tecla/scroll) porque los navegadores prohíben el audio sin interacción.
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
 const LOGO = "https://lafab.com.co/wp-content/uploads/2022/12/lafab-blanco.png";
 const DURATION = 2100;
 
-// ---- Audiologo: se arma una sola vez por carga y suena al primer gesto ----
-let audioArmed = false;
-function armAudiologo() {
-  if (typeof window === "undefined" || audioArmed) return;
-  audioArmed = true;
+// ---- Audiologo ----------------------------------------------------------
+// Objetivo: que suene APENAS aparece el loader. En una navegación interna el
+// clic que disparó el cambio de página ya es un gesto válido, así que el audio
+// arranca de inmediato con la animación. Solo en la PRIMERA carga en frío el
+// navegador obliga a esperar, así que ahí suena al primer movimiento/clic/scroll.
+let audioEl: HTMLAudioElement | null = null;
+let gestureArmed = false;
 
-  const audio = new Audio("/audiologo.mp3");
-  audio.volume = 1;
-  audio.preload = "auto";
-
-  let played = false;
-  const events = ["pointerdown", "touchstart", "keydown", "click", "wheel"];
-  const teardown = () =>
-    events.forEach((e) => window.removeEventListener(e, onGesture, true));
-  const play = () => {
-    if (played) return;
-    audio
-      .play()
-      .then(() => {
-        played = true;
-        (window as unknown as Record<string, string>).__lafabAudiologo = "played";
-        teardown();
-      })
-      .catch(() => {
-        (window as unknown as Record<string, string>).__lafabAudiologo = "blocked";
-      });
-  };
-  function onGesture() {
-    play();
+function getAudio() {
+  if (!audioEl) {
+    audioEl = new Audio("/audiologo.mp3");
+    audioEl.volume = 1;
+    audioEl.preload = "auto";
+    audioEl.load();
   }
+  return audioEl;
+}
+
+function playFromStart() {
+  const a = getAudio();
+  try {
+    a.currentTime = 0;
+  } catch {
+    /* aún no cargado; play() igual arranca desde 0 */
+  }
+  return a.play();
+}
+
+function armOnFirstGesture() {
+  if (gestureArmed) return;
+  gestureArmed = true;
+  const events = ["pointerdown", "touchstart", "keydown", "click", "wheel", "scroll"];
+  const onGesture = () => {
+    playFromStart().catch(() => {});
+    events.forEach((e) => window.removeEventListener(e, onGesture, true));
+  };
   events.forEach((e) =>
     window.addEventListener(e, onGesture, { capture: true, passive: true })
   );
-  play(); // intento inmediato (por si el navegador ya lo permite)
+}
+
+// Suena en cuanto aparece el loader. Si el navegador lo bloquea (carga en frío
+// sin interacción previa), queda listo para sonar al primer gesto.
+function triggerAudiologo() {
+  if (typeof window === "undefined") return;
+  const a = getAudio();
+  // si ya está sonando, no lo reinicia (evita cortes en navegación rápida)
+  if (!a.paused && a.currentTime > 0 && (!a.duration || a.currentTime < a.duration)) return;
+  playFromStart()
+    .then(() => {
+      (window as unknown as Record<string, string>).__lafabAudiologo = "played";
+    })
+    .catch(() => {
+      (window as unknown as Record<string, string>).__lafabAudiologo = "blocked";
+      armOnFirstGesture();
+    });
 }
 
 export default function IntroLoader() {
   const pathname = usePathname();
   const [visible, setVisible] = useState(true);
   const [cycle, setCycle] = useState(0);
-  const once = useRef(false);
-
   useEffect(() => {
     setVisible(true);
     setCycle((c) => c + 1);
-    if (!once.current) {
-      once.current = true;
-      armAudiologo();
-    }
+    triggerAudiologo();
     const t = setTimeout(() => setVisible(false), DURATION);
     return () => clearTimeout(t);
   }, [pathname]);
