@@ -10,7 +10,8 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
 const LOGO = "https://lafab.com.co/wp-content/uploads/2022/12/lafab-blanco.png";
-const DURATION = 2100;
+// El audiologo dura ~6s: el loader dura lo mismo para que animación y sonido calcen.
+const DURATION = 6000;
 
 // ---- Audiologo ----------------------------------------------------------
 // Objetivo: que suene APENAS aparece el loader. En una navegación interna el
@@ -57,9 +58,7 @@ function armOnFirstGesture() {
 // sin interacción previa), queda listo para sonar al primer gesto.
 function triggerAudiologo() {
   if (typeof window === "undefined") return;
-  const a = getAudio();
-  // si ya está sonando, no lo reinicia (evita cortes en navegación rápida)
-  if (!a.paused && a.currentTime > 0 && (!a.duration || a.currentTime < a.duration)) return;
+  // Suena en CADA aparición del loader, desde el inicio.
   playFromStart()
     .then(() => {
       (window as unknown as Record<string, string>).__lafabAudiologo = "played";
@@ -78,7 +77,11 @@ export default function IntroLoader() {
     setVisible(true);
     setCycle((c) => c + 1);
     triggerAudiologo();
-    const t = setTimeout(() => setVisible(false), DURATION);
+    const reduce =
+      typeof window !== "undefined" &&
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const t = setTimeout(() => setVisible(false), reduce ? 800 : DURATION);
     return () => clearTimeout(t);
   }, [pathname]);
 
@@ -109,16 +112,16 @@ export default function IntroLoader() {
           strokeLinejoin="round"
         >
           {/* respaldo + brazos */}
-          <path className="lf-sofa-line" style={{ animationDelay: "0.35s" }} d="M26 86 L26 54 Q26 40 42 40 L198 40 Q214 40 214 54 L214 86" />
-          {/* línea del asiento */}
-          <path className="lf-sofa-line" style={{ animationDelay: "0.6s" }} d="M40 66 Q120 60 200 66" />
+          <path className="lf-sofa-line" style={{ animationDelay: "0.7s" }} d="M26 86 L26 54 Q26 40 42 40 L198 40 Q214 40 214 54 L214 86" />
           {/* base */}
-          <path className="lf-sofa-line" style={{ animationDelay: "0.55s" }} d="M20 86 L220 86" />
+          <path className="lf-sofa-line" style={{ animationDelay: "1.1s" }} d="M20 86 L220 86" />
+          {/* línea del asiento */}
+          <path className="lf-sofa-line" style={{ animationDelay: "1.5s" }} d="M40 66 Q120 60 200 66" />
           {/* división de cojines */}
-          <path className="lf-sofa-line" style={{ animationDelay: "0.8s" }} d="M120 66 L120 44" />
+          <path className="lf-sofa-line" style={{ animationDelay: "2.1s" }} d="M120 66 L120 44" />
           {/* patas */}
-          <path className="lf-sofa-line" style={{ animationDelay: "0.9s" }} d="M44 86 L40 100" />
-          <path className="lf-sofa-line" style={{ animationDelay: "0.9s" }} d="M196 86 L200 100" />
+          <path className="lf-sofa-line" style={{ animationDelay: "2.5s" }} d="M44 86 L40 100" />
+          <path className="lf-sofa-line" style={{ animationDelay: "2.5s" }} d="M196 86 L200 100" />
         </svg>
 
         <span className="lf-loader-line mt-6 h-px w-24 bg-gold" />
