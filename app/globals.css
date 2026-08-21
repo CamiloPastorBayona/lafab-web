@@ -64,8 +64,8 @@ h6 {
 }
 
 /* ---- Loader de intro / cambio de página (encendido de luz + reveal del logo) ---- */
-.lf-loader {
-  animation: lf-loader-out 6s ease forwards;
+.lf-loader--playing {
+  animation: lf-loader-out var(--lf-loader-duration, 6.04s) ease forwards;
 }
 @keyframes lf-loader-out {
   0%,
@@ -81,6 +81,9 @@ h6 {
 .lf-sofa-line {
   stroke-dasharray: 620;
   stroke-dashoffset: 620;
+}
+
+.lf-loader--playing .lf-sofa-line {
   animation: lf-sofa-draw 1.8s cubic-bezier(0.55, 0, 0.1, 1) forwards;
 }
 @keyframes lf-sofa-draw {
@@ -100,7 +103,11 @@ h6 {
     rgba(176, 160, 128, 0.12) 34%,
     rgba(21, 21, 21, 0) 68%
   );
-  animation: lf-loader-glow 6s ease forwards;
+  opacity: 0.75;
+  transform: scale(0.96);
+}
+.lf-loader--playing .lf-loader-glow {
+  animation: lf-loader-glow var(--lf-loader-duration, 6.04s) ease forwards;
 }
 @keyframes lf-loader-glow {
   0% {
@@ -124,6 +131,9 @@ h6 {
 }
 
 .lf-loader-logo {
+  opacity: 1;
+}
+.lf-loader--playing .lf-loader-logo {
   opacity: 0;
   animation: lf-loader-logo 1.3s ease 2.8s forwards;
 }
@@ -143,6 +153,8 @@ h6 {
 .lf-loader-line {
   transform: scaleX(0);
   transform-origin: center;
+}
+.lf-loader--playing .lf-loader-line {
   animation: lf-loader-line 0.8s cubic-bezier(0.4, 0, 0.2, 1) 4s forwards;
 }
 @keyframes lf-loader-line {
@@ -152,12 +164,19 @@ h6 {
 }
 
 .lf-loader-tag {
+  opacity: 1;
+}
+.lf-loader--playing .lf-loader-tag {
   opacity: 0;
   animation: lf-fade-up 0.9s ease 4.5s forwards;
 }
 
+.lf-loader-start {
+  animation: lf-fade-up 0.5s ease both;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .lf-loader,
+  .lf-loader--playing,
   .lf-loader-glow,
   .lf-loader-logo,
   .lf-loader-line,

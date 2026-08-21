@@ -3,95 +3,161 @@
 // Loader de LaFab (marca de muebles): sobre un fondo oscuro se ENCIENDE una luz
 // cálida, se DIBUJA un sofá en línea dorada y aparece el logo; luego se revela el
 // sitio. Corre en cada cambio de página.
-// Sonido: el audiologo suena una vez por carga, al primer gesto del usuario
-// (clic/tap/tecla/scroll) porque los navegadores prohíben el audio sin interacción.
 
-import { useEffect, useState } from "react";
+import { type CSSProperties, useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 
 const LOGO = "https://lafab.com.co/wp-content/uploads/2022/12/lafab-blanco.png";
-// El audiologo dura ~6s: el loader dura lo mismo para que animación y sonido calcen.
-const DURATION = 6000;
+const AUDIO_SRC = "/audiologo.mp3";
+// El archivo 7 dura ~6.03s; la animación usa la misma duración para mantener sync.
+const INTRO_DURATION_MS = 6040;
 
 // ---- Audiologo ----------------------------------------------------------
-// Objetivo: que suene APENAS aparece el loader. En una navegación interna el
-// clic que disparó el cambio de página ya es un gesto válido, así que el audio
-// arranca de inmediato con la animación. Solo en la PRIMERA carga en frío el
-// navegador obliga a esperar, así que ahí suena al primer movimiento/clic/scroll.
+// Objetivo: que audio y animación empiecen juntos. En carga fría, el navegador
+// puede bloquear audio con volumen; en ese caso esperamos un gesto y reiniciamos
+// la secuencia desde cero en lugar de dejar que el loader corra desfasado.
 let audioEl: HTMLAudioElement | null = null;
-let gestureArmed = false;
+type LoaderPhase = "starting" | "needs-gesture" | "playing";
 
 function getAudio() {
   if (!audioEl) {
-    audioEl = new Audio("/audiologo.mp3");
+    audioEl = new Audio(AUDIO_SRC);
     audioEl.volume = 1;
     audioEl.preload = "auto";
-    audioEl.load();
   }
   return audioEl;
 }
 
-function playFromStart() {
-  const a = getAudio();
+function resetAudio(audio: HTMLAudioElement) {
+  audio.pause();
   try {
-    a.currentTime = 0;
+    audio.currentTime = 0;
   } catch {
-    /* aún no cargado; play() igual arranca desde 0 */
+    // Safari puede impedir currentTime antes de tener metadata; play() sigue funcionando.
   }
-  return a.play();
 }
 
-function armOnFirstGesture() {
-  if (gestureArmed) return;
-  gestureArmed = true;
-  const events = ["pointerdown", "touchstart", "keydown", "click", "wheel", "scroll"];
-  const onGesture = () => {
-    playFromStart().catch(() => {});
-    events.forEach((e) => window.removeEventListener(e, onGesture, true));
-  };
-  events.forEach((e) =>
-    window.addEventListener(e, onGesture, { capture: true, passive: true })
-  );
+function playAudiologoFromStart() {
+  const audio = getAudio();
+  resetAudio(audio);
+  return audio.play();
 }
 
-// Suena en cuanto aparece el loader. Si el navegador lo bloquea (carga en frío
-// sin interacción previa), queda listo para sonar al primer gesto.
-function triggerAudiologo() {
-  if (typeof window === "undefined") return;
-  // Suena en CADA aparición del loader, desde el inicio.
-  playFromStart()
-    .then(() => {
-      (window as unknown as Record<string, string>).__lafabAudiologo = "played";
-    })
-    .catch(() => {
-      (window as unknown as Record<string, string>).__lafabAudiologo = "blocked";
-      armOnFirstGesture();
-    });
+function stopAudiologo() {
+  if (!audioEl) return;
+  resetAudio(audioEl);
 }
 
 export default function IntroLoader() {
   const pathname = usePathname();
   const [visible, setVisible] = useState(true);
+  const [phase, setPhase] = useState<LoaderPhase>("starting");
   const [cycle, setCycle] = useState(0);
+
+  const runIdRef = useRef(0);
+  const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const cleanupEndedRef = useRef<(() => void) | null>(null);
+
+  const clearScheduledHide = useCallback(() => {
+    if (hideTimerRef.current) {
+      clearTimeout(hideTimerRef.current);
+      hideTimerRef.current = null;
+    }
+    cleanupEndedRef.current?.();
+    cleanupEndedRef.current = null;
+  }, []);
+
+  const finishRun = useCallback(
+    (runId: number) => {
+      if (runIdRef.current !== runId) return;
+      clearScheduledHide();
+      setVisible(false);
+    },
+    [clearScheduledHide]
+  );
+
+  const scheduleHide = useCallback(
+    (runId: number) => {
+      const audio = getAudio();
+      const onEnded = () => finishRun(runId);
+      audio.addEventListener("ended", onEnded, { once: true });
+      cleanupEndedRef.current = () => audio.removeEventListener("ended", onEnded);
+
+      // Fallback por si el navegador no dispara ended después de una navegación rápida.
+      hideTimerRef.current = setTimeout(() => finishRun(runId), INTRO_DURATION_MS + 500);
+    },
+    [finishRun]
+  );
+
+  const startSyncedIntro = useCallback(
+    async (runId: number) => {
+      clearScheduledHide();
+      setPhase("starting");
+
+      try {
+        await playAudiologoFromStart();
+        if (runIdRef.current !== runId) return;
+
+        setCycle((current) => current + 1);
+        setPhase("playing");
+        (window as unknown as Record<string, string>).__lafabAudiologo = "played";
+        scheduleHide(runId);
+      } catch {
+        if (runIdRef.current !== runId) return;
+
+        setPhase("needs-gesture");
+        (window as unknown as Record<string, string>).__lafabAudiologo = "blocked";
+      }
+    },
+    [clearScheduledHide, scheduleHide]
+  );
+
   useEffect(() => {
+    const audio = getAudio();
+    audio.load();
+
+    return () => {
+      clearScheduledHide();
+      stopAudiologo();
+    };
+  }, [clearScheduledHide]);
+
+  useEffect(() => {
+    const runId = runIdRef.current + 1;
+    runIdRef.current = runId;
+
     setVisible(true);
-    setCycle((c) => c + 1);
-    triggerAudiologo();
-    const reduce =
-      typeof window !== "undefined" &&
-      window.matchMedia &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const t = setTimeout(() => setVisible(false), reduce ? 800 : DURATION);
-    return () => clearTimeout(t);
-  }, [pathname]);
+    void startSyncedIntro(runId);
+
+    return () => {
+      clearScheduledHide();
+    };
+  }, [pathname, clearScheduledHide, startSyncedIntro]);
+
+  const handleStart = () => {
+    const runId = runIdRef.current + 1;
+    runIdRef.current = runId;
+    setVisible(true);
+    void startSyncedIntro(runId);
+  };
 
   if (!visible) return null;
+
+  const isPlaying = phase === "playing";
+  const loaderStyle = {
+    "--lf-loader-duration": `${INTRO_DURATION_MS}ms`,
+  } as CSSProperties;
 
   return (
     <div
       key={cycle}
-      className="lf-loader pointer-events-none fixed inset-0 z-[200] flex items-center justify-center overflow-hidden bg-ink"
-      aria-hidden
+      className={`lf-loader fixed inset-0 z-[200] flex items-center justify-center overflow-hidden bg-ink ${
+        isPlaying ? "lf-loader--playing pointer-events-none" : "lf-loader--ready"
+      }`}
+      style={loaderStyle}
+      aria-hidden={phase === "needs-gesture" ? undefined : true}
+      aria-label={phase === "needs-gesture" ? "Iniciar LaFab" : undefined}
+      role={phase === "needs-gesture" ? "dialog" : undefined}
     >
       {/* Luz cálida que se enciende */}
       <span className="lf-loader-glow" />
@@ -128,6 +194,21 @@ export default function IntroLoader() {
         <span className="lf-loader-tag mt-4 text-[11px] uppercase tracking-[0.35em] text-white/55">
           Muebles a la medida
         </span>
+
+        {phase === "needs-gesture" ? (
+          <button
+            type="button"
+            className="lf-loader-start mt-7 inline-flex items-center gap-3 rounded-full border border-gold-light/50 bg-white/10 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.24em] text-white backdrop-blur transition-colors hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-gold-light focus:ring-offset-2 focus:ring-offset-ink"
+            onClick={handleStart}
+          >
+            <span className="flex h-4 items-end gap-0.5" aria-hidden>
+              <span className="h-2 w-0.5 bg-gold-light" />
+              <span className="h-4 w-0.5 bg-gold-light" />
+              <span className="h-3 w-0.5 bg-gold-light" />
+            </span>
+            <span>Entrar</span>
+          </button>
+        ) : null}
       </div>
     </div>
   );
