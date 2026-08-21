@@ -9,15 +9,16 @@ import { usePathname } from "next/navigation";
 
 const LOGO = "https://lafab.com.co/wp-content/uploads/2022/12/lafab-blanco.png";
 const AUDIO_SRC = "/audiologo.mp3";
-// El archivo 7 dura ~6.03s; la animación usa la misma duración para mantener sync.
-const INTRO_DURATION_MS = 6040;
+const HOME_PATHS = new Set(["/", "/inicio"]);
+const AUDIO_SESSION_KEY = "lafab:audiologo:intro-played";
+// La animación visual queda 1.5s más corta; el audiologo conserva su duración real.
+const INTRO_DURATION_MS = 4540;
 
 // ---- Audiologo ----------------------------------------------------------
-// Objetivo: que audio y animación empiecen juntos. En carga fría, el navegador
-// puede bloquear audio con volumen; en ese caso esperamos un gesto y reiniciamos
-// la secuencia desde cero en lugar de dejar que el loader corra desfasado.
+// Objetivo: intentar el audiologo automáticamente una sola vez en home. Si el
+// navegador bloquea autoplay con sonido, el loader no se detiene ni pide click.
 let audioEl: HTMLAudioElement | null = null;
-type LoaderPhase = "starting" | "needs-gesture" | "playing";
+let audioAttemptedInRuntime = false;
 
 function getAudio() {
   if (!audioEl) {
@@ -48,23 +49,56 @@ function stopAudiologo() {
   resetAudio(audioEl);
 }
 
+function isHomePath(pathname: string) {
+  return HOME_PATHS.has(pathname);
+}
+
+function wasAudioAlreadyAttempted() {
+  if (audioAttemptedInRuntime) return true;
+
+  try {
+    return window.sessionStorage.getItem(AUDIO_SESSION_KEY) === "true";
+  } catch {
+    return false;
+  }
+}
+
+function markAudioAttempted() {
+  audioAttemptedInRuntime = true;
+
+  try {
+    window.sessionStorage.setItem(AUDIO_SESSION_KEY, "true");
+  } catch {
+    // sessionStorage puede estar deshabilitado; la bandera en memoria cubre la sesión SPA.
+  }
+}
+
+function tryPlayAudiologoOnce(pathname: string) {
+  if (!isHomePath(pathname) || wasAudioAlreadyAttempted()) return;
+
+  markAudioAttempted();
+  void playAudiologoFromStart()
+    .then(() => {
+      (window as unknown as Record<string, string>).__lafabAudiologo = "played";
+    })
+    .catch(() => {
+      (window as unknown as Record<string, string>).__lafabAudiologo = "blocked";
+    });
+}
+
 export default function IntroLoader() {
   const pathname = usePathname();
   const [visible, setVisible] = useState(true);
-  const [phase, setPhase] = useState<LoaderPhase>("starting");
   const [cycle, setCycle] = useState(0);
 
   const runIdRef = useRef(0);
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const cleanupEndedRef = useRef<(() => void) | null>(null);
 
   const clearScheduledHide = useCallback(() => {
     if (hideTimerRef.current) {
       clearTimeout(hideTimerRef.current);
       hideTimerRef.current = null;
     }
-    cleanupEndedRef.current?.();
-    cleanupEndedRef.current = null;
   }, []);
 
   const finishRun = useCallback(
@@ -78,38 +112,13 @@ export default function IntroLoader() {
 
   const scheduleHide = useCallback(
     (runId: number) => {
-      const audio = getAudio();
-      const onEnded = () => finishRun(runId);
-      audio.addEventListener("ended", onEnded, { once: true });
-      cleanupEndedRef.current = () => audio.removeEventListener("ended", onEnded);
-
-      // Fallback por si el navegador no dispara ended después de una navegación rápida.
-      hideTimerRef.current = setTimeout(() => finishRun(runId), INTRO_DURATION_MS + 500);
+      const reduce =
+        typeof window !== "undefined" &&
+        window.matchMedia &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      hideTimerRef.current = setTimeout(() => finishRun(runId), reduce ? 800 : INTRO_DURATION_MS);
     },
     [finishRun]
-  );
-
-  const startSyncedIntro = useCallback(
-    async (runId: number) => {
-      clearScheduledHide();
-      setPhase("starting");
-
-      try {
-        await playAudiologoFromStart();
-        if (runIdRef.current !== runId) return;
-
-        setCycle((current) => current + 1);
-        setPhase("playing");
-        (window as unknown as Record<string, string>).__lafabAudiologo = "played";
-        scheduleHide(runId);
-      } catch {
-        if (runIdRef.current !== runId) return;
-
-        setPhase("needs-gesture");
-        (window as unknown as Record<string, string>).__lafabAudiologo = "blocked";
-      }
-    },
-    [clearScheduledHide, scheduleHide]
   );
 
   useEffect(() => {
@@ -118,7 +127,6 @@ export default function IntroLoader() {
 
     return () => {
       clearScheduledHide();
-      stopAudiologo();
     };
   }, [clearScheduledHide]);
 
@@ -126,24 +134,24 @@ export default function IntroLoader() {
     const runId = runIdRef.current + 1;
     runIdRef.current = runId;
 
+    clearScheduledHide();
     setVisible(true);
-    void startSyncedIntro(runId);
+    setCycle((current) => current + 1);
+    scheduleHide(runId);
+
+    if (isHomePath(pathname)) {
+      tryPlayAudiologoOnce(pathname);
+    } else {
+      stopAudiologo();
+    }
 
     return () => {
       clearScheduledHide();
     };
-  }, [pathname, clearScheduledHide, startSyncedIntro]);
-
-  const handleStart = () => {
-    const runId = runIdRef.current + 1;
-    runIdRef.current = runId;
-    setVisible(true);
-    void startSyncedIntro(runId);
-  };
+  }, [pathname, clearScheduledHide, scheduleHide]);
 
   if (!visible) return null;
 
-  const isPlaying = phase === "playing";
   const loaderStyle = {
     "--lf-loader-duration": `${INTRO_DURATION_MS}ms`,
   } as CSSProperties;
@@ -151,13 +159,9 @@ export default function IntroLoader() {
   return (
     <div
       key={cycle}
-      className={`lf-loader fixed inset-0 z-[200] flex items-center justify-center overflow-hidden bg-ink ${
-        isPlaying ? "lf-loader--playing pointer-events-none" : "lf-loader--ready"
-      }`}
+      className="lf-loader lf-loader--playing pointer-events-none fixed inset-0 z-[200] flex items-center justify-center overflow-hidden bg-ink"
       style={loaderStyle}
-      aria-hidden={phase === "needs-gesture" ? undefined : true}
-      aria-label={phase === "needs-gesture" ? "Iniciar LaFab" : undefined}
-      role={phase === "needs-gesture" ? "dialog" : undefined}
+      aria-hidden
     >
       {/* Luz cálida que se enciende */}
       <span className="lf-loader-glow" />
@@ -178,37 +182,22 @@ export default function IntroLoader() {
           strokeLinejoin="round"
         >
           {/* respaldo + brazos */}
-          <path className="lf-sofa-line" style={{ animationDelay: "0.7s" }} d="M26 86 L26 54 Q26 40 42 40 L198 40 Q214 40 214 54 L214 86" />
+          <path className="lf-sofa-line" style={{ animationDelay: "0.45s" }} d="M26 86 L26 54 Q26 40 42 40 L198 40 Q214 40 214 54 L214 86" />
           {/* base */}
-          <path className="lf-sofa-line" style={{ animationDelay: "1.1s" }} d="M20 86 L220 86" />
+          <path className="lf-sofa-line" style={{ animationDelay: "0.7s" }} d="M20 86 L220 86" />
           {/* línea del asiento */}
-          <path className="lf-sofa-line" style={{ animationDelay: "1.5s" }} d="M40 66 Q120 60 200 66" />
+          <path className="lf-sofa-line" style={{ animationDelay: "0.95s" }} d="M40 66 Q120 60 200 66" />
           {/* división de cojines */}
-          <path className="lf-sofa-line" style={{ animationDelay: "2.1s" }} d="M120 66 L120 44" />
+          <path className="lf-sofa-line" style={{ animationDelay: "1.25s" }} d="M120 66 L120 44" />
           {/* patas */}
-          <path className="lf-sofa-line" style={{ animationDelay: "2.5s" }} d="M44 86 L40 100" />
-          <path className="lf-sofa-line" style={{ animationDelay: "2.5s" }} d="M196 86 L200 100" />
+          <path className="lf-sofa-line" style={{ animationDelay: "1.55s" }} d="M44 86 L40 100" />
+          <path className="lf-sofa-line" style={{ animationDelay: "1.55s" }} d="M196 86 L200 100" />
         </svg>
 
         <span className="lf-loader-line mt-6 h-px w-24 bg-gold" />
         <span className="lf-loader-tag mt-4 text-[11px] uppercase tracking-[0.35em] text-white/55">
           Muebles a la medida
         </span>
-
-        {phase === "needs-gesture" ? (
-          <button
-            type="button"
-            className="lf-loader-start mt-7 inline-flex items-center gap-3 rounded-full border border-gold-light/50 bg-white/10 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.24em] text-white backdrop-blur transition-colors hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-gold-light focus:ring-offset-2 focus:ring-offset-ink"
-            onClick={handleStart}
-          >
-            <span className="flex h-4 items-end gap-0.5" aria-hidden>
-              <span className="h-2 w-0.5 bg-gold-light" />
-              <span className="h-4 w-0.5 bg-gold-light" />
-              <span className="h-3 w-0.5 bg-gold-light" />
-            </span>
-            <span>Entrar</span>
-          </button>
-        ) : null}
       </div>
     </div>
   );
