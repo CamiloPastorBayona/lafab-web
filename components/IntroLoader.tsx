@@ -17,15 +17,14 @@ import { usePathname } from "next/navigation";
 const LOGO = "https://lafab.com.co/wp-content/uploads/2022/12/lafab-blanco.png";
 const AUDIO_SRC = "/audiologo.mp3";
 const HOME_PATHS = new Set(["/", "/inicio"]);
-const AUDIO_SESSION_KEY = "lafab:audiologo:intro-played";
 // La animación visual queda 1.5s más corta; el audiologo conserva su duración real.
 const INTRO_DURATION_MS = 4540;
+const AUDIO_START_GUARD_MS = 1200;
 
 // ---- Audiologo ----------------------------------------------------------
 // Objetivo: el home empieza con una lámpara apagada. El primer tap/click del
 // usuario enciende la escena y dispara el audiologo dentro de un gesto real.
 let audioEl: HTMLAudioElement | null = null;
-let audioPlayedInRuntime = false;
 type LoaderState = "ready" | "playing" | "waiting-for-sound";
 
 function prepareAudio(audio: HTMLAudioElement) {
@@ -66,26 +65,6 @@ function isHomePath(pathname: string) {
   return HOME_PATHS.has(pathname);
 }
 
-function wasAudioAlreadyPlayed() {
-  if (audioPlayedInRuntime) return true;
-
-  try {
-    return window.sessionStorage.getItem(AUDIO_SESSION_KEY) === "true";
-  } catch {
-    return false;
-  }
-}
-
-function markAudioPlayed() {
-  audioPlayedInRuntime = true;
-
-  try {
-    window.sessionStorage.setItem(AUDIO_SESSION_KEY, "true");
-  } catch {
-    // sessionStorage puede estar deshabilitado; la bandera en memoria cubre la sesión SPA.
-  }
-}
-
 function setAudioStatus(status: "playing" | "played" | "blocked") {
   (window as unknown as Record<string, string>).__lafabAudiologo = status;
 }
@@ -98,6 +77,7 @@ export default function IntroLoader() {
   const [cycle, setCycle] = useState(0);
 
   const loaderRef = useRef<HTMLDivElement | null>(null);
+  const homeSoundPrimedRef = useRef(false);
   const runIdRef = useRef(0);
   const soundStartInFlightRef = useRef(false);
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -139,38 +119,36 @@ export default function IntroLoader() {
     [clearScheduledHide, scheduleHide]
   );
 
+  const playHomeSound = useCallback(() => {
+    if (soundStartInFlightRef.current) return;
+    soundStartInFlightRef.current = true;
+
+    setAudioStatus("playing");
+    const releaseGuard = window.setTimeout(() => {
+      soundStartInFlightRef.current = false;
+    }, AUDIO_START_GUARD_MS);
+
+    void playAudiologoFromStart()
+      .then(() => {
+        setAudioStatus("played");
+      })
+      .catch(() => {
+        setAudioStatus("blocked");
+      })
+      .finally(() => {
+        window.clearTimeout(releaseGuard);
+        soundStartInFlightRef.current = false;
+      });
+  }, []);
+
   const startHomeSoundAndLoader = useCallback(
     (runId: number) => {
-      if (wasAudioAlreadyPlayed()) {
-        startVisualLoader(runId);
-        return;
-      }
-
-      if (soundStartInFlightRef.current) return;
-      soundStartInFlightRef.current = true;
-
-      setAudioStatus("playing");
       // El play() se invoca dentro del gesto real del usuario y la animación
       // arranca en el mismo frame para que luz + audiologo entren juntos.
       startVisualLoader(runId);
-
-      void playAudiologoFromStart()
-        .then(() => {
-          if (runIdRef.current !== runId) return;
-
-          markAudioPlayed();
-          setAudioStatus("played");
-        })
-        .catch(() => {
-          if (runIdRef.current !== runId) return;
-
-          setAudioStatus("blocked");
-        })
-        .finally(() => {
-          soundStartInFlightRef.current = false;
-        });
+      playHomeSound();
     },
-    [startVisualLoader]
+    [playHomeSound, startVisualLoader]
   );
 
   useEffect(() => {
@@ -182,6 +160,36 @@ export default function IntroLoader() {
   }, [clearScheduledHide]);
 
   useEffect(() => {
+    const primeHomeSoundFromLink = (event: PointerEvent) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+
+      const link = target.closest<HTMLAnchorElement>("a[href]");
+      if (!link) return;
+
+      const url = new URL(link.href, window.location.href);
+      if (url.origin !== window.location.origin || !isHomePath(url.pathname)) return;
+
+      homeSoundPrimedRef.current = true;
+      playHomeSound();
+
+      if (isHomePath(window.location.pathname)) {
+        const runId = runIdRef.current + 1;
+        runIdRef.current = runId;
+        setVisible(true);
+        setLoaderState("ready");
+        startVisualLoader(runId);
+      }
+    };
+
+    document.addEventListener("pointerdown", primeHomeSoundFromLink, { capture: true });
+
+    return () => {
+      document.removeEventListener("pointerdown", primeHomeSoundFromLink, { capture: true });
+    };
+  }, [playHomeSound, startVisualLoader]);
+
+  useEffect(() => {
     const runId = runIdRef.current + 1;
     runIdRef.current = runId;
     soundStartInFlightRef.current = false;
@@ -190,12 +198,14 @@ export default function IntroLoader() {
     setVisible(true);
     setLoaderState("ready");
 
-    if (isHomePath(pathname) && !wasAudioAlreadyPlayed()) {
+    if (isHomePath(pathname) && homeSoundPrimedRef.current) {
+      homeSoundPrimedRef.current = false;
+      startVisualLoader(runId);
+    } else if (isHomePath(pathname)) {
       setCycle((current) => current + 1);
       setLoaderState("waiting-for-sound");
-    } else if (isHomePath(pathname)) {
-      startVisualLoader(runId);
     } else {
+      homeSoundPrimedRef.current = false;
       stopAudiologo();
       startVisualLoader(runId);
     }
@@ -210,6 +220,7 @@ export default function IntroLoader() {
 
   const handleSoundGesture = useCallback(() => {
     if (!isHome || loaderState !== "waiting-for-sound") return;
+    if (soundStartInFlightRef.current) return;
 
     const runId = runIdRef.current + 1;
     runIdRef.current = runId;
@@ -261,68 +272,68 @@ export default function IntroLoader() {
       onTouchStart={handleSoundGesture}
       onKeyDown={handleSoundKeyDown}
     >
-      {/* Luz cálida que se enciende */}
+      <span className="lf-loader-wash" />
       <span className="lf-loader-glow" />
       <span className="lf-lamp-beam" />
 
-      <div className="lf-lamp" aria-hidden>
-        <span className="lf-lamp-cable" />
-        <svg
-          className="lf-lamp-shade"
-          viewBox="0 0 120 70"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="3"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M42 12 H78" />
-          <path d="M32 16 L18 56 H102 L88 16 Z" />
-          <path d="M28 56 H92" />
-        </svg>
-        <span className="lf-lamp-bulb" />
-      </div>
+      <div className="lf-loader-stage">
+        <div className="lf-lamp" aria-hidden>
+          <span className="lf-lamp-cable" />
+          <svg
+            className="lf-lamp-shade"
+            viewBox="0 0 120 70"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M42 12 H78" />
+            <path d="M32 16 L18 56 H102 L88 16 Z" />
+            <path d="M28 56 H92" />
+          </svg>
+          <span className="lf-lamp-bulb" />
+        </div>
 
-      {isWaitingForSound ? (
-        <div className="relative z-10 flex flex-col items-center px-6 pt-44 text-center md:pt-48">
-          <span className="lf-loader-prompt text-[11px] font-medium uppercase tracking-[0.32em] text-white/55">
+        {isWaitingForSound ? (
+          <span className="lf-loader-prompt text-xs font-medium uppercase text-white/60">
             Toca para encender
           </span>
+        ) : null}
+
+        <div className="lf-loader-brand flex flex-col items-center px-6">
+          {/* Logo iluminado */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={LOGO} alt="LaFab" className="lf-loader-logo h-8 w-auto md:h-10" />
+
+          {/* Sofá que se dibuja en línea dorada */}
+          <svg
+            className="lf-sofa mt-7 w-[220px] md:w-[260px]"
+            viewBox="0 0 240 120"
+            fill="none"
+            stroke="#CABBA0"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            {/* respaldo + brazos */}
+            <path className="lf-sofa-line" style={{ animationDelay: "0.45s" }} d="M26 86 L26 54 Q26 40 42 40 L198 40 Q214 40 214 54 L214 86" />
+            {/* base */}
+            <path className="lf-sofa-line" style={{ animationDelay: "0.7s" }} d="M20 86 L220 86" />
+            {/* línea del asiento */}
+            <path className="lf-sofa-line" style={{ animationDelay: "0.95s" }} d="M40 66 Q120 60 200 66" />
+            {/* división de cojines */}
+            <path className="lf-sofa-line" style={{ animationDelay: "1.25s" }} d="M120 66 L120 44" />
+            {/* patas */}
+            <path className="lf-sofa-line" style={{ animationDelay: "1.55s" }} d="M44 86 L40 100" />
+            <path className="lf-sofa-line" style={{ animationDelay: "1.55s" }} d="M196 86 L200 100" />
+          </svg>
+
+          <span className="lf-loader-line mt-6 h-px w-24 bg-gold" />
+          <span className="lf-loader-tag mt-4 text-[11px] uppercase tracking-[0.35em] text-white/55">
+            Muebles a la medida
+          </span>
         </div>
-      ) : null}
-
-      <div className="lf-loader-brand relative z-10 flex flex-col items-center px-6">
-        {/* Logo iluminado */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={LOGO} alt="LaFab" className="lf-loader-logo h-8 w-auto md:h-10" />
-
-        {/* Sofá que se dibuja en línea dorada */}
-        <svg
-          className="lf-sofa mt-7 w-[220px] md:w-[260px]"
-          viewBox="0 0 240 120"
-          fill="none"
-          stroke="#CABBA0"
-          strokeWidth="2.2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          {/* respaldo + brazos */}
-          <path className="lf-sofa-line" style={{ animationDelay: "0.45s" }} d="M26 86 L26 54 Q26 40 42 40 L198 40 Q214 40 214 54 L214 86" />
-          {/* base */}
-          <path className="lf-sofa-line" style={{ animationDelay: "0.7s" }} d="M20 86 L220 86" />
-          {/* línea del asiento */}
-          <path className="lf-sofa-line" style={{ animationDelay: "0.95s" }} d="M40 66 Q120 60 200 66" />
-          {/* división de cojines */}
-          <path className="lf-sofa-line" style={{ animationDelay: "1.25s" }} d="M120 66 L120 44" />
-          {/* patas */}
-          <path className="lf-sofa-line" style={{ animationDelay: "1.55s" }} d="M44 86 L40 100" />
-          <path className="lf-sofa-line" style={{ animationDelay: "1.55s" }} d="M196 86 L200 100" />
-        </svg>
-
-        <span className="lf-loader-line mt-6 h-px w-24 bg-gold" />
-        <span className="lf-loader-tag mt-4 text-[11px] uppercase tracking-[0.35em] text-white/55">
-          Muebles a la medida
-        </span>
       </div>
     </div>
   );

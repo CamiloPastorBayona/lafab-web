@@ -64,6 +64,10 @@ h6 {
 }
 
 /* ---- Loader de intro / cambio de página (encendido de luz + reveal del logo) ---- */
+.lf-loader {
+  isolation: isolate;
+}
+
 .lf-loader--playing {
   animation: lf-loader-out var(--lf-loader-duration, 4.54s) ease forwards;
 }
@@ -77,24 +81,72 @@ h6 {
   }
 }
 
+.lf-loader-wash {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(255, 244, 222, 0.58) 0%, rgba(221, 198, 157, 0.28) 30%, rgba(21, 21, 21, 0) 64%),
+    linear-gradient(180deg, rgba(202, 187, 160, 0.18) 0%, rgba(255, 250, 237, 0.08) 48%, rgba(21, 21, 21, 0) 100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.lf-loader--playing .lf-loader-wash {
+  animation: lf-loader-wash var(--lf-loader-duration, 4.54s) ease forwards;
+}
+
+@keyframes lf-loader-wash {
+  0% {
+    opacity: 0;
+  }
+  16% {
+    opacity: 1;
+  }
+  72% {
+    opacity: 0.78;
+  }
+  100% {
+    opacity: 0.35;
+  }
+}
+
+.lf-loader-stage {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  width: min(92vw, 560px);
+  min-height: min(74vh, 620px);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(32px, 6vh, 64px) 24px;
+}
+
 .lf-loader-brand {
-  transition: opacity 0.45s ease, transform 0.45s ease;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(92vw, 360px);
+  transition: opacity 0.45s ease, transform 0.45s ease, filter 0.45s ease;
 }
 
 .lf-loader--waiting .lf-loader-brand,
 .lf-loader--ready .lf-loader-brand {
   opacity: 0;
-  transform: translateY(14px);
+  transform: translate(-50%, -50%) translateY(18px) scale(0.98);
+  filter: blur(4px);
 }
 
 .lf-loader--playing .lf-loader-brand {
   opacity: 1;
-  transform: translateY(0);
+  transform: translate(-50%, -50%) translateY(0) scale(1);
+  filter: blur(0);
 }
 
 .lf-lamp {
   position: absolute;
-  top: 0;
+  top: clamp(18px, 7vh, 76px);
   left: 50%;
   z-index: 11;
   display: flex;
@@ -131,20 +183,19 @@ h6 {
 
 .lf-lamp-beam {
   position: absolute;
-  top: 142px;
+  top: 50%;
   left: 50%;
-  z-index: 1;
-  width: min(74vw, 620px);
-  height: min(68vh, 620px);
-  transform: translateX(-50%);
+  z-index: 2;
+  width: 116vmax;
+  height: 116vmax;
+  transform: translate(-50%, -50%) scale(0.72);
   background: radial-gradient(
-    ellipse at top,
-    rgba(202, 187, 160, 0.34) 0%,
-    rgba(202, 187, 160, 0.15) 30%,
-    rgba(202, 187, 160, 0.04) 58%,
-    rgba(21, 21, 21, 0) 78%
+    circle,
+    rgba(255, 245, 224, 0.7) 0%,
+    rgba(229, 203, 158, 0.34) 22%,
+    rgba(202, 187, 160, 0.1) 48%,
+    rgba(21, 21, 21, 0) 72%
   );
-  clip-path: polygon(45% 0, 55% 0, 100% 100%, 0 100%);
   opacity: 0;
   pointer-events: none;
 }
@@ -172,6 +223,12 @@ h6 {
 }
 
 .lf-loader-prompt {
+  position: absolute;
+  left: 50%;
+  top: calc(clamp(18px, 7vh, 76px) + 292px);
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(100vw - 48px);
   animation: lf-loader-prompt 1.9s ease-in-out infinite;
 }
 
@@ -195,14 +252,14 @@ h6 {
 @keyframes lf-lamp-beam {
   0% {
     opacity: 0;
-    transform: translateX(-50%) scaleY(0.4);
+    transform: translate(-50%, -50%) scale(0.46);
   }
-  38% {
+  34% {
     opacity: 1;
   }
   100% {
-    opacity: 0.78;
-    transform: translateX(-50%) scaleY(1);
+    opacity: 0.86;
+    transform: translate(-50%, -50%) scale(1);
   }
 }
 
@@ -233,6 +290,9 @@ h6 {
 
 .lf-loader-glow {
   position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
   width: 70vmax;
   height: 70vmax;
   border-radius: 9999px;
@@ -243,33 +303,33 @@ h6 {
     rgba(21, 21, 21, 0) 68%
   );
   opacity: 0.75;
-  transform: scale(0.96);
+  transform: translate(-50%, -50%) scale(0.96);
 }
 .lf-loader--waiting .lf-loader-glow,
 .lf-loader--ready .lf-loader-glow {
   opacity: 0;
-  transform: scale(0.18);
+  transform: translate(-50%, -50%) scale(0.18);
 }
 .lf-loader--playing .lf-loader-glow {
   animation: lf-loader-glow var(--lf-loader-duration, 4.54s) ease forwards;
 }
 @keyframes lf-loader-glow {
   0% {
-    transform: scale(0.2);
+    transform: translate(-50%, -50%) scale(0.2);
     opacity: 0;
   }
   18% {
     opacity: 1;
   }
   30% {
-    transform: scale(1);
+    transform: translate(-50%, -50%) scale(1);
   }
   85% {
-    transform: scale(1.08);
+    transform: translate(-50%, -50%) scale(1.08);
     opacity: 0.9;
   }
   100% {
-    transform: scale(1.15);
+    transform: translate(-50%, -50%) scale(1.15);
     opacity: 0.75;
   }
 }
@@ -318,6 +378,7 @@ h6 {
 @media (prefers-reduced-motion: reduce) {
   .lf-loader--playing,
   .lf-loader-glow,
+  .lf-loader-wash,
   .lf-lamp,
   .lf-lamp-beam,
   .lf-loader-prompt,
