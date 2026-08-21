@@ -86,14 +86,14 @@ h6 {
   inset: 0;
   z-index: 0;
   background:
-    radial-gradient(circle at 50% 42%, rgba(255, 244, 222, 0.58) 0%, rgba(221, 198, 157, 0.28) 30%, rgba(21, 21, 21, 0) 64%),
-    linear-gradient(180deg, rgba(202, 187, 160, 0.18) 0%, rgba(255, 250, 237, 0.08) 48%, rgba(21, 21, 21, 0) 100%);
+    radial-gradient(circle at 50% 42%, rgba(255, 244, 222, 0.44) 0%, rgba(221, 198, 157, 0.2) 28%, rgba(21, 21, 21, 0) 58%),
+    linear-gradient(180deg, rgba(202, 187, 160, 0.12) 0%, rgba(255, 250, 237, 0.05) 42%, rgba(21, 21, 21, 0) 100%);
   opacity: 0;
   pointer-events: none;
 }
 
 .lf-loader--playing .lf-loader-wash {
-  animation: lf-loader-wash var(--lf-loader-duration, 4.54s) ease forwards;
+  animation: lf-loader-wash 1.45s ease-out forwards;
 }
 
 @keyframes lf-loader-wash {
@@ -103,11 +103,11 @@ h6 {
   16% {
     opacity: 1;
   }
-  72% {
-    opacity: 0.78;
+  48% {
+    opacity: 0.52;
   }
   100% {
-    opacity: 0.35;
+    opacity: 0.06;
   }
 }
 
@@ -127,6 +127,7 @@ h6 {
   position: absolute;
   left: 50%;
   top: 50%;
+  z-index: 12;
   width: min(92vw, 360px);
   transition: opacity 0.45s ease, transform 0.45s ease, filter 0.45s ease;
 }
@@ -181,6 +182,14 @@ h6 {
   box-shadow: 0 0 0 rgba(202, 187, 160, 0);
 }
 
+.lf-loader--waiting .lf-lamp {
+  color: rgba(220, 204, 172, 0.62);
+}
+
+.lf-loader--waiting .lf-lamp-bulb {
+  background: rgba(220, 204, 172, 0.28);
+}
+
 .lf-lamp-beam {
   position: absolute;
   top: 50%;
@@ -191,9 +200,9 @@ h6 {
   transform: translate(-50%, -50%) scale(0.72);
   background: radial-gradient(
     circle,
-    rgba(255, 245, 224, 0.7) 0%,
-    rgba(229, 203, 158, 0.34) 22%,
-    rgba(202, 187, 160, 0.1) 48%,
+    rgba(255, 245, 224, 0.52) 0%,
+    rgba(229, 203, 158, 0.22) 22%,
+    rgba(202, 187, 160, 0.06) 48%,
     rgba(21, 21, 21, 0) 72%
   );
   opacity: 0;
@@ -219,7 +228,7 @@ h6 {
 }
 
 .lf-loader--playing .lf-lamp-beam {
-  animation: lf-lamp-beam 1.25s ease forwards;
+  animation: lf-lamp-beam 1.35s ease-out forwards;
 }
 
 .lf-loader-prompt {
@@ -229,6 +238,8 @@ h6 {
   transform: translateX(-50%);
   width: max-content;
   max-width: calc(100vw - 48px);
+  color: rgba(255, 255, 255, 0.72);
+  text-shadow: 0 10px 24px rgba(0, 0, 0, 0.72);
   animation: lf-loader-prompt 1.9s ease-in-out infinite;
 }
 
@@ -255,11 +266,14 @@ h6 {
     transform: translate(-50%, -50%) scale(0.46);
   }
   34% {
-    opacity: 1;
+    opacity: 0.9;
+  }
+  64% {
+    opacity: 0.22;
   }
   100% {
-    opacity: 0.86;
-    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.04;
+    transform: translate(-50%, -50%) scale(1.02);
   }
 }
 
@@ -282,6 +296,12 @@ h6 {
 .lf-loader--playing .lf-sofa-line {
   animation: lf-sofa-draw 1.25s cubic-bezier(0.55, 0, 0.1, 1) forwards;
 }
+
+.lf-sofa {
+  stroke: #f2d9ae;
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.55));
+}
+
 @keyframes lf-sofa-draw {
   to {
     stroke-dashoffset: 0;
@@ -311,7 +331,7 @@ h6 {
   transform: translate(-50%, -50%) scale(0.18);
 }
 .lf-loader--playing .lf-loader-glow {
-  animation: lf-loader-glow var(--lf-loader-duration, 4.54s) ease forwards;
+  animation: lf-loader-glow 1.8s ease-out forwards;
 }
 @keyframes lf-loader-glow {
   0% {
@@ -326,20 +346,21 @@ h6 {
   }
   85% {
     transform: translate(-50%, -50%) scale(1.08);
-    opacity: 0.9;
+    opacity: 0.28;
   }
   100% {
     transform: translate(-50%, -50%) scale(1.15);
-    opacity: 0.75;
+    opacity: 0.1;
   }
 }
 
 .lf-loader-logo {
   opacity: 1;
+  filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.72));
 }
 .lf-loader--playing .lf-loader-logo {
   opacity: 0;
-  animation: lf-loader-logo 0.95s ease 2.1s forwards;
+  animation: lf-loader-logo 0.95s ease 1.55s forwards;
 }
 @keyframes lf-loader-logo {
   0% {
@@ -350,16 +371,18 @@ h6 {
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
-    filter: blur(0);
+    filter: blur(0) drop-shadow(0 12px 28px rgba(0, 0, 0, 0.72));
   }
 }
 
 .lf-loader-line {
+  background-color: #f2d9ae;
+  box-shadow: 0 0 18px rgba(242, 217, 174, 0.35);
   transform: scaleX(0);
   transform-origin: center;
 }
 .lf-loader--playing .lf-loader-line {
-  animation: lf-loader-line 0.55s cubic-bezier(0.4, 0, 0.2, 1) 3s forwards;
+  animation: lf-loader-line 0.55s cubic-bezier(0.4, 0, 0.2, 1) 2.45s forwards;
 }
 @keyframes lf-loader-line {
   to {
@@ -369,10 +392,11 @@ h6 {
 
 .lf-loader-tag {
   opacity: 1;
+  text-shadow: 0 10px 24px rgba(0, 0, 0, 0.72);
 }
 .lf-loader--playing .lf-loader-tag {
   opacity: 0;
-  animation: lf-fade-up 0.65s ease 3.35s forwards;
+  animation: lf-fade-up 0.65s ease 2.75s forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {
