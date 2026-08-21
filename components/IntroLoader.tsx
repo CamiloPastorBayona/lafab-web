@@ -17,6 +17,7 @@ import { usePathname } from "next/navigation";
 const LOGO = "https://lafab.com.co/wp-content/uploads/2022/12/lafab-blanco.png";
 const AUDIO_SRC = "/audiologo.mp3";
 const HOME_PATHS = new Set(["/", "/inicio"]);
+const LAMP_INTRO_KEY = "lafab:intro-lamp-seen";
 // La animación visual queda 1.5s más corta; el audiologo conserva su duración real.
 const INTRO_DURATION_MS = 4540;
 const AUDIO_START_GUARD_MS = 1200;
@@ -25,6 +26,7 @@ const AUDIO_START_GUARD_MS = 1200;
 // Objetivo: el home empieza con una lámpara apagada. El primer tap/click del
 // usuario enciende la escena y dispara el audiologo dentro de un gesto real.
 let audioEl: HTMLAudioElement | null = null;
+let lampIntroSeenInRuntime = false;
 type LoaderState = "ready" | "playing" | "waiting-for-sound";
 
 function prepareAudio(audio: HTMLAudioElement) {
@@ -69,11 +71,32 @@ function setAudioStatus(status: "playing" | "played" | "blocked") {
   (window as unknown as Record<string, string>).__lafabAudiologo = status;
 }
 
+function hasSeenLampIntro() {
+  if (lampIntroSeenInRuntime) return true;
+
+  try {
+    return window.localStorage.getItem(LAMP_INTRO_KEY) === "true";
+  } catch {
+    return false;
+  }
+}
+
+function markLampIntroSeen() {
+  lampIntroSeenInRuntime = true;
+
+  try {
+    window.localStorage.setItem(LAMP_INTRO_KEY, "true");
+  } catch {
+    // localStorage puede estar bloqueado; la bandera en runtime evita repetir en la sesión SPA.
+  }
+}
+
 export default function IntroLoader() {
   const pathname = usePathname();
   const isHome = isHomePath(pathname);
   const [visible, setVisible] = useState(true);
   const [loaderState, setLoaderState] = useState<LoaderState>("ready");
+  const [showLampIntro, setShowLampIntro] = useState(false);
   const [cycle, setCycle] = useState(0);
 
   const loaderRef = useRef<HTMLDivElement | null>(null);
@@ -200,12 +223,23 @@ export default function IntroLoader() {
 
     if (isHomePath(pathname) && homeSoundPrimedRef.current) {
       homeSoundPrimedRef.current = false;
+      setShowLampIntro(false);
+      markLampIntroSeen();
       startVisualLoader(runId);
     } else if (isHomePath(pathname)) {
-      setCycle((current) => current + 1);
-      setLoaderState("waiting-for-sound");
+      const shouldShowLampIntro = !hasSeenLampIntro();
+      setShowLampIntro(shouldShowLampIntro);
+
+      if (shouldShowLampIntro) {
+        setCycle((current) => current + 1);
+        setLoaderState("waiting-for-sound");
+      } else {
+        playHomeSound();
+        startVisualLoader(runId);
+      }
     } else {
       homeSoundPrimedRef.current = false;
+      setShowLampIntro(false);
       stopAudiologo();
       startVisualLoader(runId);
     }
@@ -213,7 +247,7 @@ export default function IntroLoader() {
     return () => {
       clearScheduledHide();
     };
-  }, [pathname, clearScheduledHide, startVisualLoader]);
+  }, [pathname, clearScheduledHide, playHomeSound, startVisualLoader]);
 
   const isWaitingForSound = loaderState === "waiting-for-sound";
   const isPlaying = loaderState === "playing";
@@ -224,6 +258,7 @@ export default function IntroLoader() {
 
     const runId = runIdRef.current + 1;
     runIdRef.current = runId;
+    markLampIntroSeen();
     startHomeSoundAndLoader(runId);
   }, [isHome, loaderState, startHomeSoundAndLoader]);
 
@@ -261,7 +296,7 @@ export default function IntroLoader() {
       key={cycle}
       className={`lf-loader fixed inset-0 z-[200] flex items-center justify-center overflow-hidden bg-ink ${
         isPlaying ? "lf-loader--playing pointer-events-none" : "lf-loader--ready"
-      } ${isWaitingForSound ? "lf-loader--waiting cursor-pointer" : ""}`}
+      } ${showLampIntro ? "lf-loader--with-lamp" : "lf-loader--without-lamp"} ${isWaitingForSound ? "lf-loader--waiting cursor-pointer" : ""}`}
       style={loaderStyle}
       aria-hidden={isWaitingForSound ? undefined : true}
       aria-label={isWaitingForSound ? "Encender intro sonora de LaFab" : undefined}
@@ -277,25 +312,27 @@ export default function IntroLoader() {
       <span className="lf-lamp-beam" />
 
       <div className="lf-loader-stage">
-        <div className="lf-lamp" aria-hidden>
-          <span className="lf-lamp-cable" />
-          <svg
-            className="lf-lamp-shade"
-            viewBox="0 0 120 70"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M42 12 H78" />
-            <path d="M32 16 L18 56 H102 L88 16 Z" />
-            <path d="M28 56 H92" />
-          </svg>
-          <span className="lf-lamp-bulb" />
-        </div>
+        {showLampIntro ? (
+          <div className="lf-lamp" aria-hidden>
+            <span className="lf-lamp-cable" />
+            <svg
+              className="lf-lamp-shade"
+              viewBox="0 0 120 70"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M42 12 H78" />
+              <path d="M32 16 L18 56 H102 L88 16 Z" />
+              <path d="M28 56 H92" />
+            </svg>
+            <span className="lf-lamp-bulb" />
+          </div>
+        ) : null}
 
-        {isWaitingForSound ? (
+        {showLampIntro && isWaitingForSound ? (
           <span className="lf-loader-prompt text-xs font-medium uppercase text-white/60">
             Toca para encender
           </span>
