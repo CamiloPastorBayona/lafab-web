@@ -19,7 +19,7 @@ const AUDIO_SRC = "/audiologo.mp3";
 const HOME_PATHS = new Set(["/", "/inicio"]);
 const LAMP_INTRO_KEY = "lafab:intro-lamp-seen";
 const LAMP_INTRO_DURATION_MS = 4540;
-const QUICK_INTRO_DURATION_MS = 3000;
+const QUICK_INTRO_DURATION_MS = 2000;
 const AUDIO_START_GUARD_MS = 1200;
 
 // ---- Audiologo ----------------------------------------------------------
@@ -347,33 +347,37 @@ export default function IntroLoader() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={LOGO} alt="LaFab" className="lf-loader-logo h-8 w-auto md:h-10" />
 
-          {/* Sofá que se dibuja en línea dorada */}
-          <svg
-            className="lf-sofa mt-7 w-[220px] md:w-[260px]"
-            viewBox="0 0 240 120"
-            fill="none"
-            stroke="#CABBA0"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            {/* respaldo + brazos */}
-            <path className="lf-sofa-line" style={{ animationDelay: "0.45s" }} d="M26 86 L26 54 Q26 40 42 40 L198 40 Q214 40 214 54 L214 86" />
-            {/* base */}
-            <path className="lf-sofa-line" style={{ animationDelay: "0.7s" }} d="M20 86 L220 86" />
-            {/* línea del asiento */}
-            <path className="lf-sofa-line" style={{ animationDelay: "0.95s" }} d="M40 66 Q120 60 200 66" />
-            {/* división de cojines */}
-            <path className="lf-sofa-line" style={{ animationDelay: "1.25s" }} d="M120 66 L120 44" />
-            {/* patas */}
-            <path className="lf-sofa-line" style={{ animationDelay: "1.55s" }} d="M44 86 L40 100" />
-            <path className="lf-sofa-line" style={{ animationDelay: "1.55s" }} d="M196 86 L200 100" />
-          </svg>
+          {showLampIntro ? (
+            <>
+              {/* Sofá que se dibuja en línea dorada */}
+              <svg
+                className="lf-sofa mt-7 w-[220px] md:w-[260px]"
+                viewBox="0 0 240 120"
+                fill="none"
+                stroke="#CABBA0"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                {/* respaldo + brazos */}
+                <path className="lf-sofa-line" style={{ animationDelay: "0.45s" }} d="M26 86 L26 54 Q26 40 42 40 L198 40 Q214 40 214 54 L214 86" />
+                {/* base */}
+                <path className="lf-sofa-line" style={{ animationDelay: "0.7s" }} d="M20 86 L220 86" />
+                {/* línea del asiento */}
+                <path className="lf-sofa-line" style={{ animationDelay: "0.95s" }} d="M40 66 Q120 60 200 66" />
+                {/* división de cojines */}
+                <path className="lf-sofa-line" style={{ animationDelay: "1.25s" }} d="M120 66 L120 44" />
+                {/* patas */}
+                <path className="lf-sofa-line" style={{ animationDelay: "1.55s" }} d="M44 86 L40 100" />
+                <path className="lf-sofa-line" style={{ animationDelay: "1.55s" }} d="M196 86 L200 100" />
+              </svg>
 
-          <span className="lf-loader-line mt-6 h-px w-24 bg-gold" />
-          <span className="lf-loader-tag mt-4 text-[10px] uppercase tracking-[0.18em] text-white/60 sm:text-[11px] sm:tracking-[0.28em]">
-            diseño y fábrica de muebles
-          </span>
+              <span className="lf-loader-line mt-6 h-px w-24 bg-gold" />
+              <span className="lf-loader-tag mt-4 text-[10px] uppercase tracking-[0.18em] text-white/60 sm:text-[11px] sm:tracking-[0.28em]">
+                diseño y fábrica de muebles
+              </span>
+            </>
+          ) : null}
         </div>
       </div>
     </div>

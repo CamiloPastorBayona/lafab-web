@@ -305,10 +305,6 @@ h6 {
   animation: lf-sofa-draw 1.25s cubic-bezier(0.55, 0, 0.1, 1) forwards;
 }
 
-.lf-loader--quick.lf-loader--playing .lf-sofa-line {
-  animation-duration: 0.85s;
-}
-
 .lf-sofa {
   stroke: #f2d9ae;
   filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.55));
@@ -379,7 +375,7 @@ h6 {
   animation: lf-loader-logo 0.95s ease 1.55s forwards;
 }
 .lf-loader--quick.lf-loader--playing .lf-loader-logo {
-  animation: lf-loader-logo 0.65s ease 0.55s forwards;
+  animation: lf-loader-logo 0.55s ease 0.38s forwards;
 }
 @keyframes lf-loader-logo {
   0% {
@@ -403,9 +399,6 @@ h6 {
 .lf-loader--playing .lf-loader-line {
   animation: lf-loader-line 0.55s cubic-bezier(0.4, 0, 0.2, 1) 2.45s forwards;
 }
-.lf-loader--quick.lf-loader--playing .lf-loader-line {
-  animation: lf-loader-line 0.45s cubic-bezier(0.4, 0, 0.2, 1) 1.65s forwards;
-}
 @keyframes lf-loader-line {
   to {
     transform: scaleX(1);
@@ -423,9 +416,6 @@ h6 {
 .lf-loader--playing .lf-loader-tag {
   opacity: 0;
   animation: lf-fade-up 0.65s ease 2.75s forwards;
-}
-.lf-loader--quick.lf-loader--playing .lf-loader-tag {
-  animation: lf-fade-up 0.5s ease 1.95s forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {
