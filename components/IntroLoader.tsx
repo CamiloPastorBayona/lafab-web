@@ -20,12 +20,10 @@ const HOME_PATHS = new Set(["/", "/inicio"]);
 const AUDIO_SESSION_KEY = "lafab:audiologo:intro-played";
 // La animación visual queda 1.5s más corta; el audiologo conserva su duración real.
 const INTRO_DURATION_MS = 4540;
-const AUDIO_START_TIMEOUT_MS = 900;
 
 // ---- Audiologo ----------------------------------------------------------
-// Objetivo: intentar el audiologo automáticamente una sola vez en home. Si el
-// navegador bloquea autoplay con sonido, usamos el gesto real de navegación a
-// Inicio para dispararlo sin mostrar un botón extra.
+// Objetivo: el home empieza con una lámpara apagada. El primer tap/click del
+// usuario enciende la escena y dispara el audiologo dentro de un gesto real.
 let audioEl: HTMLAudioElement | null = null;
 let audioPlayedInRuntime = false;
 type LoaderState = "ready" | "playing" | "waiting-for-sound";
@@ -88,7 +86,7 @@ function markAudioPlayed() {
   }
 }
 
-function setAudioStatus(status: "playing" | "played" | "blocked" | "unlocked") {
+function setAudioStatus(status: "playing" | "played" | "blocked") {
   (window as unknown as Record<string, string>).__lafabAudiologo = status;
 }
 
@@ -99,6 +97,7 @@ export default function IntroLoader() {
   const [loaderState, setLoaderState] = useState<LoaderState>("ready");
   const [cycle, setCycle] = useState(0);
 
+  const loaderRef = useRef<HTMLDivElement | null>(null);
   const runIdRef = useRef(0);
   const soundStartInFlightRef = useRef(false);
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -151,32 +150,21 @@ export default function IntroLoader() {
       soundStartInFlightRef.current = true;
 
       setAudioStatus("playing");
-      let settled = false;
-      const startTimeout = setTimeout(() => {
-        if (settled || runIdRef.current !== runId) return;
-
-        soundStartInFlightRef.current = false;
-        setAudioStatus("blocked");
-        setLoaderState("waiting-for-sound");
-      }, AUDIO_START_TIMEOUT_MS);
+      // El play() se invoca dentro del gesto real del usuario y la animación
+      // arranca en el mismo frame para que luz + audiologo entren juntos.
+      startVisualLoader(runId);
 
       void playAudiologoFromStart()
         .then(() => {
-          settled = true;
-          clearTimeout(startTimeout);
           if (runIdRef.current !== runId) return;
 
           markAudioPlayed();
           setAudioStatus("played");
-          startVisualLoader(runId);
         })
         .catch(() => {
-          settled = true;
-          clearTimeout(startTimeout);
           if (runIdRef.current !== runId) return;
 
           setAudioStatus("blocked");
-          setLoaderState("waiting-for-sound");
         })
         .finally(() => {
           soundStartInFlightRef.current = false;
@@ -202,8 +190,11 @@ export default function IntroLoader() {
     setVisible(true);
     setLoaderState("ready");
 
-    if (isHomePath(pathname)) {
-      startHomeSoundAndLoader(runId);
+    if (isHomePath(pathname) && !wasAudioAlreadyPlayed()) {
+      setCycle((current) => current + 1);
+      setLoaderState("waiting-for-sound");
+    } else if (isHomePath(pathname)) {
+      startVisualLoader(runId);
     } else {
       stopAudiologo();
       startVisualLoader(runId);
@@ -212,15 +203,18 @@ export default function IntroLoader() {
     return () => {
       clearScheduledHide();
     };
-  }, [pathname, clearScheduledHide, startHomeSoundAndLoader, startVisualLoader]);
+  }, [pathname, clearScheduledHide, startVisualLoader]);
 
-  const handleSoundGesture = () => {
+  const isWaitingForSound = loaderState === "waiting-for-sound";
+  const isPlaying = loaderState === "playing";
+
+  const handleSoundGesture = useCallback(() => {
     if (!isHome || loaderState !== "waiting-for-sound") return;
 
     const runId = runIdRef.current + 1;
     runIdRef.current = runId;
     startHomeSoundAndLoader(runId);
-  };
+  }, [isHome, loaderState, startHomeSoundAndLoader]);
 
   const handleSoundKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key !== "Enter" && event.key !== " ") return;
@@ -228,23 +222,38 @@ export default function IntroLoader() {
     handleSoundGesture();
   };
 
+  useEffect(() => {
+    const loader = loaderRef.current;
+    if (!loader || !isWaitingForSound) return;
+
+    const onNativeGesture = () => handleSoundGesture();
+    loader.addEventListener("mousedown", onNativeGesture);
+    loader.addEventListener("pointerdown", onNativeGesture);
+    loader.addEventListener("touchstart", onNativeGesture, { passive: true });
+
+    return () => {
+      loader.removeEventListener("mousedown", onNativeGesture);
+      loader.removeEventListener("pointerdown", onNativeGesture);
+      loader.removeEventListener("touchstart", onNativeGesture);
+    };
+  }, [handleSoundGesture, isWaitingForSound]);
+
   if (!visible) return null;
 
   const loaderStyle = {
     "--lf-loader-duration": `${INTRO_DURATION_MS}ms`,
   } as CSSProperties;
-  const isWaitingForSound = loaderState === "waiting-for-sound";
-  const isPlaying = loaderState === "playing";
 
   return (
     <div
+      ref={loaderRef}
       key={cycle}
       className={`lf-loader fixed inset-0 z-[200] flex items-center justify-center overflow-hidden bg-ink ${
         isPlaying ? "lf-loader--playing pointer-events-none" : "lf-loader--ready"
-      } ${isWaitingForSound ? "cursor-pointer" : ""}`}
+      } ${isWaitingForSound ? "lf-loader--waiting cursor-pointer" : ""}`}
       style={loaderStyle}
       aria-hidden={isWaitingForSound ? undefined : true}
-      aria-label={isWaitingForSound ? "Activar intro sonora de LaFab" : undefined}
+      aria-label={isWaitingForSound ? "Encender intro sonora de LaFab" : undefined}
       role={isWaitingForSound ? "button" : undefined}
       tabIndex={isWaitingForSound ? 0 : undefined}
       onClick={handleSoundGesture}
@@ -254,8 +263,35 @@ export default function IntroLoader() {
     >
       {/* Luz cálida que se enciende */}
       <span className="lf-loader-glow" />
+      <span className="lf-lamp-beam" />
 
-      <div className="relative z-10 flex flex-col items-center px-6">
+      <div className="lf-lamp" aria-hidden>
+        <span className="lf-lamp-cable" />
+        <svg
+          className="lf-lamp-shade"
+          viewBox="0 0 120 70"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M42 12 H78" />
+          <path d="M32 16 L18 56 H102 L88 16 Z" />
+          <path d="M28 56 H92" />
+        </svg>
+        <span className="lf-lamp-bulb" />
+      </div>
+
+      {isWaitingForSound ? (
+        <div className="relative z-10 flex flex-col items-center px-6 pt-44 text-center md:pt-48">
+          <span className="lf-loader-prompt text-[11px] font-medium uppercase tracking-[0.32em] text-white/55">
+            Toca para encender
+          </span>
+        </div>
+      ) : null}
+
+      <div className="lf-loader-brand relative z-10 flex flex-col items-center px-6">
         {/* Logo iluminado */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={LOGO} alt="LaFab" className="lf-loader-logo h-8 w-auto md:h-10" />
