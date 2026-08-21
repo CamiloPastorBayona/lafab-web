@@ -1,52 +1,63 @@
 "use client";
 
-// Loader de LaFab: aparece en cada cambio de página con un reveal elegante de
-// "encendido de luz" + el logo (acorde a una marca de muebles: cálido y minimal).
-// Corre solo (sin clic). El audiologo suena en la primera entrada de la sesión;
-// si el navegador bloquea el autoplay en frío, suena en el primer gesto del usuario.
+// Loader de LaFab: reveal de "encendido de luz" + logo en cada cambio de página.
+// El audiologo suena una vez por sesión. Como los navegadores prohíben el sonido
+// sin interacción, se intenta al cargar y, si se bloquea, suena en el primer
+// gesto del usuario (clic, tap, tecla o scroll) — sin botón de "entrar".
 
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 
 const LOGO = "https://lafab.com.co/wp-content/uploads/2022/12/lafab-blanco.png";
-const DURATION = 1500;
+const DURATION = 1800;
+
+// Suena el audiologo una sola vez por sesión, en la primera oportunidad válida.
+function armAudiologo() {
+  if (typeof window === "undefined") return;
+  if (sessionStorage.getItem("lafab_audiologo")) return;
+
+  const audio = new Audio("/audiologo.mp3");
+  audio.volume = 0.9;
+  audio.preload = "auto";
+
+  let done = false;
+  const events = ["pointerdown", "click", "keydown", "touchstart", "wheel"];
+  const cleanup = () =>
+    events.forEach((e) => window.removeEventListener(e, onGesture, true));
+  const mark = () => {
+    done = true;
+    sessionStorage.setItem("lafab_audiologo", "1");
+    cleanup();
+  };
+  const tryPlay = () => {
+    if (done) return;
+    audio.play().then(mark).catch(() => {});
+  };
+  function onGesture() {
+    tryPlay();
+  }
+
+  // Intento inmediato (funciona en visitas donde el navegador ya lo permite)…
+  tryPlay();
+  // …y si no, en cuanto el usuario haga cualquier gesto.
+  events.forEach((e) =>
+    window.addEventListener(e, onGesture, { capture: true, passive: true })
+  );
+}
 
 export default function IntroLoader() {
   const pathname = usePathname();
   const [visible, setVisible] = useState(true);
   const [cycle, setCycle] = useState(0);
-  const soundTried = useRef(false);
+  const armed = useRef(false);
 
   useEffect(() => {
-    // Mostrar el loader en cada navegación y reiniciar la animación.
     setVisible(true);
     setCycle((c) => c + 1);
-
-    // Audiologo: solo una vez por sesión.
-    if (typeof window !== "undefined" && !soundTried.current) {
-      soundTried.current = true;
-      if (!sessionStorage.getItem("lafab_audiologo")) {
-        const audio = new Audio("/audiologo.mp3");
-        audio.volume = 0.7;
-        const mark = () => sessionStorage.setItem("lafab_audiologo", "1");
-        audio
-          .play()
-          .then(mark)
-          .catch(() => {
-            // Autoplay bloqueado: reproducir en el primer gesto del usuario.
-            const unlock = () => {
-              audio.play().then(mark).catch(() => {});
-              ["pointerdown", "keydown", "touchstart", "wheel"].forEach((e) =>
-                window.removeEventListener(e, unlock)
-              );
-            };
-            ["pointerdown", "keydown", "touchstart", "wheel"].forEach((e) =>
-              window.addEventListener(e, unlock, { once: true, passive: true })
-            );
-          });
-      }
+    if (!armed.current) {
+      armed.current = true;
+      armAudiologo();
     }
-
     const t = setTimeout(() => setVisible(false), DURATION);
     return () => clearTimeout(t);
   }, [pathname]);

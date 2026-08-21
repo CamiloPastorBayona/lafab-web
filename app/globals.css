@@ -65,11 +65,11 @@ h6 {
 
 /* ---- Loader de intro / cambio de página (encendido de luz + reveal del logo) ---- */
 .lf-loader {
-  animation: lf-loader-out 1.5s ease forwards;
+  animation: lf-loader-out 1.8s ease forwards;
 }
 @keyframes lf-loader-out {
   0%,
-  68% {
+  80% {
     opacity: 1;
   }
   100% {
@@ -88,7 +88,7 @@ h6 {
     rgba(176, 160, 128, 0.12) 34%,
     rgba(21, 21, 21, 0) 68%
   );
-  animation: lf-loader-glow 1.5s ease forwards;
+  animation: lf-loader-glow 1.8s ease forwards;
 }
 @keyframes lf-loader-glow {
   0% {
