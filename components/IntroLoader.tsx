@@ -16,9 +16,12 @@ const INTRO_DURATION_MS = 4540;
 
 // ---- Audiologo ----------------------------------------------------------
 // Objetivo: intentar el audiologo automáticamente una sola vez en home. Si el
-// navegador bloquea autoplay con sonido, el loader no se detiene ni pide click.
+// navegador bloquea autoplay con sonido, usamos el gesto real de navegación a
+// Inicio para dispararlo sin mostrar un botón extra.
 let audioEl: HTMLAudioElement | null = null;
-let audioAttemptedInRuntime = false;
+let audioPlayedInRuntime = false;
+let audioPlayInFlight = false;
+let audioUnlockInFlight = false;
 
 function getAudio() {
   if (!audioEl) {
@@ -53,8 +56,8 @@ function isHomePath(pathname: string) {
   return HOME_PATHS.has(pathname);
 }
 
-function wasAudioAlreadyAttempted() {
-  if (audioAttemptedInRuntime) return true;
+function wasAudioAlreadyPlayed() {
+  if (audioPlayedInRuntime) return true;
 
   try {
     return window.sessionStorage.getItem(AUDIO_SESSION_KEY) === "true";
@@ -63,8 +66,8 @@ function wasAudioAlreadyAttempted() {
   }
 }
 
-function markAudioAttempted() {
-  audioAttemptedInRuntime = true;
+function markAudioPlayed() {
+  audioPlayedInRuntime = true;
 
   try {
     window.sessionStorage.setItem(AUDIO_SESSION_KEY, "true");
@@ -73,17 +76,65 @@ function markAudioAttempted() {
   }
 }
 
-function tryPlayAudiologoOnce(pathname: string) {
-  if (!isHomePath(pathname) || wasAudioAlreadyAttempted()) return;
+function setAudioStatus(status: "playing" | "played" | "blocked" | "unlocked") {
+  (window as unknown as Record<string, string>).__lafabAudiologo = status;
+}
 
-  markAudioAttempted();
+function playAudiologoOnce() {
+  if (wasAudioAlreadyPlayed() || audioPlayInFlight) return;
+
+  audioPlayInFlight = true;
   void playAudiologoFromStart()
     .then(() => {
-      (window as unknown as Record<string, string>).__lafabAudiologo = "played";
+      markAudioPlayed();
+      setAudioStatus("played");
     })
     .catch(() => {
-      (window as unknown as Record<string, string>).__lafabAudiologo = "blocked";
+      setAudioStatus("blocked");
+    })
+    .finally(() => {
+      audioPlayInFlight = false;
     });
+}
+
+function tryPlayAudiologoOnHome(pathname: string) {
+  if (!isHomePath(pathname)) return;
+  playAudiologoOnce();
+}
+
+function unlockAudioForLater() {
+  if (wasAudioAlreadyPlayed() || audioUnlockInFlight) return;
+
+  const audio = getAudio();
+  audioUnlockInFlight = true;
+  audio.muted = true;
+
+  void playAudiologoFromStart()
+    .then(() => {
+      resetAudio(audio);
+      setAudioStatus("unlocked");
+    })
+    .catch(() => {
+      setAudioStatus("blocked");
+    })
+    .finally(() => {
+      audio.muted = false;
+      audioUnlockInFlight = false;
+    });
+}
+
+function getGestureTargetPath(event: Event) {
+  const target = event.target;
+  if (!(target instanceof Element)) return window.location.pathname;
+
+  const link = target.closest<HTMLAnchorElement>("a[href]");
+  if (!link) return window.location.pathname;
+
+  try {
+    return new URL(link.href, window.location.href).pathname;
+  } catch {
+    return window.location.pathname;
+  }
 }
 
 export default function IntroLoader() {
@@ -124,8 +175,28 @@ export default function IntroLoader() {
   useEffect(() => {
     const audio = getAudio();
     audio.load();
+    const events = ["pointerdown", "touchstart", "keydown"];
+
+    const onGesture = (event: Event) => {
+      if (wasAudioAlreadyPlayed()) return;
+
+      const targetPath = getGestureTargetPath(event);
+      if (isHomePath(targetPath) || isHomePath(window.location.pathname)) {
+        playAudiologoOnce();
+        return;
+      }
+
+      unlockAudioForLater();
+    };
+
+    events.forEach((eventName) => {
+      window.addEventListener(eventName, onGesture, { capture: true, passive: true });
+    });
 
     return () => {
+      events.forEach((eventName) => {
+        window.removeEventListener(eventName, onGesture, true);
+      });
       clearScheduledHide();
     };
   }, [clearScheduledHide]);
@@ -140,7 +211,7 @@ export default function IntroLoader() {
     scheduleHide(runId);
 
     if (isHomePath(pathname)) {
-      tryPlayAudiologoOnce(pathname);
+      tryPlayAudiologoOnHome(pathname);
     } else {
       stopAudiologo();
     }
