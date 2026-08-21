@@ -1,5 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          {
+            key: "Permissions-Policy",
+            value: "autoplay=(self)",
+          },
+        ],
+      },
+    ];
+  },
   // Proxy de la fuente propia (morality) para servirla desde nuestro dominio y
   // evitar el bloqueo CORS del servidor de WordPress (no envía Access-Control-Allow-Origin).
   async rewrites() {
