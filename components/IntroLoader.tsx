@@ -17,7 +17,6 @@ import { usePathname } from "next/navigation";
 const LOGO = "https://lafab.com.co/wp-content/uploads/2022/12/lafab-blanco.png";
 const AUDIO_SRC = "/audiologo.mp3";
 const HOME_PATHS = new Set(["/", "/inicio"]);
-const LAMP_INTRO_KEY = "lafab:intro-lamp-seen";
 const LAMP_INTRO_DURATION_MS = 4540;
 const QUICK_INTRO_DURATION_MS = 2000;
 const AUDIO_START_GUARD_MS = 1200;
@@ -71,24 +70,15 @@ function setAudioStatus(status: "playing" | "played" | "blocked") {
   (window as unknown as Record<string, string>).__lafabAudiologo = status;
 }
 
+// La lámpara aparece en la primera carga de CADA sesión (no se persiste entre
+// recargas): así el primer loader SIEMPRE trae la lámpara, que es la que enciende
+// el sonido dentro de un gesto real. En navegación interna (SPA) no se repite.
 function hasSeenLampIntro() {
-  if (lampIntroSeenInRuntime) return true;
-
-  try {
-    return window.localStorage.getItem(LAMP_INTRO_KEY) === "true";
-  } catch {
-    return false;
-  }
+  return lampIntroSeenInRuntime;
 }
 
 function markLampIntroSeen() {
   lampIntroSeenInRuntime = true;
-
-  try {
-    window.localStorage.setItem(LAMP_INTRO_KEY, "true");
-  } catch {
-    // localStorage puede estar bloqueado; la bandera en runtime evita repetir en la sesión SPA.
-  }
 }
 
 export default function IntroLoader() {
@@ -311,9 +301,15 @@ export default function IntroLoader() {
       onTouchStart={handleSoundGesture}
       onKeyDown={handleSoundKeyDown}
     >
-      <span className="lf-loader-wash" />
-      <span className="lf-loader-glow" />
-      <span className="lf-lamp-beam" />
+      {/* Luz/lámpara solo en el loader principal (primera carga). En los demás
+          loaders queda únicamente el logo de LaFab sobre el fondo oscuro. */}
+      {showLampIntro ? (
+        <>
+          <span className="lf-loader-wash" />
+          <span className="lf-loader-glow" />
+          <span className="lf-lamp-beam" />
+        </>
+      ) : null}
 
       <div className="lf-loader-stage">
         {showLampIntro ? (
