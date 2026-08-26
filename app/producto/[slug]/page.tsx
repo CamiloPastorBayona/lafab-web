@@ -23,6 +23,7 @@ import TrackView from "@/components/TrackView";
 import ReviewsBadge from "@/components/ReviewsBadge";
 import Reviews from "@/components/Reviews";
 import { WHATSAPP } from "@/lib/content";
+import { getProductLanding } from "@/lib/landings";
 
 export const revalidate = 300;
 
@@ -110,6 +111,7 @@ export default async function ProductPage({
 
   // Ficha enriquecida (ACF): medidas, materiales, garantía, looks, FAQs…
   const extra = await getProductExtra(product.id);
+  const landing = getProductLanding(product.slug);
 
   // Datos estructurados (Product schema) para resultados enriquecidos en Google.
   const jsonLd = {
@@ -204,12 +206,12 @@ export default async function ProductPage({
             </>
           )}
 
-          {product.slug === "sofa-san-diego" && (
+          {landing && (
             <Link
-              href="/san-diego"
+              href={landing.path}
               className="mt-5 flex items-center justify-between gap-2 rounded-2xl border border-gold/40 bg-gold/10 px-5 py-3 text-sm font-semibold text-gold-dark transition-colors hover:bg-gold/20"
             >
-              <span>Vive la experiencia completa del Sofá San Diego</span>
+              <span>{landing.cta}</span>
               <span aria-hidden>→</span>
             </Link>
           )}

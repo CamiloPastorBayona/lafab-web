@@ -1,5 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Las plantillas de correo se leen con fs en tiempo de ejecución; sin esto
+  // Vercel no las empaqueta en la función y el cron falla con ENOENT.
+  outputFileTracingIncludes: {
+    "/api/cron/emails": ["./emails/**"],
+    "/api/webhooks/woocommerce": ["./emails/**"],
+    "/api/emails/send": ["./emails/**"],
+    "/api/dev/email-preview": ["./emails/**"],
+  },
   async headers() {
     return [
       {

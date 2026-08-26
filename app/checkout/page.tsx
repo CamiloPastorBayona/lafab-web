@@ -41,6 +41,55 @@ export default function CheckoutPage() {
     );
   }, [items, subtotal]);
 
+  // --- Carrito abandonado -------------------------------------------------
+  // Guardamos el carrito en cuanto tenemos un correo válido, y lo re-guardamos
+  // si el cliente cambia el correo o los ítems. El cron le escribe más tarde
+  // solo si no llegó a completar el pedido.
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  const trackedKey = useRef<string>("");
+
+  const trackCart = (recovered = false) => {
+    const email = form.email.trim();
+    if (!EMAIL_RE.test(email)) return;
+    if (!recovered && items.length === 0) return;
+
+    const key = `${email}|${items.map((i) => `${i.id}x${i.qty}`).join(",")}`;
+    if (!recovered && key === trackedKey.current) return;
+    trackedKey.current = recovered ? "" : key;
+
+    const body = recovered
+      ? { email, recovered: true }
+      : {
+          email,
+          name: `${form.nombre} ${form.apellidos}`.trim(),
+          subtotal,
+          items: items.map((i) => ({
+            id: i.id,
+            name: i.name,
+            slug: i.slug,
+            image: i.image,
+            price: i.price,
+            qty: i.qty,
+          })),
+        };
+
+    // Best-effort: si falla, el checkout no se entera.
+    fetch("/api/cart/track", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+      keepalive: true,
+    }).catch(() => {});
+  };
+
+  // Si el cliente ya dejó su correo y luego cambia cantidades, actualizamos el
+  // registro para que el recordatorio muestre el carrito real.
+  useEffect(() => {
+    if (items.length === 0) return;
+    trackCart();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [items, form.email]);
+
   const set =
     (k: keyof typeof form) =>
     (
@@ -101,7 +150,9 @@ export default function CheckoutPage() {
       if (!order.ok || !order.data)
         throw new Error(order.error || "No pudimos crear tu pedido. Intenta de nuevo.");
 
-      // El pedido ya existe en WooCommerce; vaciamos el carrito local.
+      // El pedido ya existe en WooCommerce: cancelamos el recordatorio de
+      // carrito abandonado y vaciamos el carrito local.
+      trackCart(true);
       clear();
       const redirect = order.data.payment_result?.redirect_url;
       if (redirect) {
@@ -169,7 +220,7 @@ export default function CheckoutPage() {
               <div className="grid gap-4 sm:grid-cols-2">
                 <input className={field} placeholder="Nombre *" value={form.nombre} onChange={set("nombre")} />
                 <input className={field} placeholder="Apellidos *" value={form.apellidos} onChange={set("apellidos")} />
-                <input className={field} type="email" placeholder="Correo electrónico *" value={form.email} onChange={set("email")} />
+                <input className={field} type="email" placeholder="Correo electrónico *" value={form.email} onChange={set("email")} onBlur={() => trackCart()} />
                 <input className={field} placeholder="Teléfono / WhatsApp *" value={form.telefono} onChange={set("telefono")} />
               </div>
             </div>

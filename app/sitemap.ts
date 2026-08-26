@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import { getProducts } from "@/lib/woocommerce";
 import { ARTICLES } from "@/lib/blog";
+import { LANDING_PATHS } from "@/lib/landings";
 
 const SITE = "https://lafab.com.co";
 
@@ -16,7 +17,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/comedores",
     "/camas",
     "/poltronas",
-    "/san-diego",
     "/espacios",
     "/proyectos",
     "/nosotros",
@@ -26,6 +26,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/contacto",
     "/terminos-y-condiciones",
     "/politica-de-datos",
+    ...LANDING_PATHS,
   ];
 
   const blogEntries: MetadataRoute.Sitemap = ARTICLES.map((a) => ({
