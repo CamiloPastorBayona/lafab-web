@@ -35,6 +35,13 @@ function stripHtml(html: string): string {
     .trim();
 }
 
+// Quita imágenes de la descripción (evita imágenes rotas/hotlink en "Sobre este mueble").
+function stripImages(html: string): string {
+  return html
+    .replace(/<figure[^>]*>[\s\S]*?<\/figure>/gi, "")
+    .replace(/<img[^>]*>/gi, "");
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -295,7 +302,7 @@ export default async function ProductPage({
             </h2>
             <div
               className="text-[16px] leading-relaxed text-ink/75 [&_a]:text-gold-dark [&_a]:underline [&_h2]:mt-8 [&_h2]:text-xl [&_h2]:font-light [&_h2]:text-ink [&_p]:mt-4"
-              dangerouslySetInnerHTML={{ __html: product.description }}
+              dangerouslySetInnerHTML={{ __html: stripImages(product.description) }}
             />
           </section>
         </Reveal>
