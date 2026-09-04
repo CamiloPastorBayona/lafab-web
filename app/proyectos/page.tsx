@@ -6,6 +6,7 @@ import { getProducts } from "@/lib/woocommerce";
 import { WHATSAPP } from "@/lib/content";
 import WpImage from "@/components/WpImage";
 import Ico from "@/components/LandingIcons";
+import { UPLOADS } from "@/lib/site";
 
 export const revalidate = 300;
 
@@ -32,7 +33,7 @@ export default async function ProyectosPage() {
         eyebrow="Proyectos"
         title="Muebles que ya viven en otros hogares"
         subtitle="Una muestra de las piezas que hemos diseñado y fabricado a la medida."
-        image="https://lafab.com.co/wp-content/uploads/2026/07/4.webp"
+        image={`${UPLOADS}/2026/07/4.webp`}
       />
 
       {/* Intro con propósito */}

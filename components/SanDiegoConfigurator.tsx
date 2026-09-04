@@ -9,11 +9,12 @@ import { useState, type CSSProperties, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { SANDIEGO } from "@/lib/sandiego";
 import { useCart } from "@/lib/cart";
+import { UPLOADS } from "@/lib/site";
 
 const PRICE = 3400000;
 const REAL = 3800000;
-const TEX = "https://lafab.com.co/wp-content/uploads/2026/06/"; // texturas (swatches)
-const FOTO = "https://lafab.com.co/wp-content/uploads/2026/07/"; // fotos por tela+color
+const TEX = `${UPLOADS}/2026/06/`; // texturas (swatches)
+const FOTO = `${UPLOADS}/2026/07/`; // fotos por tela+color
 
 type Color = { name: string; hex: string; img: string; foto: string };
 type Fabric = { name: string; tag: string; colors: Color[] };

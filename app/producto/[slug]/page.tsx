@@ -24,6 +24,7 @@ import ReviewsBadge from "@/components/ReviewsBadge";
 import Reviews from "@/components/Reviews";
 import { WHATSAPP } from "@/lib/content";
 import { getProductLanding } from "@/lib/landings";
+import { SITE_URL } from "@/lib/site";
 
 export const revalidate = 300;
 
@@ -133,7 +134,7 @@ export default async function ProductPage({
         ? "https://schema.org/InStock"
         : "https://schema.org/OutOfStock",
       itemCondition: "https://schema.org/NewCondition",
-      url: `https://lafab.com.co/producto/${product.slug}`,
+      url: `${SITE_URL}/producto/${product.slug}`,
     },
   };
 

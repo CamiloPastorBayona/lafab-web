@@ -7,6 +7,8 @@ import WpImage from "@/components/WpImage";
 import ShareButtons from "@/components/ShareButtons";
 import { ARTICLES, getArticle } from "@/lib/blog";
 import { WHATSAPP } from "@/lib/content";
+import { UPLOADS } from "@/lib/site";
+import { SITE_URL } from "@/lib/site";
 
 export function generateStaticParams() {
   return ARTICLES.map((a) => ({ slug: a.slug }));
@@ -50,7 +52,7 @@ export default function ArticlePage({
   const a = getArticle(params.slug);
   if (!a) notFound();
 
-  const url = `https://lafab.com.co/blog/${a.slug}`;
+  const url = `${SITE_URL}/blog/${a.slug}`;
   const related = ARTICLES.filter((x) => x.slug !== a.slug).slice(0, 2);
 
   const jsonLd = {
@@ -66,7 +68,7 @@ export default function ArticlePage({
       name: "LaFab",
       logo: {
         "@type": "ImageObject",
-        url: "https://lafab.com.co/wp-content/uploads/2022/12/LaFab-negro.png",
+        url: `${UPLOADS}/2022/12/LaFab-negro.png`,
       },
     },
     mainEntityOfPage: url,

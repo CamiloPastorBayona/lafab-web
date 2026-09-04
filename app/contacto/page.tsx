@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { SHOWROOM } from "@/lib/content";
 import PageHeader from "@/components/PageHeader";
+import { UPLOADS } from "@/lib/site";
 
 const PHONE = "573054602395";
 
@@ -32,7 +33,7 @@ export default function ContactoPage() {
         eyebrow="Contacto"
         title="Hablemos"
         subtitle="¿Tienes una idea o una duda? Escríbenos y te asesoramos para diseñar el mueble perfecto para tu espacio."
-        image="https://lafab.com.co/wp-content/uploads/2026/07/6.webp"
+        image={`${UPLOADS}/2026/07/6.webp`}
       />
 
       <section className="mx-auto grid max-w-site gap-10 px-4 py-14 md:grid-cols-2 md:px-6">

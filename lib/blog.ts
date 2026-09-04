@@ -1,5 +1,6 @@
+import { UPLOADS } from "@/lib/site";
 // Artículos del blog de LaFab (SEO informacional).
-const U = "https://lafab.com.co/wp-content/uploads";
+const U = UPLOADS;
 
 export type Article = {
   slug: string;

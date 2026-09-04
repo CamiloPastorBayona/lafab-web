@@ -13,12 +13,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { createHmac, timingSafeEqual } from "crypto";
 import { handleOrderStatus } from "@/lib/emails/triggers";
 import type { WooOrder } from "@/lib/emails/orders";
+import { SITE_URL } from "@/lib/site";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
-const SITE = (process.env.NEXT_PUBLIC_SITE_URL || "https://lafab.com.co").replace(/\/$/, "");
+const SITE = SITE_URL;
 
 function signatureValid(rawBody: string, received: string | null): boolean {
   const secret = process.env.WC_WEBHOOK_SECRET;

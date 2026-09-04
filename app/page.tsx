@@ -8,6 +8,7 @@ import Hero from "@/components/Hero";
 import WpImage from "@/components/WpImage";
 import Reveal from "@/components/Reveal";
 import Ico from "@/components/LandingIcons";
+import { UPLOADS } from "@/lib/site";
 
 export const revalidate = 300;
 
@@ -86,7 +87,7 @@ export default async function HomePage() {
             <Reveal>
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
                 <WpImage
-                  src="https://lafab.com.co/wp-content/uploads/2026/06/taller3-1.webp"
+                  src={`${UPLOADS}/2026/06/taller3-1.webp`}
                   alt="Taller LaFab"
                   className="absolute inset-0 h-full w-full object-cover"
                 />

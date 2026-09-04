@@ -16,6 +16,7 @@ import { renderAbandonedCart } from "@/lib/emails/abandonedCart";
 import { runQueue } from "@/lib/emails/send";
 import { sendMail } from "@/lib/mailer";
 import { WHATSAPP } from "@/lib/content";
+import { SITE_URL } from "@/lib/site";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -29,7 +30,7 @@ const num = (v: string | undefined, fallback: number) => {
   return v !== undefined && v !== "" && Number.isFinite(n) && n >= 0 ? n : fallback;
 };
 
-const SITE = (process.env.NEXT_PUBLIC_SITE_URL || "https://lafab.com.co").replace(/\/$/, "");
+const SITE = SITE_URL;
 
 function authorized(req: NextRequest) {
   const secret = process.env.CRON_SECRET;

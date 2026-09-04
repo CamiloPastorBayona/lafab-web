@@ -13,8 +13,9 @@ import {
   useState,
 } from "react";
 import { usePathname } from "next/navigation";
+import { UPLOADS } from "@/lib/site";
 
-const LOGO = "https://lafab.com.co/wp-content/uploads/2022/12/lafab-blanco.png";
+const LOGO = `${UPLOADS}/2022/12/lafab-blanco.png`;
 const AUDIO_SRC = "/audiologo.mp3";
 const HOME_PATHS = new Set(["/", "/inicio"]);
 const LAMP_INTRO_DURATION_MS = 4540;

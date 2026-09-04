@@ -7,6 +7,7 @@ import Reviews from "@/components/Reviews";
 import { WHATSAPP } from "@/lib/content";
 import type { CategoryConfig } from "@/lib/categories";
 import type { WCProduct } from "@/lib/woocommerce";
+import { SITE_URL } from "@/lib/site";
 
 const BENEFITS = [
   { icon: "factory", t: "Fabricación propia" },
@@ -26,9 +27,9 @@ export default function CategoryPage({
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Inicio", item: "https://lafab.com.co/" },
-      { "@type": "ListItem", position: 2, name: "Tienda", item: "https://lafab.com.co/shop" },
-      { "@type": "ListItem", position: 3, name: cfg.eyebrow, item: `https://lafab.com.co/${cfg.slug}` },
+      { "@type": "ListItem", position: 1, name: "Inicio", item: `${SITE_URL}/` },
+      { "@type": "ListItem", position: 2, name: "Tienda", item: `${SITE_URL}/shop` },
+      { "@type": "ListItem", position: 3, name: cfg.eyebrow, item: `${SITE_URL}/${cfg.slug}` },
     ],
   };
 

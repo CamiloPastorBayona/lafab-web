@@ -11,6 +11,7 @@
 
 import { readFileSync } from "fs";
 import { join } from "path";
+import { SITE_URL, UPLOADS } from "@/lib/site";
 
 export const TEMPLATES = [
   "pedido-recibido",
@@ -88,6 +89,19 @@ export type RenderOptions = {
   subject?: string;
 };
 
+/**
+ * Variables que aplican a todas las plantillas. El logo se resuelve aquí para
+ * que no quede ningún dominio escrito a mano dentro del HTML: tras el cutover
+ * lafab.com.co deja de servir /wp-content.
+ */
+function defaultVars(): Record<string, string> {
+  return {
+    logo_url:
+      process.env.MAIL_LOGO_URL || `${UPLOADS}/2022/12/lafab-blanco.png`,
+    site_url: SITE_URL,
+  };
+}
+
 export function render(
   name: TemplateName,
   options: RenderOptions = {}
@@ -99,7 +113,7 @@ export function render(
     html = html.replace(re, content);
   }
 
-  for (const [key, value] of Object.entries(options.vars || {})) {
+  for (const [key, value] of Object.entries({ ...defaultVars(), ...(options.vars || {}) })) {
     // Las URLs van dentro de href="…": solo hay que neutralizar las comillas.
     const safe = key.endsWith("_url")
       ? String(value).replace(/"/g, "%22")

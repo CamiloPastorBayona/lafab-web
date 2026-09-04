@@ -2,8 +2,9 @@ import { MetadataRoute } from "next";
 import { getProducts } from "@/lib/woocommerce";
 import { ARTICLES } from "@/lib/blog";
 import { LANDING_PATHS } from "@/lib/landings";
+import { SITE_URL } from "@/lib/site";
 
-const SITE = "https://lafab.com.co";
+const SITE = SITE_URL;
 
 export const revalidate = 3600;
 

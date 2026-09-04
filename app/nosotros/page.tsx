@@ -3,6 +3,7 @@ import PageHeader from "@/components/PageHeader";
 import { WHATSAPP } from "@/lib/content";
 import WpImage from "@/components/WpImage";
 import Reveal from "@/components/Reveal";
+import { UPLOADS } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Nosotros",
@@ -62,14 +63,14 @@ export default function NosotrosPage() {
         eyebrow="Nosotros"
         title="Fabricamos los muebles que imaginas"
         subtitle="Somos La Fábrica de Muebles: un taller en Itagüí donde el diseño y la fabricación propia se unen para crear piezas hechas a tu medida."
-        image="https://lafab.com.co/wp-content/uploads/2026/06/taller1-1.webp"
+        image={`${UPLOADS}/2026/06/taller1-1.webp`}
       />
 
       <section className="mx-auto grid max-w-site items-center gap-10 px-4 py-16 md:grid-cols-2 md:px-6">
         <Reveal>
           <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
             <WpImage
-              src="https://lafab.com.co/wp-content/uploads/2026/07/3-1000x1242.webp"
+              src={`${UPLOADS}/2026/07/3-1000x1242.webp`}
               alt="Muebles fabricados por LaFab"
               className="absolute inset-0 h-full w-full object-cover"
             />

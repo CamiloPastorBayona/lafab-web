@@ -4,6 +4,7 @@ import Reveal from "@/components/Reveal";
 import WpImage from "@/components/WpImage";
 import Ico from "@/components/LandingIcons";
 import { SHOWROOM, WHATSAPP } from "@/lib/content";
+import { UPLOADS } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Showroom en Itagüí",
@@ -25,7 +26,7 @@ export default function ShowroomsPage() {
         eyebrow="Showroom"
         title="Vive los muebles en persona"
         subtitle="Te esperamos en nuestro showroom de Itagüí, muy cerca de la estación Envigado del Metro."
-        image="https://lafab.com.co/wp-content/uploads/2026/07/2.webp"
+        image={`${UPLOADS}/2026/07/2.webp`}
       />
 
       {/* Por qué visitarnos */}

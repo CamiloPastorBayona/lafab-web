@@ -1,5 +1,6 @@
+import { UPLOADS } from "@/lib/site";
 // Configuración de las páginas de categoría (SEO + contenido).
-const U = "https://lafab.com.co/wp-content/uploads";
+const U = UPLOADS;
 
 export type CategoryConfig = {
   slug: string;

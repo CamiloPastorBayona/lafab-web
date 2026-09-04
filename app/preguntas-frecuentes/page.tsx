@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import PageHeader from "@/components/PageHeader";
 import { FAQS, WHATSAPP } from "@/lib/content";
+import { UPLOADS } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Preguntas frecuentes",
@@ -15,7 +16,7 @@ export default function FaqPage() {
         eyebrow="Ayuda"
         title="Preguntas frecuentes"
         subtitle="Todo lo que necesitas saber antes de encargar tu mueble a la medida."
-        image="https://lafab.com.co/wp-content/uploads/2026/06/sofa3.webp"
+        image={`${UPLOADS}/2026/06/sofa3.webp`}
       />
 
       <section className="mx-auto max-w-3xl px-4 py-14 md:px-6">

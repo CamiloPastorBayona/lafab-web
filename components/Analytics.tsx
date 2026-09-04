@@ -9,6 +9,12 @@ const GA = process.env.NEXT_PUBLIC_GA_ID || "G-EQDN3BWDSD";
 const CLARITY = process.env.NEXT_PUBLIC_CLARITY_ID || "xq77h4k3lx";
 const PIXEL = process.env.NEXT_PUBLIC_FB_PIXEL_ID || "1531225141803025";
 
+// La analítica solo corre en el sitio real. Se cuelga de la misma bandera que
+// la indexación para que el cutover sea un único interruptor: mientras el
+// frontend viva en *.vercel.app, las visitas de prueba no ensucian el GA, el
+// Pixel ni Clarity de producción.
+const ENABLED = process.env.NEXT_PUBLIC_ALLOW_INDEX === "true";
+
 export default function Analytics() {
   const pathname = usePathname();
 
@@ -18,9 +24,12 @@ export default function Analytics() {
       gtag?: (...a: unknown[]) => void;
       fbq?: (...a: unknown[]) => void;
     };
+    if (!ENABLED) return;
     w.gtag?.("event", "page_view", { page_path: pathname });
     w.fbq?.("track", "PageView");
   }, [pathname]);
+
+  if (!ENABLED) return null;
 
   return (
     <>

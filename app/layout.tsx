@@ -9,6 +9,7 @@ import Analytics from "@/components/Analytics";
 import WhatsAppFab from "@/components/WhatsAppFab";
 import ImageGuard from "@/components/ImageGuard";
 import IntroLoader from "@/components/IntroLoader";
+import { SITE_URL, MEDIA_URL, UPLOADS } from "@/lib/site";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -22,7 +23,7 @@ const poppins = Poppins({
 const INDEXABLE = process.env.NEXT_PUBLIC_ALLOW_INDEX === "true";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://lafab.com.co"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "LaFab | Muebles a la medida en Medellín",
     template: "%s | LaFab",
@@ -30,7 +31,7 @@ export const metadata: Metadata = {
   description:
     "Fabricamos muebles a la medida en Medellín: sofás, comedores, camas y closets. Diseño propio, materiales de calidad y envío a todo el país.",
   icons: {
-    icon: "https://lafab.com.co/wp-content/uploads/2024/11/cropped-favicon-lafab-270x270.png",
+    icon: `${UPLOADS}/2024/11/cropped-favicon-lafab-270x270.png`,
   },
   robots: INDEXABLE
     ? { index: true, follow: true }
@@ -47,8 +48,8 @@ const BUSINESS_JSONLD = {
   "@type": "FurnitureStore",
   name: "LaFab · La Fábrica de Muebles",
   image:
-    "https://lafab.com.co/wp-content/uploads/2022/12/LaFab-negro.png",
-  url: "https://lafab.com.co",
+    `${UPLOADS}/2022/12/LaFab-negro.png`,
+  url: SITE_URL,
   telephone: "+573054602395",
   email: "info@lafab.com.co",
   priceRange: "$$",
@@ -84,10 +85,10 @@ export default function RootLayout({
         {/* Adelanta la conexión (DNS + TLS) al host de imágenes para que carguen antes */}
         <link
           rel="preconnect"
-          href="https://lafab.com.co"
+          href={MEDIA_URL}
           crossOrigin="anonymous"
         />
-        <link rel="dns-prefetch" href="https://lafab.com.co" />
+        <link rel="dns-prefetch" href={MEDIA_URL} />
         {/* Adelanta DNS de scripts de terceros (analítica) sin bloquear el render */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.clarity.ms" />

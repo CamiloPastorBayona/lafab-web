@@ -6,6 +6,7 @@ import ProductCard from "@/components/ProductCard";
 import WpImage from "@/components/WpImage";
 import { SPACES, WHATSAPP } from "@/lib/content";
 import { getProducts, WCProduct } from "@/lib/woocommerce";
+import { UPLOADS } from "@/lib/site";
 
 export const revalidate = 300;
 
@@ -31,7 +32,7 @@ export default async function EspaciosPage() {
         eyebrow="Compra por espacios"
         title="Un mueble para cada rincón"
         subtitle="Encuentra la pieza perfecta según el espacio que quieres transformar. Diseño propio, fabricación a la medida."
-        image="https://lafab.com.co/wp-content/uploads/2026/07/1.webp"
+        image={`${UPLOADS}/2026/07/1.webp`}
       />
 
       <div className="mx-auto max-w-site px-4 py-14 md:px-6 md:py-20">

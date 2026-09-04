@@ -6,13 +6,12 @@
 // woocommerce_store_api_disable_nonce_check y la continuidad la da el Cart-Token.
 
 import { NextRequest, NextResponse } from "next/server";
+import { CMS_URL } from "@/lib/site";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const STORE_URL = (
-  process.env.NEXT_PUBLIC_WC_STORE_URL || "https://lafab.com.co"
-).replace(/\/$/, "");
+const STORE_URL = CMS_URL;
 const BASIC_AUTH = process.env.WC_STORE_BASIC_AUTH;
 const TOKEN_COOKIE = "lafab_cart_token";
 

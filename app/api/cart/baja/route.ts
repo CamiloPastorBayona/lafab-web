@@ -3,6 +3,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { optOut } from "@/lib/abandonedCarts";
+import { SITE_URL } from "@/lib/site";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -16,7 +17,7 @@ function page(title: string, message: string, status: number) {
 <div style="font-size:20px;letter-spacing:6px;font-weight:600;">LAFAB</div>
 <h1 style="font-size:22px;margin:24px 0 12px;">${title}</h1>
 <p style="color:#4A4A4A;line-height:1.6;margin:0 0 24px;">${message}</p>
-<a href="https://lafab.com.co" style="display:inline-block;background:#151515;color:#fff;text-decoration:none;padding:13px 30px;border-radius:999px;font-weight:600;font-size:14px;">Volver a LaFab</a>
+<a href="${SITE_URL}" style="display:inline-block;background:#151515;color:#fff;text-decoration:none;padding:13px 30px;border-radius:999px;font-weight:600;font-size:14px;">Volver a LaFab</a>
 </div></body></html>`,
     { status, headers: { "Content-Type": "text/html; charset=utf-8" } }
   );

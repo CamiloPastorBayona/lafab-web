@@ -1,9 +1,9 @@
 // WooCommerce Store API client (public, read-only — no auth needed for catalog).
 // Docs: https://developer.woocommerce.com/docs/apis/store-api/
+import { CMS_URL } from "@/lib/site";
 
-const STORE_URL =
-  process.env.NEXT_PUBLIC_WC_STORE_URL?.replace(/\/$/, "") ||
-  "https://lafab.com.co";
+
+const STORE_URL = CMS_URL;
 
 const API = `${STORE_URL}/wp-json/wc/store/v1`;
 

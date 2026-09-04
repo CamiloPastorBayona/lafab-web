@@ -16,12 +16,13 @@ import { timingSafeEqual } from "crypto";
 import { sendTemplate } from "@/lib/emails/send";
 import { TEMPLATES, type TemplateName } from "@/lib/emails/templates";
 import { GOOGLE_REVIEW_URL } from "@/lib/content";
+import { SITE_URL } from "@/lib/site";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
-const SITE = (process.env.NEXT_PUBLIC_SITE_URL || "https://lafab.com.co").replace(/\/$/, "");
+const SITE = SITE_URL;
 
 const esc = (s: string) =>
   String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");

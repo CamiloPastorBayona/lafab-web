@@ -5,6 +5,7 @@
 // (#7A6A45), hover/acentos en gold-light (#CABBA0).
 
 import { useEffect, useRef } from "react";
+import { UPLOADS } from "@/lib/site";
 
 const CSS = `
 #lafab-sd-specs,#lafab-sd-specs *{box-sizing:border-box;margin:0;padding:0;}
@@ -178,7 +179,7 @@ export default function SanDiegoSpecs() {
           <div className="ls-right">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="https://lafab.com.co/wp-content/uploads/2026/06/sofa3.webp"
+              src={`${UPLOADS}/2026/06/sofa3.webp`}
               alt="Sofá San Diego de LaFab"
               loading="lazy"
             />
