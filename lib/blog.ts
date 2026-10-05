@@ -37,8 +37,8 @@ export const ARTICLES: Article[] = [
 <h2>1. Empieza por las medidas de tu espacio</h2>
 <p>Antes de enamorarte de un modelo, mide el espacio disponible: largo de la pared, ancho libre y las rutas de circulación. Un sofá demasiado grande ahoga la sala; uno pequeño se ve perdido. Deja al menos 40–50 cm de paso alrededor. La ventaja de un mueble a la medida es que se ajusta al centímetro a tu espacio, no al revés.</p>
 
-<h2>2. ¿Sofá lineal o en L (angular)?</h2>
-<p>El <strong>sofá lineal</strong> es versátil y funciona en casi cualquier sala. El <strong>sofá en L o angular</strong> aprovecha mejor las esquinas y suma puestos, ideal para familias o para quienes ven películas en casa. Si tu sala es cuadrada o pequeña, un lineal mantiene la amplitud; si es amplia o en L, un angular la define muy bien.</p>
+<h2>2. ¿Sofá lineal o sofá en L?</h2>
+<p>El <strong>sofá lineal</strong> es versátil y funciona en casi cualquier sala. El <strong>sofá en L</strong> aprovecha mejor las esquinas y suma puestos, ideal para familias o para quienes ven películas en casa. Si tu sala es cuadrada o pequeña, un sofá lineal mantiene la amplitud; si es amplia o en L, un sofá en L la define muy bien.</p>
 
 <h2>3. La tela lo cambia todo</h2>
 <p>La tela decide la durabilidad y el mantenimiento. Para hogares con niños o mascotas, busca telas <strong>antifluido</strong> y <strong>pet friendly</strong>, que repelen líquidos y facilitan la limpieza. El color también importa: los tonos neutros (marfil, beige, avellana) son atemporales y combinan con todo.</p>

@@ -1,4 +1,4 @@
-// Badge compacto de calificación (estrellas + "4.9 · 29 reseñas en Google").
+// Badge compacto de calificación (estrellas + "4.9 · 38 reseñas en Google").
 // Reutilizable junto al precio, en cabeceras, etc. Enlaza a las reseñas de Google.
 import { REVIEWS_SUMMARY, GOOGLE_REVIEW_URL } from "@/lib/content";
 

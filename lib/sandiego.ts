@@ -125,7 +125,7 @@ export const SANDIEGO = {
     { n: "01", title: "Elige la medida", text: "A tu espacio, de 1.70 a 2.00 m." },
     { n: "02", title: "Elige el material", text: "Microfibra Mon o Chenil Milan." },
     { n: "03", title: "Escoge el color", text: "Varias tonalidades disponibles." },
-    { n: "04", title: "Indica tu ciudad", text: "Calculamos tu envío." },
+    { n: "04", title: "Indica tu ciudad", text: "Ves el costo del envío antes de pagar." },
     { n: "05", title: "Paga en línea", text: "Rápido y seguro." },
     { n: "06", title: "Recíbelo en casa", text: "Lo llevamos hasta tu sala." },
   ],
@@ -170,7 +170,7 @@ export const SANDIEGO = {
     },
     { label: "Colores", value: "Marfil, Beige, Avellana, Plata y Gris" },
     { label: "Garantía", value: "3 años en estructura · 1 año por desajustes" },
-    { label: "Envíos", value: "Nacional a ciudades capitales y local: incluido" },
+    { label: "Envíos", value: "Medellín y área metropolitana: incluido · Otras ciudades capitales: $200.000" },
   ],
 
   whyLafab: [
@@ -219,7 +219,7 @@ export const SANDIEGO = {
     },
     {
       q: "¿Envían a mi ciudad?",
-      a: "Sí, enviamos a todo el país. Medellín y área metropolitana: envío incluido. Ciudades capitales: envío incluido. Municipios no capitales pueden tener un costo adicional según ubicación, que te informamos antes de despachar.",
+      a: "Sí, enviamos a todo el país. En Medellín y su área metropolitana el envío está incluido en el precio. A las demás ciudades capitales el envío tiene un costo adicional de $200.000, que ves sumado antes de pagar. En municipios que no son capitales el valor puede variar según la ubicación y te lo informamos antes de despachar.",
     },
     {
       q: "¿Cómo viene empacado?",

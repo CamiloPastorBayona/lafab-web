@@ -3,6 +3,7 @@
 import { useMemo, useState, type ReactNode } from "react";
 import { WCProduct } from "@/lib/woocommerce";
 import ProductCard from "@/components/ProductCard";
+import { catLabel } from "@/lib/categories";
 
 type Cat = { id: number; name: string; slug: string; count: number };
 
@@ -70,7 +71,7 @@ export default function ShopBrowser({ products }: { products: WCProduct[] }) {
       for (const c of p.categories) {
         const prev = map.get(c.id);
         if (prev) prev.count += 1;
-        else map.set(c.id, { id: c.id, name: c.name, slug: c.slug, count: 1 });
+        else map.set(c.id, { id: c.id, name: catLabel(c.name), slug: c.slug, count: 1 });
       }
     }
     return [...map.values()].sort((a, b) => b.count - a.count);

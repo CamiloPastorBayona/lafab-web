@@ -1,4 +1,9 @@
-import { REVIEWS, REVIEWS_SUMMARY, GOOGLE_REVIEW_URL } from "@/lib/content";
+import {
+  REVIEWS,
+  REVIEWS_SUMMARY,
+  GOOGLE_REVIEW_URL,
+  reviewDateLabel,
+} from "@/lib/content";
 import Reveal from "@/components/Reveal";
 
 function Stars({ n = 5 }: { n?: number }) {
@@ -83,8 +88,14 @@ export default function Reviews() {
                   </span>
                   <div className="flex-1">
                     <strong className="block text-sm text-ink">{r.name}</strong>
-                    <span className="flex items-center gap-1 text-xs text-ink/40">
+                    <span className="flex flex-wrap items-center gap-1 text-xs text-ink/40">
                       <GoogleG className="h-3.5 w-3.5" /> vía Google
+                      {r.date && (
+                        <>
+                          <span aria-hidden>·</span>
+                          <time dateTime={r.date}>{reviewDateLabel(r.date)}</time>
+                        </>
+                      )}
                     </span>
                   </div>
                 </div>

@@ -13,6 +13,7 @@ import {
 } from "@/lib/headlessCheckout";
 import Ico from "@/components/LandingIcons";
 import { trackBeginCheckout } from "@/lib/analytics";
+import { SHIPPING_NOTE, SHIPPING_NATIONAL_COST, cop as copShip } from "@/lib/shipping";
 
 export default function CheckoutPage() {
   const { items, subtotal, count, clear } = useCart();
@@ -203,7 +204,7 @@ export default function CheckoutPage() {
                 <textarea className={`${field} sm:col-span-2`} rows={3} placeholder="Notas del pedido (opcional)" value={form.notas} onChange={set("notas")} />
               </div>
               <p className="mt-3 text-sm text-gold-dark">
-                Envío incluido en Medellín y área metropolitana. A otras ciudades se coordina el despacho.
+                {SHIPPING_NOTE}
               </p>
             </div>
           </div>
@@ -240,7 +241,13 @@ export default function CheckoutPage() {
                 </div>
                 <div className="flex justify-between text-ink/70">
                   <span>Envío</span>
-                  <span>Incluido</span>
+                  <span className="text-right">
+                    Incluido en Medellín
+                    <br />
+                    <span className="text-xs text-ink/45">
+                      +{copShip(SHIPPING_NATIONAL_COST)} otras ciudades
+                    </span>
+                  </span>
                 </div>
               </div>
               <div className="mt-4 flex items-baseline justify-between border-t border-ink/10 pt-4">

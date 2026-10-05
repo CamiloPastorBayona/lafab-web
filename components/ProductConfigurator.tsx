@@ -12,6 +12,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/lib/cart";
 import { money, type WCVariation, type WCPrices } from "@/lib/woocommerce";
+import { SHIPPING_INLINE } from "@/lib/shipping";
 
 type Term = { name: string; slug: string };
 type Attr = { name: string; terms: Term[] };
@@ -146,7 +147,7 @@ export default function ProductConfigurator({
         )}
       </div>
       <p className="mt-1 text-sm text-ink/50">
-        IVA incluido · Envío incluido en Medellín
+        IVA incluido · {SHIPPING_INLINE}
       </p>
 
       {/* Selectores */}

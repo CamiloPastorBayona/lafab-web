@@ -16,10 +16,39 @@ export type CategoryConfig = {
   subcategories?: { label: string; href: string }[];
 };
 
+// --- Nombres públicos de categoría -------------------------------------------
+// La taxonomía de WooCommerce todavía conserva nombres heredados ("Asientos",
+// "Sofás Angulares"). En la comunicación de LaFab nunca se dice "asientos":
+// siempre "sofá" / "sofás". Este mapa traduce el nombre que llega de la API al
+// nombre que ve el cliente, para no depender de un cambio en el backend.
+const CATEGORY_LABELS: Record<string, string> = {
+  asientos: "Sofás",
+  "sofas angulares": "Sofás en L",
+  "sofás angulares": "Sofás en L",
+  "sofas en l (angulares)": "Sofás en L",
+  "sofás en l (angulares)": "Sofás en L",
+};
+
+/** Devuelve el nombre público de una categoría de WooCommerce. */
+export function catLabel(name?: string | null): string {
+  if (!name) return "";
+  const hit = CATEGORY_LABELS[name.trim().toLowerCase()];
+  if (hit) return hit;
+  // Red de seguridad: si aparece cualquier variante de "asiento(s)", se traduce.
+  return name
+    .replace(/\bAsientos\b/g, "Sofás")
+    .replace(/\basientos\b/g, "sofás")
+    .replace(/\bAsiento\b/g, "Sofá")
+    .replace(/\basiento\b/g, "sofá")
+    .replace(/\s*\(angulares?\)/gi, "")
+    .replace(/\bAngulares\b/g, "en L")
+    .replace(/\bangulares\b/g, "en L");
+}
+
 export const CATEGORIES: Record<string, CategoryConfig> = {
   sofas: {
     slug: "sofas",
-    catId: 102, // Asientos (incluye lineales y angulares)
+    catId: 102, // Sofás (incluye lineales y en L)
     excludeCatId: 103, // excluye Poltronas
     eyebrow: "Sofás",
     h1: "Sofás a la medida en Medellín",
@@ -35,7 +64,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     image: `${U}/2026/07/3.webp`,
     intro: [
       "En LaFab diseñamos y fabricamos sofás a la medida en Medellín, con fabricación propia en nuestro taller de Itagüí. Cada sofá se adapta a tu espacio: eliges las medidas, la tela y el color para lograr la comodidad y el estilo que buscas.",
-      "Trabajamos sofás lineales y en L (angulares) con telas antifluido y opciones pet friendly, espumas certificadas y estructuras en madera inmunizada para que duren años. El envío está incluido en Medellín y su área metropolitana, y despachamos a las principales ciudades del país.",
+      "Trabajamos sofás lineales y sofás en L con telas antifluido y opciones pet friendly, espumas certificadas y estructuras en madera inmunizada para que duren años. El envío está incluido en Medellín y su área metropolitana, y despachamos a las principales ciudades del país.",
     ],
     faq: [
       { q: "¿Puedo elegir la medida del sofá?", a: "Sí. Fabricamos cada sofá a la medida: adaptamos el largo, la profundidad y la configuración a tu sala." },
@@ -45,7 +74,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     ],
     subcategories: [
       { label: "Sofás lineales", href: "/sofas-lineales" },
-      { label: "Sofás en L (angulares)", href: "/sofas-en-l" },
+      { label: "Sofás en L", href: "/sofas-en-l" },
     ],
   },
 
@@ -75,7 +104,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     ],
     subcategories: [
       { label: "Ver todos los sofás", href: "/sofas" },
-      { label: "Sofás en L (angulares)", href: "/sofas-en-l" },
+      { label: "Sofás en L", href: "/sofas-en-l" },
     ],
   },
 
@@ -83,10 +112,10 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     slug: "sofas-en-l",
     catId: 118, // Sofás Angulares
     eyebrow: "Sofás en L",
-    h1: "Sofás en L (angulares) a la medida en Medellín",
-    metaTitle: "Sofás en L y angulares a la medida en Medellín",
+    h1: "Sofás en L a la medida en Medellín",
+    metaTitle: "Sofás en L a la medida en Medellín",
     metaDescription:
-      "Sofás en L y angulares a la medida en Medellín: aprovechan la esquina y suman puestos. Telas antifluido y pet friendly, fabricación propia. ¡Cotízalo!",
+      "Sofás en L a la medida en Medellín: aprovechan la esquina y suman puestos. Telas antifluido y pet friendly, fabricación propia. ¡Cotízalo!",
     keywords: [
       "sofás en L Medellín",
       "sofás angulares Medellín",
@@ -94,7 +123,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     ],
     image: `${U}/2026/07/6.webp`,
     intro: [
-      "Fabricamos sofás en L (angulares) a la medida en Medellín, ideales para aprovechar la esquina y sumar puestos sin ocupar de más. Perfectos para familias y para las tardes de película en casa.",
+      "Fabricamos sofás en L a la medida en Medellín, ideales para aprovechar la esquina y sumar puestos sin ocupar de más. Perfectos para familias y para las tardes de película en casa.",
       "Los adaptamos al lado que necesites (izquierdo o derecho) y a las dimensiones de tu sala. Telas antifluido y pet friendly, espumas de calidad y estructura en madera. Fabricación propia en Itagüí y envío incluido en Medellín.",
     ],
     faq: [

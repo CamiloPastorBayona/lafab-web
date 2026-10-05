@@ -17,8 +17,41 @@ export const SHOWROOM = {
   mapsQuery: "La+Fabrica+de+Muebles+Itagui+Calle+64+44-74",
 };
 
-// Reseñas reales de Google (4.9★ · 29 reseñas)
-export const REVIEWS = [
+// Reseñas reales de Google (4.9★ · 38 reseñas · verificado el 05/10/2026).
+// `date` es la fecha de publicación en Google, en formato ISO (YYYY-MM o
+// YYYY-MM-DD). Es opcional: si una reseña todavía no la tiene confirmada, la
+// tarjeta se renderiza igual, solo sin la fecha. Para completar las que faltan,
+// se consulta el perfil de empresa en Google (Opiniones → fecha de cada una).
+export type Review = {
+  name: string;
+  rating: number;
+  text: string;
+  /** Fecha de publicación en Google (ISO: YYYY-MM o YYYY-MM-DD). */
+  date?: string;
+};
+
+export const REVIEWS: Review[] = [
+  {
+    name: "Andrés Rendón Dederle",
+    rating: 5,
+    date: "2026-09",
+    text:
+      "Compramos comedor, sala y cama, y debo decir que el resultado superó lo que esperábamos. Excelente calidad, cumplimiento en la entrega y una atención impecable de principio a fin.",
+  },
+  {
+    name: "Kris O.",
+    rating: 5,
+    date: "2026-05",
+    text:
+      "Compré un sofá en LaFab y tuve una experiencia excelente de principio a fin. Me explicaron las dimensiones en detalle y me ayudaron a elegir el que mejor encajaba en mi espacio.",
+  },
+  {
+    name: "Julián Ramírez",
+    rating: 5,
+    date: "2026-05",
+    text:
+      "Mi esposa y yo compramos una mesa y quedamos realmente impresionados. La calidad es excepcional. Muy recomendados.",
+  },
   {
     name: "María Angélica Vergara",
     rating: 5,
@@ -43,24 +76,30 @@ export const REVIEWS = [
     text:
       "Me encantó el trabajo, me dieron una muy buena asesoría e hicieron realidad lo que tenía en mente. Totalmente recomendados. ¡Muchas gracias!",
   },
-  {
-    name: "María Estefany Chavarría",
-    rating: 5,
-    text:
-      "Mi esposa y yo compramos una mesa y quedamos realmente impresionados. La calidad es excepcional. Muy recomendados.",
-  },
 ];
 
-export const REVIEWS_SUMMARY = { rating: 4.9, count: 29 };
+/** Formatea una fecha ISO de reseña como "mayo de 2026". */
+export function reviewDateLabel(iso?: string): string {
+  if (!iso) return "";
+  const [y, m] = iso.split("-");
+  const months = [
+    "enero", "febrero", "marzo", "abril", "mayo", "junio",
+    "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre",
+  ];
+  const name = months[Number(m) - 1];
+  return name ? `${name} de ${y}` : y;
+}
+
+export const REVIEWS_SUMMARY = { rating: 4.9, count: 38 };
 
 // Espacios (categorías principales de la tienda)
 export const SPACES = [
   {
-    name: "Asientos",
-    slug: "asientos",
+    name: "Sofás",
+    slug: "sofas",
     catId: 102,
     description:
-      "Sofás lineales, angulares y poltronas diseñados para tu sala.",
+      "Sofás lineales, sofás en L y poltronas diseñados para tu sala.",
     href: "/sofas",
     image: "https://lafab.com.co/wp-content/uploads/2026/07/3-825x1024.webp",
   },
@@ -95,7 +134,7 @@ export const FAQS = [
   },
   {
     q: "¿Cómo funcionan los envíos y cuánto cuestan?",
-    a: "Envíos gratis en Medellín y su área metropolitana. Hacemos despacho a las principales ciudades capitales del país; el costo se confirma según el destino al momento de la compra.",
+    a: "En Medellín y su área metropolitana el envío está incluido en el precio. A las demás ciudades capitales del país el envío tiene un costo adicional de $200.000, que se suma al precio del mueble. En municipios que no son capitales el valor puede variar según la ubicación y se informa antes de despachar.",
   },
   {
     q: "¿Qué métodos de pago aceptan?",

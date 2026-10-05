@@ -23,6 +23,9 @@ import TrackView from "@/components/TrackView";
 import ReviewsBadge from "@/components/ReviewsBadge";
 import Reviews from "@/components/Reviews";
 import { WHATSAPP } from "@/lib/content";
+import { catLabel } from "@/lib/categories";
+import ShippingPrice from "@/components/ShippingPrice";
+import { SHIPPING_INLINE } from "@/lib/shipping";
 
 export const revalidate = 300;
 
@@ -55,7 +58,7 @@ export async function generateMetadata({
       `${product.name} Medellín`,
       "muebles a la medida Medellín",
       product.categories?.[0]?.name
-        ? `${product.categories[0].name} a la medida`
+        ? `${catLabel(product.categories[0].name)} a la medida`
         : "muebles a la medida",
     ],
     alternates: { canonical: `/producto/${product.slug}` },
@@ -161,7 +164,7 @@ export default async function ProductPage({
         <div>
           {cat && (
             <p className="text-sm font-medium uppercase tracking-[0.15em] text-gold-dark">
-              {cat.name}
+              {catLabel(cat.name)}
             </p>
           )}
           <h1 className="mt-2 text-3xl font-light text-ink md:text-5xl">
@@ -192,7 +195,7 @@ export default async function ProductPage({
                 )}
               </div>
               <p className="mt-1 text-sm text-ink/50">
-                IVA incluido · Envío incluido en Medellín
+                IVA incluido · {SHIPPING_INLINE}
               </p>
             </>
           )}
@@ -261,8 +264,11 @@ export default async function ProductPage({
             con un asesor
           </a>
 
-          {/* Franja de confianza / envío */}
-          <TrustStrip className="mt-6" />
+          {/* Envío: precio base + costo adicional (criterio San Diego) */}
+          <ShippingPrice className="mt-6" />
+
+          {/* Franja de confianza */}
+          <TrustStrip className="mt-4" />
 
           {/* Sellos con iconos */}
           <div className="mt-8 grid grid-cols-2 gap-4 border-t border-ink/10 pt-6 text-center sm:grid-cols-4">
@@ -338,7 +344,7 @@ export default async function ProductPage({
           {[
             { i: "sofa", n: "01", t: "Elige tu mueble", s: "Explora el catálogo y elige el que va con tu espacio." },
             { i: "gem", n: "02", t: "Personalízalo", s: "Medidas, tela y color a tu gusto. Te asesoramos en todo." },
-            { i: "truck", n: "03", t: "Recíbelo en casa", s: "Lo fabricamos y te lo llevamos. Envío incluido en Medellín." },
+            { i: "truck", n: "03", t: "Recíbelo en casa", s: "Lo fabricamos y te lo llevamos. Envío incluido en Medellín y costo adicional visible para otras ciudades." },
           ].map((step, idx) => (
             <Reveal key={step.n} delay={idx * 110}>
               <div className="h-full rounded-2xl bg-cream p-6">

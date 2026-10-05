@@ -2,6 +2,12 @@
 // título morality, base Poppins, eyebrow gold (#7A6A45), avatar gold-light
 // (#CABBA0), fondo cream (#F4F1EC). Estático (sin JS).
 
+import {
+  REVIEWS as ALL_REVIEWS,
+  REVIEWS_SUMMARY,
+  reviewDateLabel,
+} from "@/lib/content";
+
 const CSS = `
 #lf-reviews,#lf-reviews *{box-sizing:border-box;margin:0;padding:0;}
 #lf-reviews{width:100%;background:#F4F1EC;color:#151515;font-family:var(--font-poppins),system-ui,sans-serif;
@@ -35,38 +41,14 @@ const CSS = `
 }
 `;
 
-const REVIEWS = [
-  {
-    initial: "M",
-    name: "María Angélica Vergara",
-    text: "Excelente calidad del sofá, muy cómodo, elegante y con acabados muy bien elaborados. Quedé muy satisfecha con la compra y con el resultado final.",
-  },
-  {
-    initial: "L",
-    name: "Lucía Vélez",
-    text: "Quedé muy agradecida, llenaron mi expectativa con mi alcoba. Muy feliz, excelente cumplimiento, acabados sensacionales y excelente servicio. ¡Dios los bendiga!",
-  },
-  {
-    initial: "P",
-    name: "Paulina Pérez",
-    text: "Amé mi sala. Súper recomendado, todo gracias a María por su acompañamiento y asesoría. Les doy un 10 en todo, ¡los mejores!",
-  },
-  {
-    initial: "E",
-    name: "Eder Durán",
-    text: "Excelente servicio, siempre muy atentos a las sugerencias y nos mantuvieron al tanto de los tiempos. Mandamos a hacer varios muebles y con todos nos fue muy bien.",
-  },
-  {
-    initial: "M",
-    name: "María Estefany Chavarría",
-    text: "Me encantó el trabajo, me dieron una muy buena asesoría e hicieron realidad lo que tenía en mente. Totalmente recomendados. ¡Muchas gracias!",
-  },
-  {
-    initial: "J",
-    name: "Julián Ramírez",
-    text: "Mi esposa y yo compramos una mesa y quedamos realmente impresionados. La calidad es excepcional. Muy recomendados.",
-  },
-];
+// Mismas reseñas y mismas fechas que el resto del sitio: fuente única en
+// lib/content.ts, para que nunca se desincronicen.
+const REVIEWS = ALL_REVIEWS.slice(0, 6).map((r) => ({
+  initial: r.name.charAt(0),
+  name: r.name,
+  text: r.text,
+  date: r.date,
+}));
 
 function Stars({ sm }: { sm?: boolean }) {
   return (
@@ -92,7 +74,8 @@ export default function SanDiegoReviews() {
             <div className="lfr2-rating">
               <Stars />
               <span className="lfr2-score">
-                <strong>4.9</strong> · 29 opiniones en Google
+                <strong>{REVIEWS_SUMMARY.rating.toFixed(1)}</strong> ·{" "}
+                {REVIEWS_SUMMARY.count} opiniones en Google
               </span>
             </div>
           </header>
@@ -105,7 +88,10 @@ export default function SanDiegoReviews() {
                   <span className="lfr2-avatar">{r.initial}</span>
                   <div className="lfr2-meta">
                     <strong>{r.name}</strong>
-                    <small>vía Google</small>
+                    <small>
+                      vía Google
+                      {r.date ? ` · ${reviewDateLabel(r.date)}` : ""}
+                    </small>
                   </div>
                 </div>
               </article>

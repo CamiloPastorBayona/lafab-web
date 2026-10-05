@@ -9,6 +9,7 @@ import { useState, type CSSProperties, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { SANDIEGO } from "@/lib/sandiego";
 import { useCart } from "@/lib/cart";
+import { SHIPPING_ZONES, cop } from "@/lib/shipping";
 
 const PRICE = 3400000;
 const REAL = 3800000;
@@ -41,12 +42,9 @@ const FABRICS: Fabric[] = [
 ];
 
 const SIZES = ["170 cm", "180 cm", "190 cm", "200 cm"];
-const SHIPS = [
-  { label: "Medellín · Área metropolitana", cost: 0 },
-  { label: "Nacional · ciudad capital", cost: 200000 },
-];
-
-const cop = (n: number) => "$" + n.toLocaleString("es-CO");
+// Tarifas de envío: fuente única en lib/shipping.ts (mismas que ve el resto
+// de la tienda y las que se liquidan en el checkout).
+const SHIPS = SHIPPING_ZONES;
 
 type Seal = { icon: ReactNode; t: string; s: string };
 const SEALS: Seal[] = [
@@ -81,6 +79,10 @@ const CSS = `
   color:rgba(20,20,20,.72);cursor:pointer;transition:all .22s ease;}
 #lf-buy .lfb-chip:hover,#lf-buy .lfb-ship:hover{border-color:rgba(20,20,20,.4);color:#151515;transform:translateY(-1px);}
 #lf-buy .lfb-chip.active,#lf-buy .lfb-ship.active{background:#151515;border-color:#151515;color:#fff;}
+#lf-buy .lfb-ship{display:inline-flex;align-items:center;gap:9px;}
+#lf-buy .lfb-ship em{font-style:normal;font-size:11.5px;font-weight:500;letter-spacing:.02em;
+  padding:2px 8px;border-radius:999px;background:rgba(20,20,20,.06);color:rgba(20,20,20,.6);}
+#lf-buy .lfb-ship.active em{background:rgba(255,255,255,.16);color:#fff;}
 #lf-buy .lfb-fabrics{display:flex;flex-wrap:wrap;gap:10px;}
 #lf-buy .lfb-fab{appearance:none;text-align:left;padding:12px 18px;background:transparent;
   border:1px solid rgba(20,20,20,.16);border-radius:8px;cursor:pointer;font-family:inherit;
@@ -298,6 +300,7 @@ export default function SanDiegoConfigurator() {
                       onClick={() => setShip(s)}
                     >
                       {s.label}
+                      <em>{s.cost > 0 ? `+${cop(s.cost)}` : "incluido"}</em>
                     </button>
                   ))}
                 </div>

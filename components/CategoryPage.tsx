@@ -7,12 +7,13 @@ import Reviews from "@/components/Reviews";
 import { WHATSAPP } from "@/lib/content";
 import type { CategoryConfig } from "@/lib/categories";
 import type { WCProduct } from "@/lib/woocommerce";
+import { SHIPPING_BADGE } from "@/lib/shipping";
 
 const BENEFITS = [
   { icon: "factory", t: "Fabricación propia" },
   { icon: "layers", t: "Telas de calidad" },
   { icon: "shieldCheck", t: "Garantía" },
-  { icon: "truck", t: "Envío incluido en Medellín" },
+  { icon: "truck", t: SHIPPING_BADGE },
 ];
 
 export default function CategoryPage({

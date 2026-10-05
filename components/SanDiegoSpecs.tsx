@@ -59,7 +59,7 @@ const ROWS_TOP: { key: string; val: React.ReactNode }[] = [
   { key: "Estructura", val: "Pino inmunizado y Roble natural · ensambles reforzados" },
   {
     key: "Confort",
-    val: "Asientos en espumas Croydon® + Penta® certificadas · espaldares sueltos en fibra siliconada de alta recuperación",
+    val: "Espumas Croydon® + Penta® certificadas · espaldares sueltos en fibra siliconada de alta recuperación",
   },
 ];
 

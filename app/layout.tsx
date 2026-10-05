@@ -9,6 +9,7 @@ import Analytics from "@/components/Analytics";
 import WhatsAppFab from "@/components/WhatsAppFab";
 import ImageGuard from "@/components/ImageGuard";
 import IntroLoader from "@/components/IntroLoader";
+import { REVIEWS_SUMMARY } from "@/lib/content";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -62,8 +63,8 @@ const BUSINESS_JSONLD = {
   areaServed: "Medellín y Colombia",
   aggregateRating: {
     "@type": "AggregateRating",
-    ratingValue: "4.9",
-    reviewCount: "29",
+    ratingValue: String(REVIEWS_SUMMARY.rating),
+    reviewCount: String(REVIEWS_SUMMARY.count),
     bestRating: "5",
     worstRating: "1",
   },
