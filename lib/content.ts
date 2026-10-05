@@ -17,11 +17,12 @@ export const SHOWROOM = {
   mapsQuery: "La+Fabrica+de+Muebles+Itagui+Calle+64+44-74",
 };
 
-// Reseñas reales de Google (4.9★ · 38 reseñas · verificado el 05/10/2026).
-// `date` es la fecha de publicación en Google, en formato ISO (YYYY-MM o
-// YYYY-MM-DD). Es opcional: si una reseña todavía no la tiene confirmada, la
-// tarjeta se renderiza igual, solo sin la fecha. Para completar las que faltan,
-// se consulta el perfil de empresa en Google (Opiniones → fecha de cada una).
+// Reseñas reales de Google, verificadas el 05/10/2026 directamente en el Perfil
+// de Empresa (lafabricamedellin@gmail.com): 4.9 ★ sobre 38 opiniones.
+// `date` es la fecha de publicación con precisión de mes (YYYY-MM), que es la
+// precisión que entrega Google para las reseñas recientes ("hace N semanas").
+// Los textos conservan el contenido original; solo se corrigieron tildes y
+// puntuación. Si se agregan reseñas nuevas, se toman del mismo perfil.
 export type Review = {
   name: string;
   rating: number;
@@ -32,49 +33,88 @@ export type Review = {
 
 export const REVIEWS: Review[] = [
   {
+    name: "Juan David Rodríguez",
+    rating: 5,
+    date: "2026-09",
+    text:
+      "Muy satisfecho por haber escogido a LaFab para la fabricación de los muebles de mi apartamento. Hubo una excelente sinergia entre mis diseños y el acompañamiento de su equipo de diseño para llegar al resultado final. ¡Muchas gracias!",
+  },
+  {
+    name: "María Isabel Castaño Maya",
+    rating: 5,
+    date: "2026-09",
+    text:
+      "Los conocí virtualmente y decidí confiar. Desde la atención por redes hasta la entrega todo estuvo perfecto: muy organizados, atentos y cumplidos.",
+  },
+  {
+    name: "Yolanda Botina",
+    rating: 5,
+    date: "2026-09",
+    text:
+      "Recibimos nuestro sofá elaborado a la medida: un trabajo impecable, con materiales y diseño de alta calidad. Muy recomendado, agradezco por este bello trabajo.",
+  },
+  {
     name: "Andrés Rendón Dederle",
     rating: 5,
     date: "2026-09",
     text:
-      "Compramos comedor, sala y cama, y debo decir que el resultado superó lo que esperábamos. Excelente calidad, cumplimiento en la entrega y una atención impecable de principio a fin.",
+      "Compramos comedor, sala y cama, y debo decir que se ve la calidad de los materiales y la terminación de los productos. Los tiempos de entrega fueron los acordados y quedamos muy satisfechos con la atención.",
   },
   {
-    name: "Kris O.",
+    name: "Edgar Zuleta",
     rating: 5,
-    date: "2026-05",
+    date: "2026-08",
     text:
-      "Compré un sofá en LaFab y tuve una experiencia excelente de principio a fin. Me explicaron las dimensiones en detalle y me ayudaron a elegir el que mejor encajaba en mi espacio.",
+      "Valió la pena esperar la fabricación de mi mueble. Desde que llegué a LaFab la atención fue increíble; probamos varios sofás y logré conseguir el ideal para mi apartamento.",
   },
   {
-    name: "Julián Ramírez",
+    name: "Estefanía López Estrada",
     rating: 5,
-    date: "2026-05",
+    date: "2026-08",
     text:
-      "Mi esposa y yo compramos una mesa y quedamos realmente impresionados. La calidad es excepcional. Muy recomendados.",
-  },
-  {
-    name: "María Angélica Vergara",
-    rating: 5,
-    text:
-      "Quedé muy agradecida, llenaron mi expectativa con mi alcoba. Muy feliz, excelente cumplimiento, acabados sensacionales y excelente servicio. ¡Dios los bendiga!",
+      "El servicio es buenísimo: te mantienen enterado del proceso, súper puntuales con la entrega, los diseños son preciosos y te recomiendan de acuerdo con tus necesidades. ¡Recomendado mil veces y aprobado por mi perrita, que ya lo estrenó!",
   },
   {
     name: "Lucía Vélez",
     rating: 5,
+    date: "2026-06",
+    text:
+      "Quedé muy agradecida, llenaron mi expectativa con mi alcoba. Muy feliz, excelente cumplimiento, acabados sensacionales y excelente servicio. ¡Dios los bendiga!",
+  },
+  {
+    name: "Paulina Pérez Navaz",
+    rating: 5,
+    date: "2026-05",
     text:
       "Amé mi sala. Súper recomendado, todo gracias a María por su acompañamiento y asesoría. Les doy un 10 en todo, ¡los mejores!",
   },
   {
-    name: "Paulina Pérez",
+    name: "María Angélica Vergara Polo",
     rating: 5,
+    date: "2026-05",
     text:
-      "Excelente servicio, siempre muy atentos a las sugerencias y nos mantuvieron al tanto de los tiempos. Mandamos a hacer varios muebles y con todos nos fue muy bien.",
+      "Excelente calidad del sofá: muy cómodo, elegante y con acabados muy bien elaborados. Quedé muy satisfecha con la compra y con el resultado final.",
+  },
+  {
+    name: "Julián Ramírez",
+    rating: 5,
+    date: "2026-04",
+    text:
+      "Mi esposa y yo compramos una mesa y quedamos realmente impresionados. La calidad es excepcional y las sillas son increíblemente cómodas. Se ve que es un producto fino, bien hecho y duradero.",
+  },
+  {
+    name: "Kris O.",
+    rating: 5,
+    date: "2026-04",
+    text:
+      "Compré un sofá en LaFab y tuve una experiencia excelente de principio a fin. Carolina fue muy atenta y conocedora: me explicó las dimensiones en detalle y me ayudó a evitar comprar un sofá que no habría encajado en mi espacio. La calidad es excepcional.",
   },
   {
     name: "Eder Durán",
     rating: 5,
+    date: "2025-11",
     text:
-      "Me encantó el trabajo, me dieron una muy buena asesoría e hicieron realidad lo que tenía en mente. Totalmente recomendados. ¡Muchas gracias!",
+      "Excelente servicio, siempre muy atentos a las sugerencias; nos mantuvieron al tanto de los tiempos y todo excelente con la instalación. Mandamos a hacer varios muebles y con todos nos fue muy bien.",
   },
 ];
 
