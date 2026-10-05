@@ -1,4 +1,4 @@
-// "Lo que dicen nuestros clientes": opiniones de Google. Acoplado a la marca:
+// "Lo que dicen nuestros clientes": reseñas de Google. Acoplado a la marca:
 // título morality, base Poppins, eyebrow gold (#7A6A45), avatar gold-light
 // (#CABBA0), fondo cream (#F4F1EC). Estático (sin JS).
 
@@ -69,7 +69,7 @@ export default function SanDiegoReviews() {
         <style dangerouslySetInnerHTML={{ __html: CSS }} />
         <div className="lfr2-wrap">
           <header className="lfr2-head">
-            <span className="lfr2-eyebrow">Opiniones</span>
+            <span className="lfr2-eyebrow">Reseñas</span>
             <h2 className="lfr2-title">Lo que dicen nuestros clientes.</h2>
             <div className="lfr2-rating">
               <Stars />

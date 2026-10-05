@@ -20,7 +20,7 @@ import TrackView from "@/components/TrackView";
 export const metadata: Metadata = {
   title: "Sofá San Diego",
   description:
-    "Sofá San Diego: confort superior, fabricación propia y telas Pet Friendly antifluidos. Elige medida, material y color, y cómpralo en línea con envío incluido.",
+    "Sofá San Diego: confort superior, fabricación propia y telas pet friendly y antifluido. Elige medida, material y color, y cómpralo en línea con envío incluido.",
 };
 
 const eyebrow =
@@ -143,7 +143,7 @@ export default function SanDiegoLanding() {
       {/* Ficha técnica */}
       <SanDiegoSpecs />
 
-      {/* Opiniones */}
+      {/* Reseñas */}
       <SanDiegoReviews />
 
       {/* CTA intermedio */}

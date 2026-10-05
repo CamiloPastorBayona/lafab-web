@@ -30,9 +30,9 @@ export const SANDIEGO = {
     title: "Los líquidos resbalan. La tela queda intacta.",
     text: "Café, vino, jugo o salsa: los líquidos permanecen en la superficie durante unos instantes, permitiendo retirarlos fácilmente antes de que sean absorbidos.",
     note: "Siempre se recomienda limpiar inmediatamente para conservar el tratamiento protector.",
-    badges: ["Repele líquidos", "Fácil limpieza", "Pet friendly"],
+    badges: ["Repele líquidos", "Fácil limpieza", "Pet Friendly"],
     img: `${U}/2026/06/milan-tela-marfil.webp`,
-    caption: "Tela antifluidos",
+    caption: "Tela antifluido",
   },
 
   lifestyle: [
@@ -96,7 +96,7 @@ export const SANDIEGO = {
         { name: "Plata", hex: "#B9BBBE" },
         { name: "Gris", hex: "#7C7F83" },
       ],
-      spec: "Soft velvet · 100% poliéster · Ancho 145 cm · Teñido y estampado",
+      spec: "Soft Velvet · 100% poliéster · Ancho 145 cm · Teñido y estampado",
     },
     {
       key: "milan",
@@ -227,7 +227,7 @@ export const SANDIEGO = {
     },
     {
       q: "¿La tela es amigable con mascotas?",
-      a: "Sí. Microfibra Mon (suave, antifluidos y Pet Friendly) y Chenil Milan (más textura, también antifluidos). Ninguna tela es indestructible: uñas o mordidas pueden generar desgaste, por lo que recomendamos un cuidado adecuado.",
+      a: "Sí. Microfibra Mon (suave, antifluido y pet friendly) y Chenil Milan (más textura, también antifluido). Ninguna tela es indestructible: uñas o mordidas pueden generar desgaste, por lo que recomendamos un cuidado adecuado.",
     },
     {
       q: "¿Cómo funciona la garantía?",

@@ -22,7 +22,7 @@ type Fabric = { name: string; tag: string; colors: Color[] };
 const FABRICS: Fabric[] = [
   {
     name: "Microfibra Mon",
-    tag: "Pet Friendly · Soft velvet",
+    tag: "Pet Friendly · Soft Velvet",
     colors: [
       { name: "Marfil", hex: "#F1ECE2", img: TEX + "mon-tela-beige.webp", foto: FOTO + "01-Mon-Marfil.webp" },
       { name: "Avellana", hex: "#D9CCB3", img: TEX + "mon-tela-avellana.webp", foto: FOTO + "02-Mon-Avellana.webp" },

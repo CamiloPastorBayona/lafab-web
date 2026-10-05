@@ -61,7 +61,7 @@ export default function NosotrosPage() {
       <PageHeader
         eyebrow="Nosotros"
         title="Fabricamos los muebles que imaginas"
-        subtitle="Somos La Fábrica de Muebles: un taller en Itagüí donde el diseño y la fabricación propia se unen para crear piezas hechas a tu medida."
+        subtitle="Somos La Fábrica de Muebles: un taller en Itagüí donde el diseño y la fabricación propia se unen para crear piezas hechas a la medida."
         image="https://lafab.com.co/wp-content/uploads/2026/06/taller1-1.webp"
       />
 

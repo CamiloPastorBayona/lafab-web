@@ -72,7 +72,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     image: `${U}/2026/07/3.webp`,
     intro: [
       "En LaFab diseñamos y fabricamos sofás a la medida en Medellín, con fabricación propia en nuestro taller de Itagüí. Cada sofá se adapta a tu espacio: eliges las medidas, la tela y el color para lograr la comodidad y el estilo que buscas.",
-      "Trabajamos sofás lineales y sofás en L con telas antifluido y opciones pet friendly, espumas certificadas y estructuras en madera inmunizada para que duren años. El envío está incluido en Medellín y su área metropolitana, y despachamos a las principales ciudades del país.",
+      "Trabajamos sofás lineales y sofás en L con telas antifluido y opciones pet friendly, espumas certificadas y estructuras en madera inmunizada para que duren años. El envío está incluido en Medellín y su área metropolitana, con envío a las principales ciudades del país.",
     ],
     faq: [
       { q: "¿Puedo elegir la medida del sofá?", a: "Sí. Fabricamos cada sofá a la medida: adaptamos el largo, la profundidad y la configuración a tu sala." },
@@ -187,13 +187,13 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     ],
     image: `${U}/2025/05/VASSUE.jpg`,
     intro: [
-      "Fabricamos camas tapizadas a la medida en Medellín para convertir tu alcoba en un verdadero refugio. Diseño propio, estructura en madera inmunizada y tapizados cómodos y resistentes.",
-      "Elige el tamaño (matrimonial, queen o king), la tela y el color. Todo se fabrica en nuestro taller de Itagüí, con envío incluido en Medellín y su área metropolitana y despacho a otras ciudades del país.",
+      "Fabricamos camas tapizadas a la medida en Medellín para convertir tu dormitorio en un verdadero refugio. Diseño propio, estructura en madera inmunizada y tapizados cómodos y resistentes.",
+      "Elige el tamaño (matrimonial, queen o king), la tela y el color. Todo se fabrica en nuestro taller de Itagüí, con envío incluido en Medellín y su área metropolitana y envío a otras ciudades del país.",
     ],
     faq: [
       { q: "¿Qué tamaños de cama manejan?", a: "Fabricamos camas matrimoniales, queen y king, y adaptamos medidas especiales si lo necesitas." },
       { q: "¿La estructura es resistente?", a: "Sí: estructura en madera de pino inmunizado y ensambles reforzados para larga durabilidad." },
-      { q: "¿Puedo elegir la tela y el color?", a: "Claro. Personalizas el tapizado y el color para que combine con tu alcoba." },
+      { q: "¿Puedo elegir la tela y el color?", a: "Claro. Eliges el tapizado y el color para que combine con tu dormitorio." },
       { q: "¿Hacen envíos fuera de Medellín?", a: "Sí. En Medellín y su área metropolitana el envío está incluido en el precio; a las demás ciudades capitales tiene un costo adicional de $200.000." },
     ],
   },
@@ -213,8 +213,8 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     ],
     image: `${U}/2026/07/2.webp`,
     intro: [
-      "Fabricamos poltronas a la medida en Medellín: ese rincón cómodo y con estilo que le hace falta a tu sala o alcoba. Diseño propio y tapizados de calidad, en la tela y el color que prefieras.",
-      "Cada poltrona se fabrica en nuestro taller de Itagüí con materiales seleccionados y acabados impecables. Envío incluido en Medellín y el área metropolitana, y despacho a otras ciudades del país.",
+      "Fabricamos poltronas a la medida en Medellín: ese rincón cómodo y con estilo que le hace falta a tu sala o a tu dormitorio. Diseño propio y tapizados de calidad, en la tela y el color que prefieras.",
+      "Cada poltrona se fabrica en nuestro taller de Itagüí con materiales seleccionados y acabados impecables. Envío incluido en Medellín y el área metropolitana, y envío a otras ciudades del país.",
     ],
     faq: [
       { q: "¿Puedo elegir la tela de la poltrona?", a: "Sí, personalizas tela y color; tenemos opciones resistentes y fáciles de limpiar." },

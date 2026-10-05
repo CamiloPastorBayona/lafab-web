@@ -139,7 +139,7 @@ export default function SanDiegoSpecs() {
                   <div className="ls-fab">
                     <strong>Microfibra Mon</strong> · Pet Friendly
                     <span className="ls-fabdesc">
-                      Suave al tacto, antifluidos y Pet Friendly: facilita la
+                      Suave al tacto, antifluido y pet friendly: facilita la
                       limpieza diaria y reduce el enganche de pelos. Ideal para
                       hogares con mascotas.
                     </span>
@@ -148,7 +148,7 @@ export default function SanDiegoSpecs() {
                     <strong>Chenil Milan</strong> · Antifluido
                     <span className="ls-fabdesc">
                       Textura cálida y apariencia acogedora, con protección
-                      antifluidos para limpiar derrames con facilidad y un
+                      antifluido para limpiar derrames con facilidad y un
                       mantenimiento sencillo.
                     </span>
                   </div>

@@ -54,7 +54,7 @@ export default function Footer() {
               className="mb-5 h-9 w-auto"
             />
             <p className="max-w-xs text-sm leading-relaxed text-white/55">
-              Muebles hechos a tu medida, construidos para durar.
+              Muebles hechos a la medida, construidos para durar.
             </p>
             <div className="mt-6 flex gap-3">
               <Social

@@ -18,7 +18,7 @@ export const SHOWROOM = {
 };
 
 // Reseñas reales de Google, verificadas el 05/10/2026 directamente en el Perfil
-// de Empresa (lafabricamedellin@gmail.com): 4.9 ★ sobre 38 opiniones.
+// de Empresa (lafabricamedellin@gmail.com): 4.9 ★ sobre 38 reseñas.
 // `date` es la fecha de publicación con precisión de mes (YYYY-MM), que es la
 // precisión que entrega Google para las reseñas recientes ("hace N semanas").
 // Los textos conservan el contenido original; solo se corrigieron tildes y
@@ -147,7 +147,7 @@ export const SPACES = [
     name: "Dormitorio",
     slug: "dormitorio",
     catId: 95,
-    description: "Camas tapizadas y muebles que hacen de tu alcoba un refugio.",
+    description: "Camas tapizadas y muebles que hacen de tu dormitorio un refugio.",
     href: "/camas",
     image: "https://lafab.com.co/wp-content/uploads/2025/05/VASSUE-1024x768.jpg",
   },

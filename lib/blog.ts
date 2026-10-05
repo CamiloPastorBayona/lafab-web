@@ -47,7 +47,7 @@ export const ARTICLES: Article[] = [
 <p>La estructura y las espumas deciden cuánto dura el sofá. Una base en madera inmunizada y espumas de buena densidad evitan que se hunda con los años. En LaFab controlamos cada etapa, del corte a la tapicería, para que esa comodidad se mantenga.</p>
 
 <h2>En resumen</h2>
-<p>Mide bien, elige la forma según tu espacio, prioriza una tela resistente y no sacrifiques la calidad interna. Si quieres un sofá hecho a tu medida, mira nuestra colección de <a href="/sofas">sofás a la medida</a> o conoce el <a href="/san-diego">Sofá San Diego</a>, nuestro modelo insignia con telas antifluido y pet friendly.</p>
+<p>Mide bien, elige la forma según tu espacio, prioriza una tela resistente y no sacrifiques la calidad interna. Si quieres un sofá hecho a la medida, mira nuestra colección de <a href="/sofas">sofás a la medida</a> o conoce el <a href="/san-diego">Sofá San Diego</a>, nuestro modelo insignia con telas antifluido y pet friendly.</p>
 `,
   },
 
@@ -117,7 +117,7 @@ export const ARTICLES: Article[] = [
 <h2>No olvides la circulación</h2>
 <p>Más importante que el tamaño de la mesa es el espacio libre alrededor. Si tras poner la mesa no quedan al menos 70 cm para pasar, conviene bajar de puestos o fabricar la mesa a la medida de tu espacio.</p>
 
-<p>¿Listo para tu comedor? Míralos en nuestra sección de <a href="/comedores">comedores de madera a la medida</a> y cuéntanos las dimensiones de tu espacio: lo fabricamos a tu medida.</p>
+<p>¿Listo para tu comedor? Míralos en nuestra sección de <a href="/comedores">comedores de madera a la medida</a> y cuéntanos las dimensiones de tu espacio: lo fabricamos a la medida.</p>
 `,
   },
 ];

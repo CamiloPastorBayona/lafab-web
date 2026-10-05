@@ -233,7 +233,7 @@ const FABRICS: Fabric[] = [
       { icon: <IcShield />, text: "Más resistente" },
     ],
     colors: ["Beige", "Avellana", "Plata", "Gris"],
-    specs: "Soft velvet · 100% poliéster · Ancho 145 cm · Teñido y estampado",
+    specs: "Soft Velvet · 100% poliéster · Ancho 145 cm · Teñido y estampado",
     right: true,
   },
 ];
@@ -353,7 +353,7 @@ export default function SanDiegoFabrics() {
             <div className="lfr-chips">
               <span>Repele líquidos</span>
               <span>Fácil limpieza</span>
-              <span>Pet friendly</span>
+              <span>Pet Friendly</span>
             </div>
           </div>
           <div className="lfr-demo">
@@ -365,7 +365,7 @@ export default function SanDiegoFabrics() {
               <span className="lfr-drop" style={{ left: "74%", animationDelay: "2.8s" }} />
               <span className="lfr-ripple" style={{ left: "74%", animationDelay: "2.8s" }} />
             </div>
-            <span className="lfr-cap">Tela antifluidos</span>
+            <span className="lfr-cap">Tela antifluido</span>
           </div>
         </div>
       </section>
