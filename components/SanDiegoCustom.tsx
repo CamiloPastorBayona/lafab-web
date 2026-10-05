@@ -101,7 +101,7 @@ export default function SanDiegoCustom() {
             color o configuración?
           </h2>
           <p className="lfc-desc">
-            Podemos fabricar una versión personalizada del sofá San Diego,
+            Podemos fabricar una versión personalizada del Sofá San Diego,
             adaptada a tu espacio, tus medidas y el acabado que estás buscando.
           </p>
           <div className="lfc-actions">

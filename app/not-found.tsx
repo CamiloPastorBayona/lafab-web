@@ -10,7 +10,7 @@ export default function NotFound() {
         </h1>
         <p className="mt-3 text-ink/60">
           Puede que el enlace haya cambiado o que la página ya no exista. Te
-          ayudamos a volver al camino.
+          llevamos de vuelta.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Link

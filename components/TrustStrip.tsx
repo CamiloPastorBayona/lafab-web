@@ -4,7 +4,7 @@ import { SHIPPING_NATIONAL_COST, cop } from "@/lib/shipping";
 
 const ITEMS = [
   { i: "truck", t: `Envío incluido en Medellín · +${cop(SHIPPING_NATIONAL_COST)} otras ciudades` },
-  { i: "factory", t: "Fabricación propia · 15-20 días" },
+  { i: "factory", t: "Fabricación propia · plazo confirmado al cotizar" },
   { i: "lock", t: "Pago 100% seguro" },
   { i: "shieldCheck", t: "Garantía por fabricación" },
 ];

@@ -60,7 +60,7 @@ const SLIDES: Slide[] = [
       [1536, "closets-2-1-1536x1025.jpg"],
     ]),
     eyebrow: "Closets",
-    title: <>Closets a tu medida.</>,
+    title: <>Closets a la medida.</>,
     sub: "Estilo y funcionalidad en perfecta armonía.",
     ctaLabel: "Diseña el tuyo",
     href: WHATSAPP,

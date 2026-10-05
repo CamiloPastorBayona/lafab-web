@@ -30,7 +30,7 @@ export const SHIPPING_ZONES: ShippingZone[] = [
     cost: 0,
   },
   {
-    label: "Nacional · ciudad capital",
+    label: "Otra ciudad capital del país",
     short: "Otras ciudades capitales",
     cost: SHIPPING_NATIONAL_COST,
   },

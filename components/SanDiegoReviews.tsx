@@ -75,7 +75,7 @@ export default function SanDiegoReviews() {
               <Stars />
               <span className="lfr2-score">
                 <strong>{REVIEWS_SUMMARY.rating.toFixed(1)}</strong> ·{" "}
-                {REVIEWS_SUMMARY.count} opiniones en Google
+                {REVIEWS_SUMMARY.count} reseñas en Google
               </span>
             </div>
           </header>

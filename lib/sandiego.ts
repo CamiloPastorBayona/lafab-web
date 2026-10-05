@@ -125,7 +125,7 @@ export const SANDIEGO = {
     { n: "01", title: "Elige la medida", text: "A tu espacio, de 1.70 a 2.00 m." },
     { n: "02", title: "Elige el material", text: "Microfibra Mon o Chenil Milan." },
     { n: "03", title: "Escoge el color", text: "Varias tonalidades disponibles." },
-    { n: "04", title: "Indica tu ciudad", text: "Ves el costo del envío antes de pagar." },
+    { n: "04", title: "Indica tu ciudad", text: "Verás el costo del envío antes de pagar." },
     { n: "05", title: "Paga en línea", text: "Rápido y seguro." },
     { n: "06", title: "Recíbelo en casa", text: "Lo llevamos hasta tu sala." },
   ],
@@ -214,7 +214,7 @@ export const SANDIEGO = {
 
   faq: [
     {
-      q: "¿Cuánto tarda?",
+      q: "¿Cuánto tarda la fabricación y la entrega?",
       a: "Cada Sofá San Diego se fabrica bajo pedido, especialmente para ti. El proceso toma entre 15 y 20 días hábiles: seleccionamos materiales, construimos la estructura y realizamos el tapizado con altos estándares. Te mantenemos informado hasta la entrega.",
     },
     {

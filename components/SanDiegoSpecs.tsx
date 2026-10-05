@@ -5,6 +5,7 @@
 // (#7A6A45), hover/acentos en gold-light (#CABBA0).
 
 import { useEffect, useRef } from "react";
+import { SHIPPING_NATIONAL_COST, cop } from "@/lib/shipping";
 
 const CSS = `
 #lafab-sd-specs,#lafab-sd-specs *{box-sizing:border-box;margin:0;padding:0;}
@@ -53,10 +54,10 @@ const CSS = `
 const ROWS_TOP: { key: string; val: React.ReactNode }[] = [
   { key: "Largo", val: "Disponible en 170 cm · 180 cm · 190 cm · 200 cm" },
   { key: "Fondo", val: "100 cm" },
-  { key: "Altura", val: "90 cm con cojines · 78 cm espaldar sin cojines" },
+  { key: "Altura", val: "Alto total 90 cm (con cojines) · 78 cm (espaldar sin cojines)" },
   { key: "Brazos", val: "Ancho 21 cm · Fondo 96 cm · Alto 62 cm" },
   { key: "Patas", val: "Roble macizo · 20 × 20 cm · alto 5 cm · acabado natural" },
-  { key: "Estructura", val: "Pino inmunizado y Roble natural · ensambles reforzados" },
+  { key: "Estructura", val: "Pino inmunizado y roble natural · ensambles reforzados" },
   {
     key: "Confort",
     val: "Espumas Croydon® + Penta® certificadas · espaldares sueltos en fibra siliconada de alta recuperación",
@@ -68,20 +69,20 @@ const ROWS_BOTTOM: { key: string; val: React.ReactNode }[] = [
     key: "Tela · técnica",
     val: (
       <>
-        100% poliéster · tecnología antifluidos <strong>AquaFobiak®</strong> ·
+        100% poliéster · tecnología antifluido <strong>AquaFobiak®</strong> ·
         +25.000 ciclos Martindale · OEKO-TEX® Standard 100
       </>
     ),
   },
-  { key: "Colores", val: "Tonos según la tela · Marfil, Beige, Avellana, Plata y Gris" },
+  { key: "Colores", val: "Marfil, Beige, Avellana, Plata y Gris (según la tela elegida)" },
   { key: "Garantía", val: "3 años en estructura · 1 año por desajustes" },
   {
     key: "Envíos",
     val: (
       <>
-        Nacional · ciudades capitales: <strong>incluido</strong>
+        Medellín y área metropolitana: <strong>incluido</strong>
         <br />
-        Local entre La Estrella y Bello (Ant.): <strong>incluido</strong>
+        Otras ciudades capitales: <strong>+{cop(SHIPPING_NATIONAL_COST)}</strong>
       </>
     ),
   },
@@ -124,7 +125,7 @@ export default function SanDiegoSpecs() {
         <div className="ls-grid">
           <div className="ls-left">
             <span className="ls-eyebrow">Ficha técnica</span>
-            <h2 className="ls-title">Especificaciones y Garantía</h2>
+            <h2 className="ls-title">Especificaciones y garantía</h2>
             <div className="ls-table">
               {ROWS_TOP.map((r) => (
                 <div className="ls-row" key={r.key}>

@@ -54,7 +54,7 @@ export default function Footer() {
               className="mb-5 h-9 w-auto"
             />
             <p className="max-w-xs text-sm leading-relaxed text-white/55">
-              Muebles hechos a tu medida, pensados para durar toda la vida.
+              Muebles hechos a tu medida, construidos para durar.
             </p>
             <div className="mt-6 flex gap-3">
               <Social
@@ -95,7 +95,7 @@ export default function Footer() {
             <a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className={`block ${link}`}>
               Agenda tu cita
             </a>
-            <Link href="/espacios" className={`block ${link}`}>Diseño de interiores</Link>
+            <Link href="/espacios" className={`block ${link}`}>Compra por espacios</Link>
             <Link href="/preguntas-frecuentes" className={`block ${link}`}>Preguntas frecuentes</Link>
             <a
               href="https://lafab.com.co/poliza-de-garantia/"

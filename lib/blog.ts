@@ -115,7 +115,7 @@ export const ARTICLES: Article[] = [
 <p>Para quienes reciben seguido o tienen familia grande. Una mesa de <strong>2.00–2.40 m de largo</strong> permite sentar a ocho personas. Requiere una zona amplia: asegúrate de tener espacio de circulación suficiente alrededor.</p>
 
 <h2>No olvides la circulación</h2>
-<p>Más importante que el tamaño de la mesa es el espacio libre alrededor. Si tras poner la mesa no quedan al menos 70 cm para pasar, conviene bajar de puestos o elegir una medida a la medida de tu espacio.</p>
+<p>Más importante que el tamaño de la mesa es el espacio libre alrededor. Si tras poner la mesa no quedan al menos 70 cm para pasar, conviene bajar de puestos o fabricar la mesa a la medida de tu espacio.</p>
 
 <p>¿Listo para tu comedor? Míralos en nuestra sección de <a href="/comedores">comedores de madera a la medida</a> y cuéntanos las dimensiones de tu espacio: lo fabricamos a tu medida.</p>
 `,

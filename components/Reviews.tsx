@@ -58,7 +58,7 @@ export default function Reviews() {
                   </div>
                 </div>
                 <p className="mt-5 text-white/70">
-                  Cientos de hogares ya confían en LaFab. Estas son algunas de sus
+                  Más de 12 años amoblando hogares en Medellín. Estas son algunas
                   experiencias reales.
                 </p>
               </div>

@@ -42,7 +42,15 @@ export function catLabel(name?: string | null): string {
     .replace(/\basiento\b/g, "sofá")
     .replace(/\s*\(angulares?\)/gi, "")
     .replace(/\bAngulares\b/g, "en L")
-    .replace(/\bangulares\b/g, "en L");
+    .replace(/\bangulares\b/g, "en L")
+    .replace(/\bSeccionales\b/g, "en L")
+    .replace(/\bseccionales\b/g, "en L")
+    .replace(/\bSeccional\b/g, "en L")
+    .replace(/\bseccional\b/g, "en L")
+    .replace(/\bEsquineros\b/g, "en L")
+    .replace(/\besquineros\b/g, "en L")
+    .replace(/\bEsquinero\b/g, "en L")
+    .replace(/\besquinero\b/g, "en L");
 }
 
 export const CATEGORIES: Record<string, CategoryConfig> = {
@@ -70,7 +78,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       { q: "¿Puedo elegir la medida del sofá?", a: "Sí. Fabricamos cada sofá a la medida: adaptamos el largo, la profundidad y la configuración a tu sala." },
       { q: "¿Qué telas manejan?", a: "Telas seleccionadas por su resistencia y fácil mantenimiento, con opciones antifluido y pet friendly, ideales para hogares con mascotas." },
       { q: "¿Cuánto tarda la fabricación?", a: "Depende del modelo y las especificaciones; te confirmamos el plazo exacto al momento de la cotización y te mantenemos informado." },
-      { q: "¿Hacen envíos?", a: "Sí: envío incluido en Medellín y área metropolitana, y despacho a ciudades capitales del país." },
+      { q: "¿Hacen envíos?", a: "Sí. En Medellín y su área metropolitana el envío está incluido en el precio; a las demás ciudades capitales tiene un costo adicional de $200.000." },
     ],
     subcategories: [
       { label: "Sofás lineales", href: "/sofas-lineales" },
@@ -100,7 +108,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       { q: "¿De cuántos puestos hacen los sofás lineales?", a: "Los fabricamos a la medida: desde dos puestos hasta el largo que necesites para tu sala." },
       { q: "¿Qué telas puedo elegir?", a: "Telas antifluido y pet friendly, fáciles de limpiar, en varios colores." },
       { q: "¿Cuánto tarda la fabricación?", a: "Depende del modelo; te confirmamos el plazo exacto al cotizar." },
-      { q: "¿Incluye envío?", a: "Envío incluido en Medellín y área metropolitana; también despachamos a otras ciudades." },
+      { q: "¿Incluye envío?", a: "En Medellín y su área metropolitana está incluido en el precio; a las demás ciudades capitales tiene un costo adicional de $200.000." },
     ],
     subcategories: [
       { label: "Ver todos los sofás", href: "/sofas" },
@@ -123,14 +131,14 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     ],
     image: `${U}/2026/07/6.webp`,
     intro: [
-      "Fabricamos sofás en L a la medida en Medellín, ideales para aprovechar la esquina y sumar puestos sin ocupar de más. Perfectos para familias y para las tardes de película en casa.",
+      "Fabricamos sofás en L a la medida en Medellín, ideales para aprovechar la esquina y sumar puestos sin ocupar más espacio del necesario. Perfectos para familias y para las tardes de película en casa.",
       "Los adaptamos al lado que necesites (izquierdo o derecho) y a las dimensiones de tu sala. Telas antifluido y pet friendly, espumas de calidad y estructura en madera. Fabricación propia en Itagüí y envío incluido en Medellín.",
     ],
     faq: [
       { q: "¿El sofá en L viene con la esquina a la izquierda o a la derecha?", a: "Como quieras: lo fabricamos a la medida con la esquina del lado que mejor se acomode a tu sala." },
       { q: "¿Cuántos puestos tiene un sofá en L?", a: "Depende de la medida que elijas; al ser a la medida, ajustamos el largo de cada lado." },
       { q: "¿Qué telas manejan?", a: "Telas antifluido y pet friendly, resistentes y fáciles de limpiar, en varios tonos." },
-      { q: "¿Hacen envíos?", a: "Envío incluido en Medellín y área metropolitana; despacho a ciudades capitales del país." },
+      { q: "¿Hacen envíos?", a: "En Medellín y su área metropolitana está incluido en el precio; a las demás ciudades capitales tiene un costo adicional de $200.000." },
     ],
     subcategories: [
       { label: "Ver todos los sofás", href: "/sofas" },
@@ -160,7 +168,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       { q: "¿De cuántos puestos fabrican los comedores?", a: "Fabricamos comedores de 4, 6 y más puestos, ajustando la medida a tu espacio." },
       { q: "¿En qué materiales trabajan?", a: "Maderas seleccionadas con acabados de calidad; puedes elegir el color para que combine con tu ambiente." },
       { q: "¿Puedo pedir una medida especial?", a: "Sí, todo se fabrica a la medida. Cuéntanos el espacio disponible y lo adaptamos." },
-      { q: "¿Incluye envío?", a: "El envío está incluido en Medellín y área metropolitana; a otras ciudades capitales también despachamos." },
+      { q: "¿Incluye envío?", a: "En Medellín y su área metropolitana está incluido en el precio; a las demás ciudades capitales tiene un costo adicional de $200.000." },
     ],
   },
 
@@ -171,7 +179,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     h1: "Camas tapizadas a la medida en Medellín",
     metaTitle: "Camas tapizadas a la medida en Medellín",
     metaDescription:
-      "Camas tapizadas a la medida en Medellín: matrimonial y king, con estructura en madera y acabados de calidad. Fabricación propia y envío nacional.",
+      "Camas tapizadas a la medida en Medellín: matrimonial, queen y king, con estructura en madera y acabados de calidad. Fabricación propia y envío nacional.",
     keywords: [
       "camas tapizadas Medellín",
       "cama matrimonial a la medida",
@@ -186,7 +194,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       { q: "¿Qué tamaños de cama manejan?", a: "Fabricamos camas matrimoniales, queen y king, y adaptamos medidas especiales si lo necesitas." },
       { q: "¿La estructura es resistente?", a: "Sí: estructura en madera de pino inmunizado y ensambles reforzados para larga durabilidad." },
       { q: "¿Puedo elegir la tela y el color?", a: "Claro. Personalizas el tapizado y el color para que combine con tu alcoba." },
-      { q: "¿Hacen envíos fuera de Medellín?", a: "Sí, despachamos a las principales ciudades del país; en Medellín y área metropolitana el envío está incluido." },
+      { q: "¿Hacen envíos fuera de Medellín?", a: "Sí. En Medellín y su área metropolitana el envío está incluido en el precio; a las demás ciudades capitales tiene un costo adicional de $200.000." },
     ],
   },
 
@@ -212,7 +220,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       { q: "¿Puedo elegir la tela de la poltrona?", a: "Sí, personalizas tela y color; tenemos opciones resistentes y fáciles de limpiar." },
       { q: "¿Son cómodas para leer o descansar?", a: "Están diseñadas para el uso diario, con espumas de calidad que ofrecen buen soporte y confort." },
       { q: "¿Se fabrican a la medida?", a: "Todas nuestras piezas son de fabricación propia y a la medida de lo que necesites." },
-      { q: "¿Incluyen envío?", a: "El envío está incluido en Medellín y área metropolitana; también despachamos a ciudades capitales." },
+      { q: "¿Incluyen envío?", a: "En Medellín y su área metropolitana está incluido en el precio; a las demás ciudades capitales tiene un costo adicional de $200.000." },
     ],
   },
 };

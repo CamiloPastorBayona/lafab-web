@@ -10,9 +10,9 @@ export const SHOWROOM = {
   address: "Cl. 64 #44-74, Barrio La Esmeralda",
   city: "Itagüí, Antioquia",
   hours: [
-    { day: "Lunes a Sábado", time: "10:00 a.m. – 6:30 p.m." },
+    { day: "Lunes a sábado", time: "10:00 a.m. – 6:30 p.m." },
     { day: "Domingos", time: "10:00 a.m. – 5:00 p.m." },
-    { day: "Festivos", time: "En puentes festivos no abrimos domingo ni lunes" },
+    { day: "Puentes festivos", time: "Cerrado domingo y lunes" },
   ],
   mapsQuery: "La+Fabrica+de+Muebles+Itagui+Calle+64+44-74",
 };
@@ -139,7 +139,7 @@ export const SPACES = [
     slug: "sofas",
     catId: 102,
     description:
-      "Sofás lineales, sofás en L y poltronas diseñados para tu sala.",
+      "Sofás lineales y sofás en L diseñados para tu sala.",
     href: "/sofas",
     image: "https://lafab.com.co/wp-content/uploads/2026/07/3-825x1024.webp",
   },
@@ -178,11 +178,11 @@ export const FAQS = [
   },
   {
     q: "¿Qué métodos de pago aceptan?",
-    a: "Pago 100% seguro en línea con Bold (tarjetas de crédito/débito y PSE) o por transferencia bancaria. Todos los precios incluyen IVA.",
+    a: "Pago 100% seguro en línea con Bold: tarjetas de crédito y débito o PSE. Si prefieres transferencia bancaria, escríbenos por WhatsApp y la coordinamos. Todos los precios incluyen IVA.",
   },
   {
     q: "¿Los muebles tienen garantía?",
-    a: "Sí. Ofrecemos garantía por defectos de fabricación y atención postventa. Consulta los detalles en nuestra Póliza de Garantía.",
+    a: "Sí: 3 años en la estructura y 1 año por desajustes, además de atención postventa. Consulta los detalles en nuestra Póliza de garantía.",
   },
   {
     q: "¿Puedo elegir la tela, el color y las medidas?",

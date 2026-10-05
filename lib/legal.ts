@@ -9,7 +9,7 @@ export const POLITICA_UPDATED = "13 de noviembre de 2025";
 export const TERMINOS: LegalSection[] = [
   {
     title: "Información",
-    body: `INVERSIONES CORREA RUA S.A.S (en adelante "Inversiones / la Compañía") es una sociedad comercial, domiciliada en la República de Colombia, identificada con NIT 901606662-6, que cuenta con un sitio web: lafab.com.co.
+    body: `INVERSIONES CORREA RUA S.A.S. (en adelante "Inversiones / la Compañía") es una sociedad comercial, domiciliada en la República de Colombia, identificada con NIT 901606662-6, que cuenta con un sitio web: lafab.com.co.
 
 Aquellos Usuarios que accedan al sitio web desde una jurisdicción distinta a la establecida para su operación, lo harán bajo su propia iniciativa y deberán someterse, a su exclusiva responsabilidad, al cumplimiento de la normativa local aplicable.
 
@@ -33,7 +33,7 @@ Las presentes condiciones regulan los derechos y obligaciones de las partes y lo
   },
   {
     title: "Propiedad industrial",
-    body: `Todas las marcas, enseñas, logos, nombres y cualesquiera otros signos distintivos, así como los modelos de utilidad y/o diseños industriales y demás elementos de propiedad industrial o intelectual insertados, usados y/o desplegados en este Sitio son propiedad exclusiva de Inversiones. Nada en lafab.com.co podrá ser desarrollado como concesión u otorgamiento de autorizaciones, licencias o cualquier otro derecho para usar o disponer de la Propiedad Industrial, sin el permiso por escrito de Inversiones. Cualquier uso no autorizado constituirá una violación a los presentes Términos y Condiciones y a las normas vigentes nacionales e internacionales sobre Propiedad Industrial.`,
+    body: `Todas las marcas, enseñas, logos, nombres y cualesquiera otros signos distintivos, así como los modelos de utilidad y/o diseños industriales y demás elementos de propiedad industrial o intelectual insertados, usados y/o desplegados en este Sitio son propiedad exclusiva de Inversiones. Nada en lafab.com.co podrá interpretarse como concesión u otorgamiento de autorizaciones, licencias o cualquier otro derecho para usar o disponer de la Propiedad Industrial, sin el permiso por escrito de Inversiones. Cualquier uso no autorizado constituirá una violación a los presentes Términos y Condiciones y a las normas vigentes nacionales e internacionales sobre Propiedad Industrial.`,
   },
   {
     title: "Ley aplicable y jurisdicción",
@@ -79,7 +79,7 @@ Las presentes condiciones regulan los derechos y obligaciones de las partes y lo
   },
   {
     title: "Cargos por impuestos",
-    body: `El Cliente será responsable de los cargos de envío, del IVA y de cualquier otro gravamen que se genere por cada compra aceptada. Al acceder al checkout con todos los datos ingresados (productos, contacto, dirección, método de envío y forma de pago), se le mostrará el valor exacto a pagar, que incluirá todos los conceptos anteriores.`,
+    body: `Los precios publicados incluyen IVA. El envío está incluido para Medellín y su área metropolitana; para los demás destinos el costo adicional se informa antes de confirmar la compra. Cualquier otro gravamen que llegue a generarse será informado previamente al Cliente. Al acceder al checkout con todos los datos ingresados (productos, contacto, dirección, método de envío y forma de pago), se le mostrará el valor exacto a pagar, que incluirá todos los conceptos anteriores.`,
   },
   {
     title: "Derecho de retracto",
@@ -118,7 +118,7 @@ El productor o proveedor se exonerará de la responsabilidad derivada de la gara
 export const POLITICA: LegalSection[] = [
   {
     title: "Información",
-    body: `INVERSIONES CORREA RUA S.A.S (en adelante "Inversiones / la Compañía") es una sociedad comercial domiciliada en Colombia, identificada con NIT 901606662-6, que cuenta con el sitio web www.lafab.com.co.
+    body: `INVERSIONES CORREA RUA S.A.S. (en adelante "Inversiones / la Compañía") es una sociedad comercial domiciliada en Colombia, identificada con NIT 901606662-6, que cuenta con el sitio web www.lafab.com.co.
 
 En cumplimiento del artículo 15 de la Constitución Nacional, la Ley 1581 de 2012, el Decreto Reglamentario 1377 de 2013 y el Decreto Reglamentario 886 de 2014, Inversiones implementa la siguiente política para el Tratamiento y Protección de Datos Personales, con el fin de proteger los derechos a la privacidad, la intimidad, el buen nombre y los derechos a conocer, actualizar y rectificar los datos de los titulares.`,
   },

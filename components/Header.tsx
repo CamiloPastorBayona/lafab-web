@@ -49,7 +49,7 @@ const NAV: NavItem[] = [
     ],
   },
   { label: "Proyectos", href: "/proyectos" },
-  { label: "Showrooms", href: "/showrooms" },
+  { label: "Showroom", href: "/showrooms" },
   { label: "Nosotros", href: "/nosotros" },
   { label: "Blog", href: "/blog" },
 ];

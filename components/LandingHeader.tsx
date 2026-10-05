@@ -11,8 +11,8 @@ const DEFAULT_SECTIONS: LandingSection[] = [
   { label: "Vistas", href: "#vistas" },
   { label: "Telas", href: "#telas" },
   { label: "Garantía", href: "#garantia" },
-  { label: "Opiniones", href: "#opiniones" },
-  { label: "Faqs", href: "#faqs" },
+  { label: "Reseñas", href: "#opiniones" },
+  { label: "Preguntas frecuentes", href: "#faqs" },
 ];
 
 export default function LandingHeader({

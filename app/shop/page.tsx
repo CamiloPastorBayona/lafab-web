@@ -8,7 +8,7 @@ export const revalidate = 300;
 export const metadata: Metadata = {
   title: "Tienda de muebles a la medida",
   description:
-    "Explora sofás, comedores, camas y closets fabricados a la medida por LaFab en Medellín. Filtra por categoría y encuentra tu mueble ideal.",
+    "Explora sofás, comedores, camas y poltronas fabricados a la medida por LaFab en Medellín. Filtra por categoría y encuentra tu mueble ideal.",
 };
 
 export default async function ShopPage() {

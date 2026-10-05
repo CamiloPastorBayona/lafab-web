@@ -264,7 +264,7 @@ export default function SanDiegoFabrics() {
             <h2 className="lff-title">Elige la tela ideal para tu hogar.</h2>
             <p className="lff-sub">
               Estas son las dos telas disponibles para compra online. Tejidos
-              premium pensados para el uso real: elige el que mejor se adapta a
+              premium pensadas para el uso real: elige la que mejor se adapte a
               tu día a día.
             </p>
             <span className="lff-tag">
