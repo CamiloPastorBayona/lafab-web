@@ -26,6 +26,8 @@ import { WHATSAPP } from "@/lib/content";
 import { catLabel } from "@/lib/categories";
 import ShippingPrice from "@/components/ShippingPrice";
 import { SHIPPING_INLINE } from "@/lib/shipping";
+import ProductTabs from "@/components/ProductTabs";
+import { splitDescription } from "@/lib/productContent";
 
 export const revalidate = 300;
 
@@ -107,6 +109,10 @@ export default async function ProductPage({
   // Ficha enriquecida (ACF): medidas, materiales, garantía, looks, FAQs…
   const extra = await getProductExtra(product.id);
 
+  // La descripción larga del Excel se parte en pestañas (Descripción · Ficha
+  // técnica · Garantía · Envío) en vez de ir todo seguido en un solo bloque.
+  const doc = splitDescription(product.description);
+
   // Datos estructurados (Product schema) para resultados enriquecidos en Google.
   const jsonLd = {
     "@context": "https://schema.org/",
@@ -146,7 +152,8 @@ export default async function ProductPage({
   };
 
   return (
-    <div className="mx-auto max-w-site px-4 py-10 md:px-6">
+    <>
+      <div className="mx-auto max-w-site px-4 py-10 md:px-6">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -303,49 +310,58 @@ export default async function ProductPage({
         </div>
       </div>
 
-      {/* Descripción */}
-      {product.description && (
+      {/* Descripción en pestañas */}
+      {doc.sections.length > 0 && (
         <Reveal>
-          <section className="mt-16 max-w-3xl">
-            <p className="text-sm font-medium uppercase tracking-[0.15em] text-gold-dark">
-              Detalles
-            </p>
-            <h2 className="mb-6 mt-1 text-2xl font-light text-ink md:text-3xl">
-              Sobre este mueble
-            </h2>
-            <div
-              className="text-[16px] leading-relaxed text-ink/75 [&_a]:text-gold-dark [&_a]:underline [&_h2]:mt-8 [&_h2]:text-xl [&_h2]:font-light [&_h2]:text-ink [&_h2:first-child]:mt-0 [&_h3]:mt-8 [&_h3]:text-base [&_h3]:font-semibold [&_h3]:uppercase [&_h3]:tracking-[0.12em] [&_h3]:text-ink [&_li]:pl-1 [&_p]:mt-4 [&_strong]:font-semibold [&_strong]:text-ink [&_ul]:mt-3 [&_ul]:list-disc [&_ul]:space-y-1.5 [&_ul]:pl-5"
-              dangerouslySetInnerHTML={{ __html: product.description }}
+          <div className="max-w-3xl">
+            <ProductTabs
+              title={doc.title || `Sobre el ${product.name}`}
+              sections={doc.sections}
             />
-          </section>
+          </div>
         </Reveal>
       )}
 
       {/* Ficha enriquecida (ACF): especificaciones, looks y FAQs */}
       {hasExtraContent(extra) && <ProductExtras extra={extra!} name={product.name} />}
 
-      {/* Related */}
+      </div>
+
+      {/* Relacionados: banda a ancho completo. Antes quedaba cortada en 1280px
+          y se veía como un bloque beige roto en pantallas grandes. */}
       {related.length > 0 && (
-        <section className="mt-20">
-          <Reveal>
-            <h2 className="mb-8 text-2xl font-light text-ink">
-              Completa tu espacio
-            </h2>
-          </Reveal>
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
-            {related.map((r, i) => (
-              <Reveal key={r.id} delay={(i % 4) * 90}>
-                <ProductCard product={r} />
-              </Reveal>
-            ))}
+        <section className="mt-20 bg-cream">
+          <div className="mx-auto max-w-site px-4 py-16 md:px-6 md:py-20">
+            <Reveal>
+              <div className="mb-10 text-center">
+                <p className="text-sm font-medium uppercase tracking-[0.25em] text-gold-dark">
+                  Completa tu espacio
+                </p>
+                <h2 className="mt-2 text-3xl font-light text-ink md:text-4xl">
+                  Productos relacionados
+                </h2>
+              </div>
+            </Reveal>
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
+              {related.map((r, i) => (
+                <Reveal key={r.id} delay={(i % 4) * 90}>
+                  <ProductCard product={r} />
+                </Reveal>
+              ))}
+            </div>
+            <div className="mt-10 text-center">
+              <Link
+                href="/shop"
+                className="inline-flex items-center gap-2 rounded-full border border-ink/20 px-7 py-3 text-sm font-semibold text-ink transition-colors hover:bg-ink hover:text-white"
+              >
+                Ver toda la tienda <span aria-hidden>→</span>
+              </Link>
+            </div>
           </div>
         </section>
       )}
 
-      {/* Reseñas */}
-      <div className="mt-20 -mx-4 md:-mx-6">
-        <Reviews />
-      </div>
+      <div className="mx-auto max-w-site px-4 md:px-6">
 
       {/* Cómo comprar */}
       <section className="mt-20">
@@ -376,6 +392,15 @@ export default async function ProductPage({
         </div>
       </section>
 
+      </div>
+
+      {/* Reseñas: también a ancho completo */}
+      <div className="mt-20">
+        <Reviews />
+      </div>
+
+      <div className="mx-auto max-w-site px-4 pb-10 md:px-6">
+
       {/* CTA final */}
       <Reveal>
         <section className="mt-16 overflow-hidden rounded-3xl bg-[radial-gradient(130%_130%_at_0%_0%,#3a342d_0%,#231f1c_45%,#141210_100%)] px-8 py-14 text-center md:px-14 md:py-16">
@@ -404,6 +429,7 @@ export default async function ProductPage({
           </div>
         </section>
       </Reveal>
-    </div>
+      </div>
+    </>
   );
 }
