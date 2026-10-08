@@ -10,8 +10,8 @@ export const SANDIEGO = {
   slug: "sofa-san-diego",
   name: "Sofá San Diego",
   tagline: "Confort superior para disfrutar todos los días",
-  price: 3400000,
-  regularPrice: 3800000,
+  price: 3390000,
+  regularPrice: 3790000,
   hero: `${U}/2026/06/SANDIEGO.webp`,
   configImage: `${U}/2026/07/01-Mon-Marfil.webp`,
 
@@ -58,7 +58,7 @@ export const SANDIEGO = {
     },
   ],
 
-  medidas: ["170 cm", "180 cm", "190 cm", "200 cm"],
+  medidas: ["180 cm", "190 cm", "200 cm"],
 
   // Colores del configurador: cada color muestra su propia foto del sofá.
   configColors: {
@@ -152,8 +152,8 @@ export const SANDIEGO = {
   ],
 
   specs: [
-    { label: "Largo", value: "170 · 180 · 190 · 200 cm" },
-    { label: "Fondo", value: "100 cm" },
+    { label: "Largo", value: "180 · 190 · 200 cm" },
+    { label: "Fondo", value: "95 cm" },
     { label: "Altura", value: "90 cm con cojines · 78 cm espaldar sin cojines" },
     { label: "Brazos", value: "Ancho 21 cm · Fondo 96 cm · Alto 62 cm" },
     { label: "Patas", value: "Roble macizo · 20 × 20 cm · alto 5 cm · acabado natural" },
@@ -166,7 +166,7 @@ export const SANDIEGO = {
     { label: "Telas", value: "Microfibra Mon (Pet Friendly) y Chenil Milan (Antifluido)" },
     {
       label: "Tecnología",
-      value: "Antifluidos AquaFobiak® · +25.000 ciclos Martindale · OEKO-TEX® Standard 100",
+      value: "Antifluido AquaFobiak® · +25.000 ciclos Martindale · OEKO-TEX® Standard 100",
     },
     { label: "Colores", value: "Marfil, Beige, Avellana, Plata y Gris" },
     { label: "Garantía", value: "3 años en estructura · 1 año por desajustes" },

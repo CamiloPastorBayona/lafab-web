@@ -11,8 +11,9 @@ import { SANDIEGO } from "@/lib/sandiego";
 import { useCart } from "@/lib/cart";
 import { SHIPPING_ZONES, cop } from "@/lib/shipping";
 
-const PRICE = 3400000;
-const REAL = 3800000;
+// Precio y medidas: fuente única en lib/sandiego.ts (datos oficiales de LaFab).
+const PRICE = SANDIEGO.price;
+const REAL = SANDIEGO.regularPrice;
 const TEX = "https://lafab.com.co/wp-content/uploads/2026/06/"; // texturas (swatches)
 const FOTO = "https://lafab.com.co/wp-content/uploads/2026/07/"; // fotos por tela+color
 
@@ -41,7 +42,7 @@ const FABRICS: Fabric[] = [
   },
 ];
 
-const SIZES = ["170 cm", "180 cm", "190 cm", "200 cm"];
+const SIZES = SANDIEGO.medidas;
 // Tarifas de envío: fuente única en lib/shipping.ts (mismas que ve el resto
 // de la tienda y las que se liquidan en el checkout).
 const SHIPS = SHIPPING_ZONES;

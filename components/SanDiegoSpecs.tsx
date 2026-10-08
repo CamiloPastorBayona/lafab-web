@@ -52,8 +52,8 @@ const CSS = `
 `;
 
 const ROWS_TOP: { key: string; val: React.ReactNode }[] = [
-  { key: "Largo", val: "Disponible en 170 cm · 180 cm · 190 cm · 200 cm" },
-  { key: "Fondo", val: "100 cm" },
+  { key: "Largo", val: "Disponible en 180 cm · 190 cm · 200 cm" },
+  { key: "Fondo", val: "95 cm" },
   { key: "Altura", val: "Alto total 90 cm (con cojines) · 78 cm (espaldar sin cojines)" },
   { key: "Brazos", val: "Ancho 21 cm · Fondo 96 cm · Alto 62 cm" },
   { key: "Patas", val: "Roble macizo · 20 × 20 cm · alto 5 cm · acabado natural" },
