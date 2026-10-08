@@ -17,6 +17,8 @@ ni en metadatos, ni en el catálogo de WooCommerce.
 | Tela que repele líquidos | **antifluido** (invariable) | antifluidos |
 | Tela apta para mascotas | **pet friendly** en texto corrido · **Pet Friendly** solo como sello o etiqueta | Pet friendly |
 | Nombre de la microfibra | **Soft Velvet** | Soft velvet |
+| Material del tapizado | **Cuero** | cuero natural, cuero genuino |
+| Atributo que elige el cliente | **Material**, con dos opciones: **Tela** y **Cuero** | Tipo de tela, Gama, Calidad |
 
 > "Sofás angulares" sí puede quedarse en los `keywords` de SEO (`lib/categories.ts`),
 > porque es una búsqueda real y no es texto visible.

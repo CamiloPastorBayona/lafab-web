@@ -127,7 +127,7 @@ export default async function ProductPage({
     brand: { "@type": "Brand", name: "LaFab" },
     offers: p.price_range
       ? {
-          // Variable (Tela / Cuero natural): Google espera un rango, no un precio suelto.
+          // Variable (Tela / Cuero): Google espera un rango, no un precio suelto.
           "@type": "AggregateOffer",
           priceCurrency: p.currency_code || "COP",
           lowPrice: parseInt(p.price_range.min_amount, 10),
