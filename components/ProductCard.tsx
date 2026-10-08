@@ -76,6 +76,14 @@ export default function ProductCard({ product }: { product: WCProduct }) {
                 {money(p.regular_price, p)}
               </span>
             </>
+          ) : p.price_range ? (
+            // Variable: el precio mostrado es el más bajo (Tela), no el final.
+            <span className="text-lg font-semibold text-white">
+              <span className="mr-1 text-xs font-normal uppercase tracking-[0.12em] text-white/70">
+                Desde
+              </span>
+              {money(p.price_range.min_amount, p)}
+            </span>
           ) : (
             <span className="text-lg font-semibold text-white">
               {money(p.price, p)}

@@ -119,16 +119,30 @@ export default async function ProductPage({
       `${product.name} fabricado a la medida por LaFab en Medellín.`
     ).slice(0, 320),
     brand: { "@type": "Brand", name: "LaFab" },
-    offers: {
-      "@type": "Offer",
-      priceCurrency: p.currency_code || "COP",
-      price: parseInt(product.on_sale ? p.sale_price : p.price, 10),
-      availability: product.is_in_stock
-        ? "https://schema.org/InStock"
-        : "https://schema.org/OutOfStock",
-      itemCondition: "https://schema.org/NewCondition",
-      url: `https://lafab.com.co/producto/${product.slug}`,
-    },
+    offers: p.price_range
+      ? {
+          // Variable (Tela / Cuero natural): Google espera un rango, no un precio suelto.
+          "@type": "AggregateOffer",
+          priceCurrency: p.currency_code || "COP",
+          lowPrice: parseInt(p.price_range.min_amount, 10),
+          highPrice: parseInt(p.price_range.max_amount, 10),
+          offerCount: variations.length || 2,
+          availability: product.is_in_stock
+            ? "https://schema.org/InStock"
+            : "https://schema.org/OutOfStock",
+          itemCondition: "https://schema.org/NewCondition",
+          url: `https://lafab.com.co/producto/${product.slug}`,
+        }
+      : {
+          "@type": "Offer",
+          priceCurrency: p.currency_code || "COP",
+          price: parseInt(product.on_sale ? p.sale_price : p.price, 10),
+          availability: product.is_in_stock
+            ? "https://schema.org/InStock"
+            : "https://schema.org/OutOfStock",
+          itemCondition: "https://schema.org/NewCondition",
+          url: `https://lafab.com.co/producto/${product.slug}`,
+        },
   };
 
   return (
@@ -200,7 +214,7 @@ export default async function ProductPage({
             </>
           )}
 
-          {product.slug === "sofa-san-diego" && (
+          {product.slug.includes("san-diego") && (
             <Link
               href="/san-diego"
               className="mt-5 flex items-center justify-between gap-2 rounded-2xl border border-gold/40 bg-gold/10 px-5 py-3 text-sm font-semibold text-gold-dark transition-colors hover:bg-gold/20"
@@ -300,7 +314,7 @@ export default async function ProductPage({
               Sobre este mueble
             </h2>
             <div
-              className="text-[16px] leading-relaxed text-ink/75 [&_a]:text-gold-dark [&_a]:underline [&_h2]:mt-8 [&_h2]:text-xl [&_h2]:font-light [&_h2]:text-ink [&_p]:mt-4"
+              className="text-[16px] leading-relaxed text-ink/75 [&_a]:text-gold-dark [&_a]:underline [&_h2]:mt-8 [&_h2]:text-xl [&_h2]:font-light [&_h2]:text-ink [&_h2:first-child]:mt-0 [&_h3]:mt-8 [&_h3]:text-base [&_h3]:font-semibold [&_h3]:uppercase [&_h3]:tracking-[0.12em] [&_h3]:text-ink [&_li]:pl-1 [&_p]:mt-4 [&_strong]:font-semibold [&_strong]:text-ink [&_ul]:mt-3 [&_ul]:list-disc [&_ul]:space-y-1.5 [&_ul]:pl-5"
               dangerouslySetInnerHTML={{ __html: product.description }}
             />
           </section>
