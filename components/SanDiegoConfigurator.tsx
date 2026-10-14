@@ -7,21 +7,19 @@
 
 import { useState, type CSSProperties, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import { SANDIEGO } from "@/lib/sandiego";
+import { useLanding } from "@/components/LandingContext";
 import { useCart } from "@/lib/cart";
 import { SHIPPING_ZONES, cop } from "@/lib/shipping";
 
-// Precio y medidas: fuente única en lib/sandiego.ts (datos oficiales de LaFab).
-const PRICE = SANDIEGO.price;
-const REAL = SANDIEGO.regularPrice;
 const TEX = "https://lafab.com.co/wp-content/uploads/2026/06/"; // texturas (swatches)
 const FOTO = "https://lafab.com.co/wp-content/uploads/2026/07/"; // fotos por tela+color
 
 type Color = { name: string; hex: string; img: string; foto: string };
-type Fabric = { name: string; tag: string; colors: Color[] };
+type Fabric = { key: string; name: string; tag: string; colors: Color[] };
 
-const FABRICS: Fabric[] = [
+const BASE_FABRICS: Fabric[] = [
   {
+    key: "mon",
     name: "Microfibra Mon",
     tag: "Pet Friendly · Soft Velvet",
     colors: [
@@ -32,6 +30,7 @@ const FABRICS: Fabric[] = [
     ],
   },
   {
+    key: "milan",
     name: "Chenil Milan",
     tag: "Cálida · Antifluido",
     colors: [
@@ -42,7 +41,6 @@ const FABRICS: Fabric[] = [
   },
 ];
 
-const SIZES = SANDIEGO.medidas;
 // Tarifas de envío: fuente única en lib/shipping.ts (mismas que ve el resto
 // de la tienda y las que se liquidan en el checkout).
 const SHIPS = SHIPPING_ZONES;
@@ -157,10 +155,28 @@ const CSS = `
 `;
 
 export default function SanDiegoConfigurator() {
+  const L = useLanding();
   const { add, remove } = useCart();
   const router = useRouter();
 
-  const [size, setSize] = useState("180 cm");
+  // Precio y medidas salen del modelo que se esté mostrando.
+  const PRICE = L.price;
+  const REAL = L.regularPrice;
+  const SIZES = L.medidas;
+
+  // Las telas y sus colores son los mismos para todos los sofás; lo que cambia
+  // es la foto. Si el modelo no tiene foto propia de ese color, se usa la suya
+  // de estudio en vez de mostrar otro sofá.
+  const fotoDe = (fabricKey: string, colorName: string, fallback: string) =>
+    L.configColors?.[fabricKey]?.find((c) => c.name === colorName)?.img ||
+    L.configImage ||
+    fallback;
+  const FABRICS = BASE_FABRICS.map((f) => ({
+    ...f,
+    colors: f.colors.map((c) => ({ ...c, foto: fotoDe(f.key, c.name, c.foto) })),
+  }));
+
+  const [size, setSize] = useState(L.medidas[0] ?? "180 cm");
   const [fabricName, setFabricName] = useState(FABRICS[0].name);
   const [colorName, setColorName] = useState(FABRICS[0].colors[0].name);
   const [ship, setShip] = useState(SHIPS[0]);
@@ -182,12 +198,12 @@ export default function SanDiegoConfigurator() {
     setBusy(true);
     // Reemplaza cualquier San Diego previo para que el carrito refleje siempre
     // la última configuración elegida (mantiene el id real del producto).
-    remove(SANDIEGO.productId);
+    remove(L.productId);
     add(
       {
-        id: SANDIEGO.productId,
-        name: `${SANDIEGO.name} · ${size} · ${fabric.name} · ${color.name} · Envío: ${ship.label}${ship.cost > 0 ? ` (+${cop(ship.cost)})` : " (incluido)"}`,
-        slug: SANDIEGO.slug,
+        id: L.productId,
+        name: `${L.name} · ${size} · ${fabric.name} · ${color.name} · Envío: ${ship.label}${ship.cost > 0 ? ` (+${cop(ship.cost)})` : " (incluido)"}`,
+        slug: L.slug,
         image: color.foto,
         price: PRICE,
       },

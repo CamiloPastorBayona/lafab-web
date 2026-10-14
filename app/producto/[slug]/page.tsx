@@ -26,6 +26,7 @@ import { WHATSAPP } from "@/lib/content";
 import { catLabel } from "@/lib/categories";
 import ShippingPrice from "@/components/ShippingPrice";
 import { SHIPPING_INLINE } from "@/lib/shipping";
+import { landingFor } from "@/lib/landings";
 import ProductTabs from "@/components/ProductTabs";
 import { splitDescription } from "@/lib/productContent";
 
@@ -97,6 +98,7 @@ export default async function ProductPage({
   const p = product.prices;
   const cat = product.categories?.[0];
   const isVariable = product.type === "variable";
+  const landing = landingFor(product.slug);
 
   // Las tres consultas que faltan no dependen entre sí, así que van juntas.
   // Antes iban una detrás de otra y cada una esperaba a la anterior.
@@ -230,12 +232,12 @@ export default async function ProductPage({
             </>
           )}
 
-          {product.slug.includes("san-diego") && (
+          {landing && (
             <Link
-              href="/san-diego"
+              href={landing}
               className="mt-5 flex items-center justify-between gap-2 rounded-2xl border border-gold/40 bg-gold/10 px-5 py-3 text-sm font-semibold text-gold-dark transition-colors hover:bg-gold/20"
             >
-              <span>Vive la experiencia completa del Sofá San Diego</span>
+              <span>Vive la experiencia completa del {product.name}</span>
               <span aria-hidden>→</span>
             </Link>
           )}

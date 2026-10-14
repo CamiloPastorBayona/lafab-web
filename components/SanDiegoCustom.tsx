@@ -5,6 +5,7 @@
 // eyebrow/acentos gold-light (#CABBA0 / #C9BCA3). Botón primario en gold.
 
 import { useEffect, useRef } from "react";
+import { useLanding } from "@/components/LandingContext";
 
 const WHATSAPP =
   "https://api.whatsapp.com/send/?phone=573054602395&text=Hola+%2ALaFab%2A.+Necesito+m%C3%A1s+informaci%C3%B3n+sobre+Sof%C3%A1+San+Diego+https%3A%2F%2Flafab.com.co%2Fsofa-san-diego%2F&type=phone_number&app_absent=0";
@@ -69,6 +70,7 @@ const OPTIONS = [
 ];
 
 export default function SanDiegoCustom() {
+  const L = useLanding();
   const ref = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -101,8 +103,8 @@ export default function SanDiegoCustom() {
             color o configuración?
           </h2>
           <p className="lfc-desc">
-            Podemos fabricar una versión personalizada del Sofá San Diego,
-            adaptada a tu espacio, tus medidas y el acabado que estás buscando.
+            Podemos fabricar una versión personalizada del {L.name}, adaptada a
+            tu espacio, tus medidas y el acabado que estás buscando.
           </p>
           <div className="lfc-actions">
             <a className="lfc-btn lfc-btn--buy" href="#comprar">

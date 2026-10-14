@@ -8,7 +8,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import WpImage from "@/components/WpImage";
-import { SANDIEGO } from "@/lib/sandiego";
+import { useLanding } from "@/components/LandingContext";
 
 // Animación Lottie mínima y válida: contorno de mouse + punto que baja y se
 // desvanece en bucle. Embebida para no depender de un asset externo.
@@ -122,6 +122,7 @@ function loadLottie(): Promise<any> {
 }
 
 export default function SanDiegoHero() {
+  const L = useLanding();
   const boxRef = useRef<HTMLDivElement | null>(null);
   const [lottieOn, setLottieOn] = useState(false);
 
@@ -156,8 +157,8 @@ export default function SanDiegoHero() {
       className="relative -mt-[64px] min-h-screen overflow-hidden bg-ink text-center"
     >
       <WpImage
-        src={SANDIEGO.hero}
-        alt={SANDIEGO.name}
+        src={L.hero}
+        alt={L.name}
         priority
         className="absolute inset-0 h-full w-full object-cover"
       />
@@ -173,10 +174,10 @@ export default function SanDiegoHero() {
       {/* Título + subtítulo (parte superior) */}
       <div className="lf-fade lfh-titlepos absolute left-0 right-0 z-10 px-4 text-center">
         <h1 className="text-4xl font-light uppercase leading-none tracking-[0.08em] text-white md:text-[76px]">
-          {SANDIEGO.name}
+          {L.name}
         </h1>
         <p className="mx-auto mt-5 max-w-xl text-base font-light text-white/90 md:text-lg">
-          {SANDIEGO.tagline}
+          {L.tagline}
         </p>
       </div>
 

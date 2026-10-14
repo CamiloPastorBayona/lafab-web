@@ -5,7 +5,7 @@
 // morality, base Poppins, eyebrow gold (#7A6A45). Set de 4 cards duplicado.
 
 import { useEffect, useRef } from "react";
-import { SANDIEGO } from "@/lib/sandiego";
+import { useLanding } from "@/components/LandingContext";
 
 const CSS = `
 #lf-views,#lf-views *{box-sizing:border-box;margin:0;padding:0;}
@@ -39,7 +39,8 @@ const SPEED = 0.5;
 
 export default function SanDiegoViews() {
   const rootRef = useRef<HTMLElement | null>(null);
-  const views = SANDIEGO.vistas;
+  const L = useLanding();
+  const views = L.vistas;
 
   useEffect(() => {
     const root = rootRef.current;

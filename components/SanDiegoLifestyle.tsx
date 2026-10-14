@@ -6,7 +6,7 @@
 // sube en hover (desktop); texto debajo en móvil. Reveal con IntersectionObserver.
 
 import { useEffect, useRef } from "react";
-import { SANDIEGO } from "@/lib/sandiego";
+import { useLanding } from "@/components/LandingContext";
 
 const CSS = `
 #lf-benefits,#lf-benefits *{box-sizing:border-box;margin:0;padding:0;}
@@ -58,6 +58,7 @@ const CSS = `
 `;
 
 export default function SanDiegoLifestyle() {
+  const L = useLanding();
   const ref = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -84,11 +85,11 @@ export default function SanDiegoLifestyle() {
         <style dangerouslySetInnerHTML={{ __html: CSS }} />
         <div className="lfb2-wrap">
           <div className="lfb2-head">
-            <span className="lfb2-eyebrow">Por qué el Sofá San Diego</span>
+            <span className="lfb2-eyebrow">Por qué el {L.name}</span>
             <h2 className="lfb2-title">Pensado para la vida real.</h2>
           </div>
           <div className="lfb2-grid">
-            {SANDIEGO.lifestyle.map((l) => (
+            {L.lifestyle.map((l) => (
               <article className="lfb2-card" key={l.title}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img

@@ -5,7 +5,7 @@
 // eyebrow gold (#7A6A45), número en gold-light (#CABBA0).
 
 import { useEffect, useRef, useState, type TouchEvent } from "react";
-import { SANDIEGO } from "@/lib/sandiego";
+import { useLanding } from "@/components/LandingContext";
 
 const CSS = `
 #lf-story,#lf-story *{box-sizing:border-box;margin:0;padding:0;}
@@ -40,7 +40,8 @@ const CSS = `
 const DELAY = 4500;
 
 export default function SanDiegoBondades() {
-  const slides = SANDIEGO.bondades;
+  const L = useLanding();
+  const slides = L.bondades;
   const N = slides.length;
   const [i, setI] = useState(0);
   const lastRef = useRef(0);

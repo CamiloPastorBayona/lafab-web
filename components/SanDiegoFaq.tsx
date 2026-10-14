@@ -5,9 +5,10 @@
 // marca (título morality, +/× en gold-dark sobre cream).
 
 import { useState } from "react";
-import { SANDIEGO } from "@/lib/sandiego";
+import { useLanding } from "@/components/LandingContext";
 
 export default function SanDiegoFaq() {
+  const L = useLanding();
   const [open, setOpen] = useState<number | null>(null);
 
   return (
@@ -26,7 +27,7 @@ export default function SanDiegoFaq() {
       </div>
 
       <div className="mt-10 divide-y divide-ink/10">
-        {SANDIEGO.faq.map((item, i) => {
+        {L.faq.map((item, i) => {
           const isOpen = open === i;
           return (
             <div key={item.q}>

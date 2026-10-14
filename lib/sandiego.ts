@@ -239,3 +239,42 @@ export const SANDIEGO = {
     },
   ],
 };
+
+// Filas de la ficha técnica. Viven aquí (y no dentro del componente) para que
+// cada landing traiga las suyas.
+export const SANDIEGO_SPECS_TOP = [
+  { key: "Largo", val: "Disponible en 180 cm · 190 cm · 200 cm" },
+  { key: "Fondo", val: "95 cm" },
+  { key: "Altura", val: "Alto total 90 cm (con cojines) · 78 cm (espaldar sin cojines)" },
+  { key: "Brazos", val: "Ancho 21 cm · Fondo 96 cm · Alto 62 cm" },
+  { key: "Patas", val: "Roble macizo · 20 × 20 cm · alto 5 cm · acabado natural" },
+  { key: "Estructura", val: "Pino inmunizado y roble natural · ensambles reforzados" },
+  {
+    key: "Confort",
+    val: "Espumas Croydon® + Penta® certificadas · espaldares sueltos en fibra siliconada de alta recuperación",
+  },
+];
+
+export const SANDIEGO_SPECS_BOTTOM = [
+  {
+    key: "Tela · técnica",
+    val: "100% poliéster · tecnología antifluido AquaFobiak® · +25.000 ciclos Martindale · OEKO-TEX® Standard 100",
+  },
+  { key: "Colores", val: "Marfil, Beige, Avellana, Plata y Gris (según la tela elegida)" },
+  { key: "Garantía", val: "3 años en estructura · 1 año por desajustes" },
+];
+
+// Lo que cada landing necesita definir. La forma la marca el San Diego, que es
+// la landing de referencia; las demás parten de ella y cambian lo suyo.
+export type Landing = typeof SANDIEGO & {
+  specsTop: { key: string; val: string }[];
+  specsBottom: { key: string; val: string }[];
+  specsImage: string;
+};
+
+export const SANDIEGO_LANDING: Landing = {
+  ...SANDIEGO,
+  specsTop: SANDIEGO_SPECS_TOP,
+  specsBottom: SANDIEGO_SPECS_BOTTOM,
+  specsImage: `${U}/2026/06/sofa3.webp`,
+};

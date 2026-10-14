@@ -6,6 +6,7 @@
 
 import { useEffect, useRef } from "react";
 import { SHIPPING_NATIONAL_COST, cop } from "@/lib/shipping";
+import { useLanding } from "@/components/LandingContext";
 
 const CSS = `
 #lafab-sd-specs,#lafab-sd-specs *{box-sizing:border-box;margin:0;padding:0;}
@@ -51,43 +52,6 @@ const CSS = `
 }
 `;
 
-const ROWS_TOP: { key: string; val: React.ReactNode }[] = [
-  { key: "Largo", val: "Disponible en 180 cm · 190 cm · 200 cm" },
-  { key: "Fondo", val: "95 cm" },
-  { key: "Altura", val: "Alto total 90 cm (con cojines) · 78 cm (espaldar sin cojines)" },
-  { key: "Brazos", val: "Ancho 21 cm · Fondo 96 cm · Alto 62 cm" },
-  { key: "Patas", val: "Roble macizo · 20 × 20 cm · alto 5 cm · acabado natural" },
-  { key: "Estructura", val: "Pino inmunizado y roble natural · ensambles reforzados" },
-  {
-    key: "Confort",
-    val: "Espumas Croydon® + Penta® certificadas · espaldares sueltos en fibra siliconada de alta recuperación",
-  },
-];
-
-const ROWS_BOTTOM: { key: string; val: React.ReactNode }[] = [
-  {
-    key: "Tela · técnica",
-    val: (
-      <>
-        100% poliéster · tecnología antifluido <strong>AquaFobiak®</strong> ·
-        +25.000 ciclos Martindale · OEKO-TEX® Standard 100
-      </>
-    ),
-  },
-  { key: "Colores", val: "Marfil, Beige, Avellana, Plata y Gris (según la tela elegida)" },
-  { key: "Garantía", val: "3 años en estructura · 1 año por desajustes" },
-  {
-    key: "Envíos",
-    val: (
-      <>
-        Medellín y área metropolitana: <strong>incluido</strong>
-        <br />
-        Otras ciudades capitales: <strong>+{cop(SHIPPING_NATIONAL_COST)}</strong>
-      </>
-    ),
-  },
-];
-
 const BADGES = [
   "Fabricación propia",
   "Garantía 3 años",
@@ -98,7 +62,23 @@ const BADGES = [
 ];
 
 export default function SanDiegoSpecs() {
+  const L = useLanding();
   const ref = useRef<HTMLElement | null>(null);
+
+  const ROWS_TOP = L.specsTop;
+  const ROWS_BOTTOM: { key: string; val: React.ReactNode }[] = [
+    ...L.specsBottom,
+    {
+      key: "Envíos",
+      val: (
+        <>
+          Medellín y área metropolitana: <strong>incluido</strong>
+          <br />
+          Otras ciudades capitales: <strong>+{cop(SHIPPING_NATIONAL_COST)}</strong>
+        </>
+      ),
+    },
+  ];
 
   useEffect(() => {
     const el = ref.current;
@@ -179,8 +159,8 @@ export default function SanDiegoSpecs() {
           <div className="ls-right">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="https://lafab.com.co/wp-content/uploads/2026/06/sofa3.webp"
-              alt="Sofá San Diego de LaFab"
+              src={L.specsImage}
+              alt={`${L.name} de LaFab`}
               loading="lazy"
             />
           </div>
