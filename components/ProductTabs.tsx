@@ -12,12 +12,14 @@ import { useState } from "react";
 import type { DocSection } from "@/lib/productContent";
 
 const PANEL: Record<DocSection["variant"], string> = {
+  // La tarjeta ocupa todo el ancho, así que el texto largo va en dos columnas
+  // en pantallas grandes: llena el espacio sin dejar renglones kilométricos.
   prose:
-    "text-[16px] leading-relaxed text-ink/75 [&_a]:text-gold-dark [&_a]:underline [&_p]:mt-4 [&_p:first-child]:mt-0 [&_strong]:font-semibold [&_strong]:text-ink",
+    "text-[16px] leading-relaxed text-ink/75 lg:columns-2 lg:gap-14 [&_a]:text-gold-dark [&_a]:underline [&_p]:mt-4 [&_p]:break-inside-avoid [&_p:first-child]:mt-0 [&_strong]:font-semibold [&_strong]:text-ink",
   specs:
-    "text-[15px] text-ink/75 [&_li]:flex [&_li]:flex-wrap [&_li]:items-baseline [&_li]:justify-between [&_li]:gap-x-6 [&_li]:gap-y-1 [&_li]:border-b [&_li]:border-ink/10 [&_li]:py-3 [&_li:last-child]:border-0 [&_li]:text-right [&_strong]:mr-auto [&_strong]:text-left [&_strong]:font-medium [&_strong]:uppercase [&_strong]:tracking-[0.08em] [&_strong]:text-[12px] [&_strong]:text-ink/45 [&_ul]:list-none [&_ul]:p-0 [&_p]:mt-4",
+    "text-[15px] text-ink/75 [&_li]:flex [&_li]:flex-wrap [&_li]:items-baseline [&_li]:justify-between [&_li]:gap-x-6 [&_li]:gap-y-1 [&_li]:border-b [&_li]:border-ink/10 [&_li]:py-3 [&_li]:text-right [&_strong]:mr-auto [&_strong]:text-left [&_strong]:font-medium [&_strong]:uppercase [&_strong]:tracking-[0.08em] [&_strong]:text-[12px] [&_strong]:text-ink/45 [&_ul]:list-none [&_ul]:p-0 md:[&_ul]:grid md:[&_ul]:grid-cols-2 md:[&_ul]:gap-x-14 [&_p]:mt-4",
   list:
-    "text-[15px] leading-relaxed text-ink/75 [&_li]:relative [&_li]:py-1.5 [&_li]:pl-7 [&_li]:before:absolute [&_li]:before:left-0 [&_li]:before:top-1.5 [&_li]:before:text-gold-dark [&_li]:before:content-['✓'] [&_ul]:list-none [&_ul]:p-0 [&_p]:mt-4",
+    "text-[15px] leading-relaxed text-ink/75 md:columns-2 md:gap-14 [&_li]:relative [&_li]:break-inside-avoid [&_li]:py-1.5 [&_li]:pl-7 [&_li]:before:absolute [&_li]:before:left-0 [&_li]:before:top-1.5 [&_li]:before:text-gold-dark [&_li]:before:content-['✓'] [&_ul]:list-none [&_ul]:p-0 [&_p]:mt-4",
 };
 
 export default function ProductTabs({

@@ -322,12 +322,10 @@ export default async function ProductPage({
       {/* Descripción en pestañas */}
       {doc.sections.length > 0 && (
         <Reveal>
-          <div className="max-w-3xl">
-            <ProductTabs
-              title={doc.title || `Sobre el ${product.name}`}
-              sections={doc.sections}
-            />
-          </div>
+          <ProductTabs
+            title={doc.title || `Sobre el ${product.name}`}
+            sections={doc.sections}
+          />
         </Reveal>
       )}
 
