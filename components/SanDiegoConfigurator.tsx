@@ -226,17 +226,15 @@ export default function SanDiegoConfigurator() {
                 key={color.foto}
                 className="lfb-photo lf-fade"
                 src={color.foto}
-                alt={`Sofá San Diego ${fabric.name} ${color.name}`}
+                alt={`${L.name} ${fabric.name} ${color.name}`}
               />
               <span className="lfb-cname">{color.name}</span>
             </div>
 
             <div className="lfb-panel">
               <span className="lfb-eyebrow">Diseña tu sofá y cómpralo ahora</span>
-              <h2 className="lfb-name">Sofá San Diego</h2>
-              <p className="lfb-tagline">
-                Confort superior para disfrutar todos los días.
-              </p>
+              <h2 className="lfb-name">{L.name}</h2>
+              <p className="lfb-tagline">{L.tagline}.</p>
 
               {/* Medida */}
               <div className="lfb-field" data-group="size">

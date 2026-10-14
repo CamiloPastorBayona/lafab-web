@@ -117,7 +117,7 @@ export default function SanDiegoBondades() {
             <article className="lfst-slide" key={s.n}>
               <div className="lfst-media">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={s.img} alt={`${s.title} del Sofá San Diego`} loading="lazy" />
+                <img src={s.img} alt={`${s.title} del ${L.name}`} loading="lazy" />
               </div>
               <div className="lfst-text">
                 <span className="lfst-num">{s.n}</span>

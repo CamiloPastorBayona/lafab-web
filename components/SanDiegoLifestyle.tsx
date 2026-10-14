@@ -94,7 +94,7 @@ export default function SanDiegoLifestyle() {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={l.img}
-                  alt={`${l.title} en el Sofá San Diego`}
+                  alt={`${l.title} en el ${L.name}`}
                   loading="lazy"
                 />
                 <div className="lfb2-cap">

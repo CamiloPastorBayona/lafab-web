@@ -157,7 +157,7 @@ export default function SanDiegoViews() {
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={v.img}
-                      alt={dup ? "" : `Vista ${v.label} del Sofá San Diego`}
+                      alt={dup ? "" : `Vista ${v.label} del ${L.name}`}
                       loading="lazy"
                       decoding="async"
                     />
