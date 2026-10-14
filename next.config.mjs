@@ -11,6 +11,17 @@ const nextConfig = {
           },
         ],
       },
+      {
+        // La fuente propia se sirve por rewrite desde WordPress: sin esta
+        // cabecera el navegador la volvía a pedir en cada página.
+        source: "/fonts/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
     ];
   },
   // Proxy de la fuente propia (morality) para servirla desde nuestro dominio y

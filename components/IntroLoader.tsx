@@ -18,7 +18,7 @@ const LOGO = "https://lafab.com.co/wp-content/uploads/2022/12/lafab-blanco.png";
 const AUDIO_SRC = "/audiologo.mp3";
 const HOME_PATHS = new Set(["/", "/inicio"]);
 const LAMP_INTRO_DURATION_MS = 4540;
-const QUICK_INTRO_DURATION_MS = 2000;
+const QUICK_INTRO_DURATION_MS = 900;
 const AUDIO_START_GUARD_MS = 1200;
 
 // ---- Audiologo ----------------------------------------------------------
@@ -26,6 +26,9 @@ const AUDIO_START_GUARD_MS = 1200;
 // usuario enciende la escena y dispara el audiologo dentro de un gesto real.
 let audioEl: HTMLAudioElement | null = null;
 let lampIntroSeenInRuntime = false;
+// El loader es un saludo de marca, no una cortina en cada clic: se muestra una
+// vez por sesión. Antes tapaba la pantalla 2 segundos en CADA navegación.
+let introShownInRuntime = false;
 type LoaderState = "ready" | "playing" | "waiting-for-sound";
 
 function prepareAudio(audio: HTMLAudioElement) {
@@ -168,7 +171,11 @@ export default function IntroLoader() {
   );
 
   useEffect(() => {
-    getAudio().load();
+    // El audiologo pesa casi medio mega y solo suena en el home: no tiene
+    // sentido descargarlo en una ficha de producto.
+    if (isHomePath(window.location.pathname)) {
+      getAudio().load();
+    }
 
     return () => {
       clearScheduledHide();
@@ -210,11 +217,23 @@ export default function IntroLoader() {
     runIdRef.current = runId;
     soundStartInFlightRef.current = false;
 
+    // Ya se mostró en esta sesión: la navegación interna entra directo, sin
+    // pantalla negra. La excepción es volver al home desde un enlace, donde el
+    // usuario ya disparó el audiologo y el loader lo acompaña.
+    const volviendoAlHomeConSonido =
+      isHomePath(pathname) && homeSoundPrimedRef.current;
+    if (introShownInRuntime && !volviendoAlHomeConSonido) {
+      clearScheduledHide();
+      setVisible(false);
+      return;
+    }
+    introShownInRuntime = true;
+
     clearScheduledHide();
     setVisible(true);
     setLoaderState("ready");
 
-    if (isHomePath(pathname) && homeSoundPrimedRef.current) {
+    if (volviendoAlHomeConSonido) {
       homeSoundPrimedRef.current = false;
       setShowLampIntro(false);
       markLampIntroSeen();

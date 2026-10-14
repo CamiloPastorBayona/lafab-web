@@ -10,6 +10,7 @@ import WhatsAppFab from "@/components/WhatsAppFab";
 import ImageGuard from "@/components/ImageGuard";
 import IntroLoader from "@/components/IntroLoader";
 import { REVIEWS_SUMMARY } from "@/lib/content";
+import { STORE_URL } from "@/lib/woocommerce";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -82,13 +83,25 @@ export default function RootLayout({
   return (
     <html lang="es-CO" className={poppins.variable}>
       <head>
-        {/* Adelanta la conexión (DNS + TLS) al host de imágenes para que carguen antes */}
+        {/* Adelanta la conexión (DNS + TLS) al host de imágenes para que carguen antes.
+            Las fotos del catálogo salen de STORE_URL, que hoy es staging: sin este
+            preconnect el navegador perdía el handshake completo en la primera foto. */}
+        <link rel="preconnect" href={STORE_URL} crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href={STORE_URL} />
         <link
           rel="preconnect"
           href="https://lafab.com.co"
           crossOrigin="anonymous"
         />
         <link rel="dns-prefetch" href="https://lafab.com.co" />
+        {/* La fuente de marca se pide de una vez, no al final de la cascada */}
+        <link
+          rel="preload"
+          href="/fonts/morality.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
         {/* Adelanta DNS de scripts de terceros (analítica) sin bloquear el render */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.clarity.ms" />

@@ -31,6 +31,18 @@ import { splitDescription } from "@/lib/productContent";
 
 export const revalidate = 300;
 
+// Las 11 fichas se generan en el build, así el primer visitante recibe HTML ya
+// hecho en vez de esperar a que Next consulte WooCommerce. Antes cada ficha se
+// renderizaba bajo demanda y eso costaba más de 5 segundos en la primera visita.
+export async function generateStaticParams() {
+  try {
+    const products = await getProducts({ per_page: 100 });
+    return products.map((p) => ({ slug: p.slug }));
+  } catch {
+    return [];
+  }
+}
+
 // Strip HTML for meta descriptions.
 function stripHtml(html: string): string {
   return html
@@ -84,18 +96,18 @@ export default async function ProductPage({
 
   const p = product.prices;
   const cat = product.categories?.[0];
+  const isVariable = product.type === "variable";
+
+  // Las tres consultas que faltan no dependen entre sí, así que van juntas.
+  // Antes iban una detrás de otra y cada una esperaba a la anterior.
+  const [relatedRaw, variations, extra] = await Promise.all([
+    cat ? getProducts({ category: cat.id, per_page: 5 }) : Promise.resolve([]),
+    isVariable ? getVariations(product) : Promise.resolve([]),
+    getProductExtra(product.id),
+  ]);
 
   // Related: same category, exclude current.
-  const related = cat
-    ? (await getProducts({ category: cat.id, per_page: 5 })).filter(
-        (r) => r.id !== product.id
-      ).slice(0, 4)
-    : [];
-
-  // Producto variable: resolvemos las variaciones (con precio) y armamos los
-  // atributos que se pueden seleccionar (Tela, Puestos, etc.).
-  const isVariable = product.type === "variable";
-  const variations = isVariable ? await getVariations(product) : [];
+  const related = relatedRaw.filter((r) => r.id !== product.id).slice(0, 4);
   const variableAttrs = isVariable
     ? (product.attributes as WCProductAttribute[])
         .filter((a) => a.has_variations && a.terms?.length)
@@ -105,9 +117,6 @@ export default async function ProductPage({
         }))
     : [];
   const showConfigurator = isVariable && variations.length > 0 && variableAttrs.length > 0;
-
-  // Ficha enriquecida (ACF): medidas, materiales, garantía, looks, FAQs…
-  const extra = await getProductExtra(product.id);
 
   // La descripción larga del Excel se parte en pestañas (Descripción · Ficha
   // técnica · Garantía · Envío) en vez de ir todo seguido en un solo bloque.
