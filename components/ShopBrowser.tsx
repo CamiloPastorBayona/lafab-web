@@ -57,6 +57,16 @@ function Group({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
+// Jerarquía del menú de la tienda. Woo guarda la relación madre-hija en la
+// taxonomía, pero la Store API no la manda con cada producto, así que la
+// declaramos aquí para poder mostrar las subcategorías indentadas en vez de
+// sueltas en una lista plana.
+const CATEGORIA_MADRE: Record<number, number> = {
+  105: 102, // Sofás Lineales → Sofás
+  118: 102, // Sofás en L     → Sofás
+  96: 95, //  Camas          → Dormitorio
+};
+
 export default function ShopBrowser({ products }: { products: WCProduct[] }) {
   const [activeCat, setActiveCat] = useState<number | null>(null);
   const [query, setQuery] = useState("");
@@ -76,6 +86,21 @@ export default function ShopBrowser({ products }: { products: WCProduct[] }) {
     }
     return [...map.values()].sort((a, b) => b.count - a.count);
   }, [products]);
+
+  // Las madres quedan arriba y cada hija cuelga debajo de la suya.
+  const arbolCategorias = useMemo(() => {
+    const porId = new Map(categories.map((c) => [c.id, c]));
+    const esHija = (c: Cat) => {
+      const madre = CATEGORIA_MADRE[c.id];
+      return madre !== undefined && porId.has(madre);
+    };
+    return categories
+      .filter((c) => !esHija(c))
+      .map((c) => ({
+        ...c,
+        hijas: categories.filter((h) => CATEGORIA_MADRE[h.id] === c.id),
+      }));
+  }, [categories]);
 
   const facets = useMemo<Facet[]>(() => {
     const map = new Map<string, Facet>();
@@ -210,12 +235,27 @@ export default function ShopBrowser({ products }: { products: WCProduct[] }) {
               <span className="text-ink/40">{products.length}</span>
             </button>
           </li>
-          {categories.map((c) => (
+          {arbolCategorias.map((c) => (
             <li key={c.id}>
               <button onClick={() => setActiveCat(c.id)} className={catRow(activeCat === c.id)}>
                 <span>{c.name}</span>
                 <span className="text-ink/40">{c.count}</span>
               </button>
+              {c.hijas.length > 0 && (
+                <ul className="ml-3 mt-0.5 space-y-0.5 border-l border-ink/10 pl-2">
+                  {c.hijas.map((h) => (
+                    <li key={h.id}>
+                      <button
+                        onClick={() => setActiveCat(h.id)}
+                        className={`${catRow(activeCat === h.id)} text-[13px]`}
+                      >
+                        <span>{h.name}</span>
+                        <span className="text-ink/40">{h.count}</span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </li>
           ))}
         </ul>
