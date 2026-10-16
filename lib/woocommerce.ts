@@ -95,6 +95,16 @@ export interface WCVariation {
 
 // ---- Price formatting ----
 // COP has currency_minor_unit = 0 and prices arrive as integer-strings ("3400000").
+// Mientras Mauricio no confirme los precios, hay productos cargados en la tienda
+// sin precio. Mostrar "$0" sería peor que no mostrar nada, así que la ficha y la
+// tarjeta dicen que el precio está por confirmar.
+export const PRECIO_PENDIENTE = "Precio por confirmar";
+
+export function tienePrecio(prices: WCPrices): boolean {
+  const n = (v?: string | null) => (v ? parseInt(v, 10) : 0);
+  return n(prices.price) > 0 || n(prices.price_range?.min_amount) > 0;
+}
+
 export function money(amount: string | number, prices: WCPrices): string {
   const minor = prices.currency_minor_unit ?? 0;
   const raw = typeof amount === "string" ? parseInt(amount, 10) : amount;

@@ -1,7 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { WCProduct, money } from "@/lib/woocommerce";
+import {
+  WCProduct,
+  money,
+  tienePrecio,
+  PRECIO_PENDIENTE,
+} from "@/lib/woocommerce";
 import { useCart } from "@/lib/cart";
 import WpImage from "@/components/WpImage";
 
@@ -67,7 +72,11 @@ export default function ProductCard({ product }: { product: WCProduct }) {
         </Link>
 
         <div className="mt-1 flex items-baseline gap-2">
-          {product.on_sale ? (
+          {!tienePrecio(p) ? (
+            <span className="text-sm font-medium uppercase tracking-[0.12em] text-white/80">
+              {PRECIO_PENDIENTE}
+            </span>
+          ) : product.on_sale ? (
             <>
               <span className="text-lg font-semibold text-white">
                 {money(p.sale_price, p)}

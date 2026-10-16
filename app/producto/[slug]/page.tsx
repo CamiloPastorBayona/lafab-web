@@ -8,6 +8,8 @@ import {
   getProductExtra,
   hasExtraContent,
   money,
+  tienePrecio,
+  PRECIO_PENDIENTE,
   type WCProductAttribute,
 } from "@/lib/woocommerce";
 import ProductGallery from "@/components/ProductGallery";
@@ -136,7 +138,8 @@ export default async function ProductPage({
       `${product.name} fabricado a la medida por LaFab en Medellín.`
     ).slice(0, 320),
     brand: { "@type": "Brand", name: "LaFab" },
-    offers: p.price_range
+    // Sin precio confirmado no se declara oferta: Google penaliza un precio 0.
+    ...(!tienePrecio(p) ? {} : { offers: p.price_range
       ? {
           // Variable (Tela / Cuero): Google espera un rango, no un precio suelto.
           "@type": "AggregateOffer",
@@ -159,7 +162,7 @@ export default async function ProductPage({
             : "https://schema.org/OutOfStock",
           itemCondition: "https://schema.org/NewCondition",
           url: `https://lafab.com.co/producto/${product.slug}`,
-        },
+        } }),
   };
 
   return (
@@ -208,7 +211,11 @@ export default async function ProductPage({
           {!showConfigurator && (
             <>
               <div className="mt-4 flex flex-wrap items-baseline gap-3">
-                {product.on_sale ? (
+                {!tienePrecio(p) ? (
+                  <span className="text-xl font-medium uppercase tracking-[0.12em] text-ink/55">
+                    {PRECIO_PENDIENTE}
+                  </span>
+                ) : product.on_sale ? (
                   <>
                     <span className="text-3xl font-semibold text-ink">
                       {money(p.sale_price, p)}
@@ -226,9 +233,11 @@ export default async function ProductPage({
                   </span>
                 )}
               </div>
-              <p className="mt-1 text-sm text-ink/50">
-                IVA incluido · {SHIPPING_INLINE}
-              </p>
+              {tienePrecio(p) && (
+                <p className="mt-1 text-sm text-ink/50">
+                  IVA incluido · {SHIPPING_INLINE}
+                </p>
+              )}
             </>
           )}
 

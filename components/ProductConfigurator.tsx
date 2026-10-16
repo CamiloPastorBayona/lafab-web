@@ -11,7 +11,9 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/lib/cart";
-import { money, type WCVariation, type WCPrices } from "@/lib/woocommerce";
+import { money,
+  tienePrecio,
+  PRECIO_PENDIENTE, type WCVariation, type WCPrices } from "@/lib/woocommerce";
 import { SHIPPING_INLINE } from "@/lib/shipping";
 
 type Term = { name: string; slug: string };
@@ -122,7 +124,11 @@ export default function ProductConfigurator({
     <div>
       {/* Precio en vivo */}
       <div className="mt-4 flex flex-wrap items-baseline gap-3">
-        {match ? (
+        {match && !tienePrecio(match.prices) ? (
+          <span className="text-xl font-medium uppercase tracking-[0.12em] text-ink/55">
+            {PRECIO_PENDIENTE}
+          </span>
+        ) : match ? (
           match.on_sale ? (
             <>
               <span className="text-3xl font-semibold text-ink">
@@ -146,9 +152,11 @@ export default function ProductConfigurator({
           </span>
         )}
       </div>
-      <p className="mt-1 text-sm text-ink/50">
-        IVA incluido · {SHIPPING_INLINE}
-      </p>
+      {(!match || tienePrecio(match.prices)) && (
+        <p className="mt-1 text-sm text-ink/50">
+          IVA incluido · {SHIPPING_INLINE}
+        </p>
+      )}
 
       {/* Selectores */}
       <div className="mt-6 space-y-5">
