@@ -42,10 +42,14 @@ const NAV: NavItem[] = [
       { label: "Todos los productos", href: "/shop" },
       { label: "Sofás", href: "/sofas" },
       { label: "Sofás lineales", href: "/sofas-lineales" },
-      { label: "Sofás en L", href: "/sofas-en-l" },
-      { label: "Comedores", href: "/comedores" },
-      { label: "Camas", href: "/camas" },
       { label: "Poltronas", href: "/poltronas" },
+      // Sofás en L, Comedores y Camas quedan fuera del menú mientras no tengan
+      // productos publicados: la carpeta de Dropbox "Productos la Web" es la
+      // única fuente del catálogo, y un enlace a una categoría vacía se ve
+      // peor que no tenerlo. Para devolverlos, basta con descomentarlos.
+      // { label: "Sofás en L", href: "/sofas-en-l" },
+      // { label: "Comedores", href: "/comedores" },
+      // { label: "Camas", href: "/camas" },
     ],
   },
   { label: "Proyectos", href: "/proyectos" },
