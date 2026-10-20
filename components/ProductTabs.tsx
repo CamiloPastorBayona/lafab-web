@@ -16,8 +16,12 @@ const PANEL: Record<DocSection["variant"], string> = {
   // en pantallas grandes: llena el espacio sin dejar renglones kilométricos.
   prose:
     "text-[16px] leading-relaxed text-ink/75 lg:columns-2 lg:gap-14 [&_a]:text-gold-dark [&_a]:underline [&_p]:mt-4 [&_p]:break-inside-avoid [&_p:first-child]:mt-0 [&_strong]:font-semibold [&_strong]:text-ink",
+  // En móvil la etiqueta va arriba y el valor debajo, los dos alineados a la
+  // izquierda. Antes compartían renglón con el valor a la derecha, y como unos
+  // valores caben y otros no, la columna quedaba con alineaciones mezcladas y
+  // se veía rota. A partir de sm sí entra la fila etiqueta / valor.
   specs:
-    "text-[15px] text-ink/75 [&_li]:flex [&_li]:flex-wrap [&_li]:items-baseline [&_li]:justify-between [&_li]:gap-x-6 [&_li]:gap-y-1 [&_li]:border-b [&_li]:border-ink/10 [&_li]:py-3 [&_li]:text-right [&_strong]:mr-auto [&_strong]:text-left [&_strong]:font-medium [&_strong]:uppercase [&_strong]:tracking-[0.08em] [&_strong]:text-[12px] [&_strong]:text-ink/45 [&_ul]:list-none [&_ul]:p-0 md:[&_ul]:grid md:[&_ul]:grid-cols-2 md:[&_ul]:gap-x-14 [&_p]:mt-4",
+    "text-[15px] text-ink/75 [&_li]:border-b [&_li]:border-ink/10 [&_li]:py-3 [&_strong]:mb-1 [&_strong]:block [&_strong]:font-medium [&_strong]:uppercase [&_strong]:tracking-[0.08em] [&_strong]:text-[12px] [&_strong]:text-ink/45 sm:[&_li]:flex sm:[&_li]:flex-wrap sm:[&_li]:items-baseline sm:[&_li]:justify-between sm:[&_li]:gap-x-6 sm:[&_li]:gap-y-1 sm:[&_li]:text-right sm:[&_strong]:mb-0 sm:[&_strong]:mr-auto sm:[&_strong]:inline sm:[&_strong]:text-left [&_ul]:list-none [&_ul]:p-0 md:[&_ul]:grid md:[&_ul]:grid-cols-2 md:[&_ul]:gap-x-14 [&_p]:mt-4",
   list:
     "text-[15px] leading-relaxed text-ink/75 md:columns-2 md:gap-14 [&_li]:relative [&_li]:break-inside-avoid [&_li]:py-1.5 [&_li]:pl-7 [&_li]:before:absolute [&_li]:before:left-0 [&_li]:before:top-1.5 [&_li]:before:text-gold-dark [&_li]:before:content-['✓'] [&_ul]:list-none [&_ul]:p-0 [&_p]:mt-4",
 };
@@ -40,14 +44,16 @@ export default function ProductTabs({
       <p className="text-sm font-medium uppercase tracking-[0.25em] text-gold-dark">
         Detalles
       </p>
-      <h2 className="mt-2 text-2xl font-light text-ink md:text-3xl">{title}</h2>
+      <h2 className="mt-2 text-balance break-words text-xl font-light text-ink sm:text-2xl md:text-3xl">
+        {title}
+      </h2>
 
       <div className="mt-7 overflow-hidden rounded-3xl border border-ink/10 bg-white">
         {!single && (
           <div
             role="tablist"
             aria-label="Información del producto"
-            className="flex gap-1 overflow-x-auto border-b border-ink/10 bg-cream/60 px-2 py-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="flex flex-wrap gap-1 border-b border-ink/10 bg-cream/60 px-2 py-2 sm:flex-nowrap sm:overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {sections.map((s, i) => (
               <button
@@ -74,7 +80,7 @@ export default function ProductTabs({
           role="tabpanel"
           id={`panel-${current.key}`}
           aria-labelledby={`tab-${current.key}`}
-          className="px-6 py-7 md:px-9 md:py-9"
+          className="px-5 py-6 sm:px-6 sm:py-7 md:px-9 md:py-9"
         >
           <div
             className={PANEL[current.variant]}

@@ -16,13 +16,15 @@ export default function ProductCard({ product }: { product: WCProduct }) {
   const { add } = useCart();
 
   const href = `/producto/${product.slug}`;
-  // Los productos variables (tela, puestos…) no se pueden agregar directo: hay que
-  // elegir la variación en la ficha. Si no, se agregaría el "padre" sin opciones.
+  // Los productos variables (tela, puestos…) no se pueden agregar directo: hay
+  // que elegir la variación en la ficha. Si no, se agregaría el "padre" sin
+  // opciones.
   const isVariable = product.type === "variable" || product.has_options;
+  const sinPrecio = !tienePrecio(p);
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (isVariable || !product.is_purchasable || !product.is_in_stock) {
+    if (isVariable || sinPrecio || !product.is_purchasable || !product.is_in_stock) {
       window.location.href = href;
       return;
     }
@@ -38,77 +40,119 @@ export default function ProductCard({ product }: { product: WCProduct }) {
     );
   };
 
-  return (
-    <div className="group relative aspect-[4/5] overflow-hidden rounded-2xl bg-cream">
-      {/* Foto (enlace a la ficha) */}
-      <Link href={href} className="absolute inset-0">
-        {img ? (
-          <WpImage
-            src={img.thumbnail || img.src}
-            srcSet={img.thumbnail_srcset}
-            sizes="(max-width: 768px) 50vw, 25vw"
-            alt={img.alt || product.name}
-            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-          />
-        ) : (
-          <div className="flex h-full items-center justify-center text-gold-dark/40">
-            Sin imagen
-          </div>
-        )}
-      </Link>
+  const etiquetaBoton = sinPrecio
+    ? "Ver ficha"
+    : isVariable
+      ? "Elegir opciones"
+      : product.is_in_stock
+        ? "Añadir al carrito"
+        : "Ver ficha";
 
-      {product.on_sale && (
-        <span className="absolute left-3 top-3 z-10 rounded-full bg-sale px-3 py-1 text-xs font-semibold text-white">
-          Oferta
+  // El precio se arma una sola vez y se reutiliza arriba y abajo.
+  const precio = (claro: boolean) => {
+    const tono = claro ? "text-white" : "text-ink";
+    const tenue = claro ? "text-white/60" : "text-ink/40";
+    if (sinPrecio)
+      return (
+        <span
+          className={`text-[11px] font-medium uppercase tracking-[0.12em] ${
+            claro ? "text-white/80" : "text-ink/50"
+          }`}
+        >
+          {PRECIO_PENDIENTE}
         </span>
-      )}
+      );
+    if (product.on_sale)
+      return (
+        <>
+          <span className={`text-base font-semibold ${tono} md:text-lg`}>
+            {money(p.sale_price, p)}
+          </span>
+          <span className={`text-sm line-through ${tenue}`}>
+            {money(p.regular_price, p)}
+          </span>
+        </>
+      );
+    if (p.price_range)
+      return (
+        // Variable: el precio mostrado es el más bajo (Tela), no el final.
+        <span className={`text-base font-semibold ${tono} md:text-lg`}>
+          <span
+            className={`mr-1 text-xs font-normal uppercase tracking-[0.12em] ${
+              claro ? "text-white/70" : "text-ink/45"
+            }`}
+          >
+            Desde
+          </span>
+          {money(p.price_range.min_amount, p)}
+        </span>
+      );
+    return (
+      <span className={`text-base font-semibold ${tono} md:text-lg`}>
+        {money(p.price, p)}
+      </span>
+    );
+  };
 
-      {/* Overlay: visible en móvil, aparece en hover en desktop */}
-      <div className="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-ink/90 via-ink/25 to-transparent p-4 opacity-100 transition-opacity duration-300 md:opacity-0 md:group-hover:opacity-100">
-        <Link href={href} className="pointer-events-auto">
-          <h3 className="text-base font-medium text-white drop-shadow-sm">
+  return (
+    <div className="group flex flex-col">
+      <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-cream">
+        <Link href={href} className="absolute inset-0">
+          {img ? (
+            <WpImage
+              src={img.thumbnail || img.src}
+              srcSet={img.thumbnail_srcset}
+              sizes="(max-width: 768px) 50vw, 25vw"
+              alt={img.alt || product.name}
+              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+          ) : (
+            <div className="flex h-full items-center justify-center text-gold-dark/40">
+              Sin imagen
+            </div>
+          )}
+        </Link>
+
+        {product.on_sale && (
+          <span className="absolute left-3 top-3 z-10 rounded-full bg-sale px-3 py-1 text-xs font-semibold text-white">
+            Oferta
+          </span>
+        )}
+
+        {/* Capa con la información encima de la foto: solo en escritorio y al
+            pasar el mouse. En móvil tapaba la foto de forma permanente y el
+            mueble no se veía, que es lo que se vende. */}
+        <div className="pointer-events-none absolute inset-0 hidden flex-col justify-end bg-gradient-to-t from-ink/90 via-ink/25 to-transparent p-4 opacity-0 transition-opacity duration-300 md:flex md:group-hover:opacity-100">
+          <Link href={href} className="pointer-events-auto">
+            <h3 className="text-base font-medium text-white drop-shadow-sm">
+              {product.name}
+            </h3>
+          </Link>
+          <div className="mt-1 flex items-baseline gap-2">{precio(true)}</div>
+          <button
+            onClick={handleAdd}
+            className="pointer-events-auto mt-3 translate-y-2 rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-ink opacity-0 transition-all hover:bg-gold group-hover:translate-y-0 group-hover:opacity-100"
+          >
+            {etiquetaBoton}
+          </button>
+        </div>
+      </div>
+
+      {/* Información debajo de la foto: solo en móvil y tablet. */}
+      <div className="mt-3 flex flex-1 flex-col md:hidden">
+        <Link href={href}>
+          <h3 className="text-sm font-medium leading-snug text-ink">
             {product.name}
           </h3>
         </Link>
-
-        <div className="mt-1 flex items-baseline gap-2">
-          {!tienePrecio(p) ? (
-            <span className="text-sm font-medium uppercase tracking-[0.12em] text-white/80">
-              {PRECIO_PENDIENTE}
-            </span>
-          ) : product.on_sale ? (
-            <>
-              <span className="text-lg font-semibold text-white">
-                {money(p.sale_price, p)}
-              </span>
-              <span className="text-sm text-white/60 line-through">
-                {money(p.regular_price, p)}
-              </span>
-            </>
-          ) : p.price_range ? (
-            // Variable: el precio mostrado es el más bajo (Tela), no el final.
-            <span className="text-lg font-semibold text-white">
-              <span className="mr-1 text-xs font-normal uppercase tracking-[0.12em] text-white/70">
-                Desde
-              </span>
-              {money(p.price_range.min_amount, p)}
-            </span>
-          ) : (
-            <span className="text-lg font-semibold text-white">
-              {money(p.price, p)}
-            </span>
-          )}
+        <div className="mt-1 flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+          {precio(false)}
         </div>
-
         <button
           onClick={handleAdd}
-          className="pointer-events-auto mt-3 translate-y-1 rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-ink opacity-100 transition-all hover:bg-gold md:translate-y-2 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100"
+          className="mt-3 w-full rounded-full border border-ink/15 py-2.5 text-xs font-semibold text-ink transition-colors active:bg-ink active:text-white"
         >
-          {isVariable
-            ? "Elegir opciones"
-            : product.is_in_stock
-              ? "Agregar al carrito"
-              : "Ver producto"}
+          {etiquetaBoton}
         </button>
       </div>
     </div>

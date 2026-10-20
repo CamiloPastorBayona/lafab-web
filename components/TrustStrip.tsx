@@ -12,7 +12,9 @@ const ITEMS = [
 export default function TrustStrip({ className = "" }: { className?: string }) {
   return (
     <div
-      className={`grid grid-cols-2 gap-3 rounded-2xl border border-ink/10 bg-cream/60 p-4 sm:grid-cols-4 ${className}`}
+      // En móvil a una sola columna: a dos, textos como "Envío incluido en
+      // Medellín · +$200.000 otras ciudades" se partían en cinco renglones.
+      className={`grid grid-cols-1 gap-3 rounded-2xl border border-ink/10 bg-cream/60 p-4 sm:grid-cols-2 lg:grid-cols-4 ${className}`}
     >
       {ITEMS.map((s) => (
         <div key={s.t} className="flex items-center gap-2.5">
