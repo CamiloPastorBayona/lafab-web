@@ -36,7 +36,7 @@ export const VITTORIO: Landing = {
   lifestyle: [
     { img: FOTO.principal, title: "Recibir visitas", text: "Una pieza que marca el espacio." },
     { img: FOTO.principal, title: "Compartir en familia", text: "El punto de encuentro de todos." },
-    { img: FOTO.principal, title: "Descansar", text: "Asientos amplios para estirarse." },
+    { img: FOTO.principal, title: "Descansar", text: "Amplitud suficiente para estirarse." },
     { img: FOTO.principal, title: "Ver películas", text: "El plan perfecto para quedarse en casa." },
   ],
 
@@ -63,9 +63,9 @@ export const VITTORIO: Landing = {
     { key: "Estructura", val: "Pino inmunizado y roble natural · ensambles reforzados" },
     {
       key: "Confort",
-      val: "Asientos amplios y cojines de espaldar sueltos · espumas Croydon® + Penta® certificadas",
+      val: "Cojines de asiento amplios y espaldares sueltos · espumas Croydon® + Penta® certificadas",
     },
-    { key: "Tapizado", val: "Telas y colores a elegir, o cuero 100% natural" },
+    { key: "Tapizado", val: "Telas y colores a elegir, o cuero" },
   ],
 
   specsBottom: SANDIEGO_LANDING.specsBottom,
@@ -81,7 +81,7 @@ export const VITTORIO: Landing = {
       value: "Espumas Croydon® + Penta® certificadas · cojines de espaldar sueltos",
     },
     { label: "Telas", value: "Microfibra Mon (Pet Friendly) y Chenil Milan (Antifluido)" },
-    { label: "Cuero", value: "Disponible en cuero 100% natural (precio diferente)" },
+    { label: "Cuero", value: "Disponible en cuero (precio diferente)" },
     { label: "Colores", value: "Marfil, Beige, Avellana, Plata y Gris" },
     { label: "Garantía", value: "3 años en estructura · 1 año por desajustes" },
     { label: "Entrega", value: "30 días calendario o antes" },
@@ -93,7 +93,7 @@ export const VITTORIO: Landing = {
 
   compra: [
     { n: "01", title: "Elige la medida", text: "1.90, 2.10 o 2.40 m de largo." },
-    { n: "02", title: "Elige el material", text: "Tela o cuero 100% natural." },
+    { n: "02", title: "Elige el material", text: "Tela o cuero." },
     ...SANDIEGO_LANDING.compra.slice(2),
   ],
 

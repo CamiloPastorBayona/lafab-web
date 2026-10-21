@@ -67,7 +67,7 @@ export const LUTON: Landing = {
       key: "Confort",
       val: "Cojines amplios en asiento y espaldar · espumas Croydon® + Penta® certificadas de alta densidad",
     },
-    { key: "Tapizado", val: "Telas y colores a elegir, o cuero 100% natural" },
+    { key: "Tapizado", val: "Telas y colores a elegir, o cuero" },
   ],
 
   specsBottom: SANDIEGO_LANDING.specsBottom,
@@ -83,7 +83,7 @@ export const LUTON: Landing = {
       value: "Espumas Croydon® + Penta® certificadas · cojines amplios en asiento y espaldar",
     },
     { label: "Telas", value: "Microfibra Mon (Pet Friendly) y Chenil Milan (Antifluido)" },
-    { label: "Cuero", value: "Disponible en cuero 100% natural (precio diferente)" },
+    { label: "Cuero", value: "Disponible en cuero (precio diferente)" },
     { label: "Colores", value: "Marfil, Beige, Avellana, Plata y Gris" },
     { label: "Garantía", value: "3 años en estructura · 1 año por desajustes" },
     { label: "Entrega", value: "30 días calendario o antes" },
@@ -95,7 +95,7 @@ export const LUTON: Landing = {
 
   compra: [
     { n: "01", title: "Elige la medida", text: "A tu espacio, de 1.80 o 2.00 m." },
-    { n: "02", title: "Elige el material", text: "Tela o cuero 100% natural." },
+    { n: "02", title: "Elige el material", text: "Tela o cuero." },
     ...SANDIEGO_LANDING.compra.slice(2),
   ],
 
