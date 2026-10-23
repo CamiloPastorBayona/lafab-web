@@ -9,6 +9,7 @@ import {
   ReactNode,
 } from "react";
 import { trackAddToCart } from "./analytics";
+import { STORE_URL } from "./woocommerce";
 
 export type CartItem = {
   id: number;
@@ -44,11 +45,24 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [isOpen, setOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
 
-  // Cargar de localStorage al montar
+  // Cargar de localStorage al montar.
+  // Los carritos guardados antes del cutover traen la foto en lafab.com.co,
+  // que desde entonces ya no sirve imágenes: se reapunta al host del CMS.
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) setItems(JSON.parse(raw));
+      if (raw) {
+        const guardados: CartItem[] = JSON.parse(raw);
+        setItems(
+          guardados.map((i) => ({
+            ...i,
+            image: (i.image || "").replace(
+              "https://lafab.com.co/wp-content/",
+              `${STORE_URL}/wp-content/`
+            ),
+          }))
+        );
+      }
     } catch {
       /* noop */
     }
