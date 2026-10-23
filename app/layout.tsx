@@ -19,9 +19,9 @@ const poppins = Poppins({
   display: "swap",
 });
 
-// Mientras el sitio esté en *.vercel.app (sin dominio) lo dejamos NO indexable
-// para evitar contenido duplicado. En el cutover se pone NEXT_PUBLIC_ALLOW_INDEX=true.
-const INDEXABLE = process.env.NEXT_PUBLIC_ALLOW_INDEX === "true";
+// La indexación la gobierna el middleware con la cabecera X-Robots-Tag: corre en
+// cada petición, así que el sitio se abre a los buscadores solo en el instante
+// del lanzamiento, sin que haya que redesplegar ni tocar una variable.
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://lafab.com.co"),
@@ -34,9 +34,9 @@ export const metadata: Metadata = {
   icons: {
     icon: "https://staging.lafab.com.co/wp-content/uploads/2024/11/cropped-favicon-lafab-270x270.png",
   },
-  robots: INDEXABLE
-    ? { index: true, follow: true }
-    : { index: false, follow: false },
+  robots: { index: true, follow: true },
+  // Canónica siempre al dominio propio: el alias *.vercel.app no compite.
+  alternates: { canonical: "./" },
   openGraph: {
     type: "website",
     locale: "es_CO",
