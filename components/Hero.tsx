@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { WHATSAPP } from "@/lib/content";
 
-const BASE = "https://lafab.com.co/wp-content/uploads";
+const BASE = "https://staging.lafab.com.co/wp-content/uploads";
 
 type Slide = {
   img: string;

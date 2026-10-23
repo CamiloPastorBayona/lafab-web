@@ -1,5 +1,5 @@
 // Configuración de las páginas de categoría (SEO + contenido).
-const U = "https://lafab.com.co/wp-content/uploads";
+const U = "https://staging.lafab.com.co/wp-content/uploads";
 
 export type CategoryConfig = {
   slug: string;

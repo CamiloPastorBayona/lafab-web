@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   description:
     "Fabricamos muebles a la medida en Medellín: sofás, comedores, camas y closets. Diseño propio, materiales de calidad y envío a todo el país.",
   icons: {
-    icon: "https://lafab.com.co/wp-content/uploads/2024/11/cropped-favicon-lafab-270x270.png",
+    icon: "https://staging.lafab.com.co/wp-content/uploads/2024/11/cropped-favicon-lafab-270x270.png",
   },
   robots: INDEXABLE
     ? { index: true, follow: true }
@@ -49,7 +49,7 @@ const BUSINESS_JSONLD = {
   "@type": "FurnitureStore",
   name: "LaFab · La Fábrica de Muebles",
   image:
-    "https://lafab.com.co/wp-content/uploads/2022/12/LaFab-negro.png",
+    "https://staging.lafab.com.co/wp-content/uploads/2022/12/LaFab-negro.png",
   url: "https://lafab.com.co",
   telephone: "+573054602395",
   email: "info@lafab.com.co",
@@ -88,12 +88,6 @@ export default function RootLayout({
             preconnect el navegador perdía el handshake completo en la primera foto. */}
         <link rel="preconnect" href={STORE_URL} crossOrigin="anonymous" />
         <link rel="dns-prefetch" href={STORE_URL} />
-        <link
-          rel="preconnect"
-          href="https://lafab.com.co"
-          crossOrigin="anonymous"
-        />
-        <link rel="dns-prefetch" href="https://lafab.com.co" />
         {/* La fuente de marca se pide de una vez, no al final de la cascada */}
         <link
           rel="preload"

@@ -66,7 +66,7 @@ export default function ArticlePage({
       name: "LaFab",
       logo: {
         "@type": "ImageObject",
-        url: "https://lafab.com.co/wp-content/uploads/2022/12/LaFab-negro.png",
+        url: "https://staging.lafab.com.co/wp-content/uploads/2022/12/LaFab-negro.png",
       },
     },
     mainEntityOfPage: url,

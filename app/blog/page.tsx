@@ -27,7 +27,7 @@ export default function BlogPage() {
         eyebrow="Blog"
         title="Consejos para amueblar tu hogar"
         subtitle="Guías prácticas sobre sofás, telas, comedores y todo lo que necesitas saber antes de comprar un mueble a la medida."
-        image="https://lafab.com.co/wp-content/uploads/2026/07/4.webp"
+        image="https://staging.lafab.com.co/wp-content/uploads/2026/07/4.webp"
       />
 
       <div className="mx-auto max-w-site px-4 py-14 md:px-6 md:py-20">

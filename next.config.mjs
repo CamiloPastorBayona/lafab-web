@@ -31,12 +31,12 @@ const nextConfig = {
       {
         source: "/fonts/morality.woff2",
         destination:
-          "https://lafab.com.co/wp-content/uploads/useanyfont/6316Morality.woff2",
+          "https://staging.lafab.com.co/wp-content/uploads/useanyfont/6316Morality.woff2",
       },
       {
         source: "/fonts/morality.woff",
         destination:
-          "https://lafab.com.co/wp-content/uploads/useanyfont/6316Morality.woff",
+          "https://staging.lafab.com.co/wp-content/uploads/useanyfont/6316Morality.woff",
       },
     ];
   },

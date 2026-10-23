@@ -11,8 +11,8 @@ import { useLanding } from "@/components/LandingContext";
 import { useCart } from "@/lib/cart";
 import { SHIPPING_ZONES, cop } from "@/lib/shipping";
 
-const TEX = "https://lafab.com.co/wp-content/uploads/2026/06/"; // texturas (swatches)
-const FOTO = "https://lafab.com.co/wp-content/uploads/2026/07/"; // fotos por tela+color
+const TEX = "https://staging.lafab.com.co/wp-content/uploads/2026/06/"; // texturas (swatches)
+const FOTO = "https://staging.lafab.com.co/wp-content/uploads/2026/07/"; // fotos por tela+color
 
 type Color = { name: string; hex: string; img: string; foto: string };
 type Fabric = { key: string; name: string; tag: string; colors: Color[] };

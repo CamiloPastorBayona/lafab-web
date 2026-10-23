@@ -32,7 +32,7 @@ export default async function ProyectosPage() {
         eyebrow="Proyectos"
         title="Muebles que ya viven en otros hogares"
         subtitle="Una muestra de las piezas que hemos diseñado y fabricado a la medida."
-        image="https://lafab.com.co/wp-content/uploads/2026/07/4.webp"
+        image="https://staging.lafab.com.co/wp-content/uploads/2026/07/4.webp"
       />
 
       {/* Intro con propósito */}

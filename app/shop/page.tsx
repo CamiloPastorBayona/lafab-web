@@ -20,7 +20,7 @@ export default async function ShopPage() {
         eyebrow="Tienda"
         title="Muebles que transforman tu espacio"
         subtitle="Cada pieza, diseñada y fabricada a la medida en nuestro taller de Itagüí."
-        image="https://lafab.com.co/wp-content/uploads/2026/07/3.webp"
+        image="https://staging.lafab.com.co/wp-content/uploads/2026/07/3.webp"
       />
 
       {/* Catálogo */}

@@ -31,7 +31,7 @@ export default async function EspaciosPage() {
         eyebrow="Compra por espacios"
         title="Un mueble para cada rincón"
         subtitle="Encuentra la pieza perfecta según el espacio que quieres transformar. Diseño propio, fabricación a la medida."
-        image="https://lafab.com.co/wp-content/uploads/2026/07/1.webp"
+        image="https://staging.lafab.com.co/wp-content/uploads/2026/07/1.webp"
       />
 
       <div className="mx-auto max-w-site px-4 py-14 md:px-6 md:py-20">

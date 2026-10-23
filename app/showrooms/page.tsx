@@ -25,7 +25,7 @@ export default function ShowroomsPage() {
         eyebrow="Showroom"
         title="Vive los muebles en persona"
         subtitle="Te esperamos en nuestro showroom de Itagüí, muy cerca de la estación Envigado del Metro."
-        image="https://lafab.com.co/wp-content/uploads/2026/07/2.webp"
+        image="https://staging.lafab.com.co/wp-content/uploads/2026/07/2.webp"
       />
 
       {/* Por qué visitarnos */}

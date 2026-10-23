@@ -49,7 +49,7 @@ export default function Footer() {
           <div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="https://lafab.com.co/wp-content/uploads/2022/12/lafab-blanco.png"
+              src="https://staging.lafab.com.co/wp-content/uploads/2022/12/lafab-blanco.png"
               alt="LaFab"
               className="mb-5 h-9 w-auto"
             />
@@ -97,14 +97,9 @@ export default function Footer() {
             </a>
             <Link href="/espacios" className={`block ${link}`}>Compra por espacios</Link>
             <Link href="/preguntas-frecuentes" className={`block ${link}`}>Preguntas frecuentes</Link>
-            <a
-              href="https://lafab.com.co/poliza-de-garantia/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`block ${link}`}
-            >
+            <Link href="/terminos-y-condiciones" className={`block ${link}`}>
               Póliza de garantía
-            </a>
+            </Link>
           </div>
 
           {/* Contacto */}

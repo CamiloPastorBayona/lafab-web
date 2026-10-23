@@ -86,7 +86,7 @@ export default async function HomePage() {
             <Reveal>
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
                 <WpImage
-                  src="https://lafab.com.co/wp-content/uploads/2026/06/taller3-1.webp"
+                  src="https://staging.lafab.com.co/wp-content/uploads/2026/06/taller3-1.webp"
                   alt="Taller LaFab"
                   className="absolute inset-0 h-full w-full object-cover"
                 />
