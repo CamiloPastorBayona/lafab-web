@@ -13,7 +13,10 @@ export const metadata: Metadata = {
 
 export default function ProximamentePage() {
   return (
-    <main className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden bg-ink px-6 py-16 text-cream">
+    <div
+      data-portada-espera
+      className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden bg-ink px-6 py-16 text-cream"
+    >
       {/* Luz cálida que cae desde arriba, como el encendido de la intro */}
       <div
         aria-hidden
@@ -90,6 +93,6 @@ export default function ProximamentePage() {
           Showroom · {SHOWROOM.address}, {SHOWROOM.city}
         </p>
       </div>
-    </main>
+    </div>
   );
 }

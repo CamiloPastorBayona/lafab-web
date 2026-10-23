@@ -457,3 +457,12 @@ img {
   z-index: 2;
   pointer-events: none; /* no interfiere con clics/zoom; solo cubre la imagen */
 }
+
+/* ---- Portada de espera (cuenta regresiva) ----
+   Se sirve por rewrite dentro del layout normal, así que apagamos el cromo del
+   sitio: la cabecera con el menú, el pie y la intro de la lámpara. */
+body:has([data-portada-espera]) header,
+body:has([data-portada-espera]) footer,
+body:has([data-portada-espera]) .lf-loader {
+  display: none !important;
+}
