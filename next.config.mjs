@@ -1,7 +1,7 @@
 // Host del CMS (WordPress). Una sola variable manda: cambiarla en Vercel mueve
 // el catálogo, las imágenes y la fuente de marca de host sin tocar código.
 const CMS = (
-  process.env.NEXT_PUBLIC_WC_STORE_URL || "https://staging.lafab.com.co"
+  process.env.NEXT_PUBLIC_WC_STORE_URL || "https://cms.lafab.com.co"
 ).replace(/\/$/, "");
 
 /** @type {import('next').NextConfig} */

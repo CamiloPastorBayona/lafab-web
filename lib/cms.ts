@@ -3,7 +3,7 @@
 // host (hoy staging, mañana cms) es cambiar NEXT_PUBLIC_WC_STORE_URL en Vercel
 // y nada más: ni una ruta queda escrita a mano en el código.
 export const CMS = (
-  process.env.NEXT_PUBLIC_WC_STORE_URL || "https://staging.lafab.com.co"
+  process.env.NEXT_PUBLIC_WC_STORE_URL || "https://cms.lafab.com.co"
 ).replace(/\/$/, "");
 
 export const UPLOADS = `${CMS}/wp-content/uploads`;
