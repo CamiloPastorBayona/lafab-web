@@ -11,6 +11,7 @@ import ImageGuard from "@/components/ImageGuard";
 import IntroLoader from "@/components/IntroLoader";
 import { REVIEWS_SUMMARY } from "@/lib/content";
 import { STORE_URL } from "@/lib/woocommerce";
+import { UPLOADS } from "@/lib/cms";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -32,7 +33,7 @@ export const metadata: Metadata = {
   description:
     "Fabricamos muebles a la medida en Medellín: sofás, comedores, camas y closets. Diseño propio, materiales de calidad y envío a todo el país.",
   icons: {
-    icon: "https://staging.lafab.com.co/wp-content/uploads/2024/11/cropped-favicon-lafab-270x270.png",
+    icon: `${UPLOADS}/2024/11/cropped-favicon-lafab-270x270.png`,
   },
   robots: { index: true, follow: true },
   // Canónica siempre al dominio propio: el alias *.vercel.app no compite.
@@ -49,7 +50,7 @@ const BUSINESS_JSONLD = {
   "@type": "FurnitureStore",
   name: "LaFab · La Fábrica de Muebles",
   image:
-    "https://staging.lafab.com.co/wp-content/uploads/2022/12/LaFab-negro.png",
+    `${UPLOADS}/2022/12/LaFab-negro.png`,
   url: "https://lafab.com.co",
   telephone: "+573054602395",
   email: "info@lafab.com.co",

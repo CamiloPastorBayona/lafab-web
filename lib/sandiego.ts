@@ -1,7 +1,8 @@
 // Contenido de la landing del Sofá San Diego (producto insignia, id 11113).
-const U = "https://staging.lafab.com.co/wp-content/uploads";
+import { UPLOADS as U } from "@/lib/cms";
 
 // Imagen real de textura de cada tela/color (ej: mon-tela-beige.webp)
+
 export const swatchImg = (telaKey: string, colorName: string) =>
   `${U}/2026/06/${telaKey}-tela-${colorName.toLowerCase()}.webp`;
 

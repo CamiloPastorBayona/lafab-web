@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { WHATSAPP } from "@/lib/content";
+import { UPLOADS as BASE } from "@/lib/cms";
 
-const BASE = "https://staging.lafab.com.co/wp-content/uploads";
 
 type Slide = {
   img: string;

@@ -1,5 +1,6 @@
 // Artículos del blog de LaFab (SEO informacional).
-const U = "https://staging.lafab.com.co/wp-content/uploads";
+import { UPLOADS as U } from "@/lib/cms";
+
 
 export type Article = {
   slug: string;

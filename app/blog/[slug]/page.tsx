@@ -7,6 +7,7 @@ import WpImage from "@/components/WpImage";
 import ShareButtons from "@/components/ShareButtons";
 import { ARTICLES, getArticle } from "@/lib/blog";
 import { WHATSAPP } from "@/lib/content";
+import { UPLOADS } from "@/lib/cms";
 
 export function generateStaticParams() {
   return ARTICLES.map((a) => ({ slug: a.slug }));
@@ -66,7 +67,7 @@ export default function ArticlePage({
       name: "LaFab",
       logo: {
         "@type": "ImageObject",
-        url: "https://staging.lafab.com.co/wp-content/uploads/2022/12/LaFab-negro.png",
+        url: `${UPLOADS}/2022/12/LaFab-negro.png`,
       },
     },
     mainEntityOfPage: url,

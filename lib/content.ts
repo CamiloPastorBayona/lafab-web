@@ -1,5 +1,7 @@
 // Contenido real de LaFab (reseñas de Google, espacios, FAQ, showroom).
 // Centralizado para reutilizar en varias páginas.
+import { UPLOADS } from "@/lib/cms";
+
 
 export const WHATSAPP =
   "https://api.whatsapp.com/send/?phone=573054602395&text=Hola%20LaFab,%20quiero%20cotizar%20un%20mueble";
@@ -141,7 +143,7 @@ export const SPACES = [
     description:
       "Sofás lineales y sofás en L diseñados para tu sala.",
     href: "/sofas",
-    image: "https://staging.lafab.com.co/wp-content/uploads/2026/07/3-825x1024.webp",
+    image: `${UPLOADS}/2026/07/3-825x1024.webp`,
   },
   {
     name: "Dormitorio",
@@ -149,7 +151,7 @@ export const SPACES = [
     catId: 95,
     description: "Camas tapizadas y muebles que hacen de tu dormitorio un refugio.",
     href: "/camas",
-    image: "https://staging.lafab.com.co/wp-content/uploads/2025/05/VASSUE-1024x768.jpg",
+    image: `${UPLOADS}/2025/05/VASSUE-1024x768.jpg`,
   },
   {
     name: "Comedor",
@@ -158,7 +160,7 @@ export const SPACES = [
     description:
       "Mesas de comedor en maderas cálidas para reunir a los tuyos.",
     href: "/comedores",
-    image: "https://staging.lafab.com.co/wp-content/uploads/2025/01/WITTEN-1-1024x578.jpg",
+    image: `${UPLOADS}/2025/01/WITTEN-1-1024x578.jpg`,
   },
 ];
 

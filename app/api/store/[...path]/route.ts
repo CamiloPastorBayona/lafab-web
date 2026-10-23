@@ -11,7 +11,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const STORE_URL = (
-  process.env.NEXT_PUBLIC_WC_STORE_URL || "https://lafab.com.co"
+  process.env.NEXT_PUBLIC_WC_STORE_URL || "https://staging.lafab.com.co"
 ).replace(/\/$/, "");
 const BASIC_AUTH = process.env.WC_STORE_BASIC_AUTH;
 const TOKEN_COOKIE = "lafab_cart_token";

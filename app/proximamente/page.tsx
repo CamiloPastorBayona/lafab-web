@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import CuentaRegresiva from "@/components/CuentaRegresiva";
 import { SHOWROOM, WHATSAPP } from "@/lib/content";
-
-const CMS = "https://staging.lafab.com.co/wp-content/uploads";
+import { UPLOADS as CMS } from "@/lib/cms";
 
 export const metadata: Metadata = {
   title: "Nueva tienda en línea",

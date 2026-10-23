@@ -1,3 +1,9 @@
+// Host del CMS (WordPress). Una sola variable manda: cambiarla en Vercel mueve
+// el catálogo, las imágenes y la fuente de marca de host sin tocar código.
+const CMS = (
+  process.env.NEXT_PUBLIC_WC_STORE_URL || "https://staging.lafab.com.co"
+).replace(/\/$/, "");
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   async headers() {
@@ -31,12 +37,12 @@ const nextConfig = {
       {
         source: "/fonts/morality.woff2",
         destination:
-          "https://staging.lafab.com.co/wp-content/uploads/useanyfont/6316Morality.woff2",
+          `${CMS}/wp-content/uploads/useanyfont/6316Morality.woff2`,
       },
       {
         source: "/fonts/morality.woff",
         destination:
-          "https://staging.lafab.com.co/wp-content/uploads/useanyfont/6316Morality.woff",
+          `${CMS}/wp-content/uploads/useanyfont/6316Morality.woff`,
       },
     ];
   },
@@ -53,7 +59,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "staging.lafab.com.co",
+        hostname: new URL(CMS).hostname,
       },
       {
         protocol: "https",

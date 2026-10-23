@@ -1,9 +1,11 @@
 // WooCommerce Store API client (public, read-only — no auth needed for catalog).
 // Docs: https://developer.woocommerce.com/docs/apis/store-api/
 
+// Origen del WordPress que sirve el catálogo. lafab.com.co ya no sirve de
+// respaldo: desde el cutover ese dominio es el front en Vercel.
 const STORE_URL =
   process.env.NEXT_PUBLIC_WC_STORE_URL?.replace(/\/$/, "") ||
-  "https://lafab.com.co";
+  "https://staging.lafab.com.co";
 
 const API = `${STORE_URL}/wp-json/wc/store/v1`;
 

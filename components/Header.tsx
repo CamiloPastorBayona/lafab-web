@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useCart } from "@/lib/cart";
 import { isLandingPath } from "@/lib/landings";
+import { UPLOADS } from "@/lib/cms";
 
 function CartIcon() {
   const { count, openCart } = useCart();
@@ -82,7 +83,7 @@ export default function Header() {
         <Link href="/inicio" className="flex items-center">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="https://staging.lafab.com.co/wp-content/uploads/2022/12/lafab-blanco.png"
+            src={`${UPLOADS}/2022/12/lafab-blanco.png`}
             alt="LaFab"
             className="h-6 w-auto md:h-7"
           />

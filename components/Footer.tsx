@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Ico from "@/components/LandingIcons";
+import { UPLOADS } from "@/lib/cms";
 
 const WHATSAPP =
   "https://api.whatsapp.com/send/?phone=573054602395&text=Hola%20LaFab";
@@ -49,7 +50,7 @@ export default function Footer() {
           <div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="https://staging.lafab.com.co/wp-content/uploads/2022/12/lafab-blanco.png"
+              src={`${UPLOADS}/2022/12/lafab-blanco.png`}
               alt="LaFab"
               className="mb-5 h-9 w-auto"
             />
