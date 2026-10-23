@@ -1,13 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { CLAVE_PREVIA, COOKIE_PREVIA, yaLanzamos } from "@/lib/lanzamiento";
 
-// Rutas que nunca deben caer en la cuenta regresiva.
-// /api sostiene el carrito y el checkout; /fonts es el rewrite de la fuente de marca.
-const LIBRES = ["/api", "/_next", "/fonts", "/proximamente"];
-
-// robots.txt, sitemap.xml, imágenes, fuentes: pasan derecho.
-const ARCHIVOS = /\.(?:ico|png|jpe?g|webp|avif|svg|gif|woff2?|ttf|txt|xml|json|mp4|webm)$/i;
-
 // Mientras no haya abierto, ninguna respuesta debe ser indexable. Va por
 // cabecera y no por <meta>, porque el middleware corre en cada petición: así
 // el sitio se vuelve indexable solo al llegar la hora, sin redesplegar nada.
@@ -22,7 +15,7 @@ export function middleware(req: NextRequest) {
 
   const { pathname, searchParams } = req.nextUrl;
 
-  // El equipo ve el sitio real entrando una vez con ?ver=lafab en cualquier URL.
+  // Con ?ver=lafab en cualquier URL también se ve la portada real, no el contador.
   if (searchParams.get("ver") === CLAVE_PREVIA) {
     const limpia = req.nextUrl.clone();
     limpia.searchParams.delete("ver");
@@ -34,16 +27,13 @@ export function middleware(req: NextRequest) {
     });
     return sinIndexar(res);
   }
-  if (req.cookies.get(COOKIE_PREVIA)?.value === "1") {
-    return sinIndexar(NextResponse.next());
-  }
 
-  if (
-    LIBRES.some((p) => pathname === p || pathname.startsWith(p + "/")) ||
-    ARCHIVOS.test(pathname)
-  ) {
-    return sinIndexar(NextResponse.next());
-  }
+  // Solo la portada muestra la cuenta regresiva. Tienda, fichas, landings,
+  // carrito y checkout funcionan normal, para poder seguir trabajando y
+  // probando sobre producción durante estos días.
+  const esPortada = pathname === "/";
+  const conPrevia = req.cookies.get(COOKIE_PREVIA)?.value === "1";
+  if (!esPortada || conPrevia) return sinIndexar(NextResponse.next());
 
   const destino = req.nextUrl.clone();
   destino.pathname = "/proximamente";
