@@ -5,8 +5,7 @@
 /* Fuente propia de LaFab (misma que usa el sitio actual) */
 @font-face {
   font-family: "morality";
-  src: url("/fonts/morality.woff2") format("woff2"),
-    url("/fonts/morality.woff") format("woff");
+  src: url("/fonts/morality.woff2") format("woff2");
   font-weight: 300 700;
   font-display: swap;
 }

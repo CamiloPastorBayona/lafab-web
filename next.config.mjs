@@ -18,8 +18,8 @@ const nextConfig = {
         ],
       },
       {
-        // La fuente propia se sirve por rewrite desde WordPress: sin esta
-        // cabecera el navegador la volvía a pedir en cada página.
+        // La fuente propia vive en public/fonts: con esta cabecera el navegador
+        // no la vuelve a pedir en cada página.
         source: "/fonts/:path*",
         headers: [
           {
@@ -30,22 +30,9 @@ const nextConfig = {
       },
     ];
   },
-  // Proxy de la fuente propia (morality) para servirla desde nuestro dominio y
-  // evitar el bloqueo CORS del servidor de WordPress (no envía Access-Control-Allow-Origin).
-  async rewrites() {
-    return [
-      {
-        source: "/fonts/morality.woff2",
-        destination:
-          `${CMS}/wp-content/uploads/useanyfont/6316Morality.woff2`,
-      },
-      {
-        source: "/fonts/morality.woff",
-        destination:
-          `${CMS}/wp-content/uploads/useanyfont/6316Morality.woff`,
-      },
-    ];
-  },
+  // La fuente de marca se sirve desde public/fonts: es del front, no del CMS.
+  // Antes venía por rewrite desde WordPress y eso ataba la tipografía de todo
+  // el sitio a un plugin (Use Any Font) y a que ese host siguiera en pie.
   images: {
     // El host (LiteSpeed) corta la conexión del optimizador de Next (ECONNRESET),
     // así que servimos las imágenes directo desde WordPress (ya vienen en .webp y
