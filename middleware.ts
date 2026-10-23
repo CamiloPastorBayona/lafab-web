@@ -15,6 +15,15 @@ export function middleware(req: NextRequest) {
 
   const { pathname, searchParams } = req.nextUrl;
 
+  // ?ver=salir devuelve el contador a quien ya activó la vista previa.
+  if (searchParams.get("ver") === "salir") {
+    const limpia = req.nextUrl.clone();
+    limpia.searchParams.delete("ver");
+    const res = NextResponse.redirect(limpia);
+    res.cookies.set(COOKIE_PREVIA, "", { path: "/", maxAge: 0 });
+    return sinIndexar(res);
+  }
+
   // Con ?ver=lafab en cualquier URL también se ve la portada real, no el contador.
   if (searchParams.get("ver") === CLAVE_PREVIA) {
     const limpia = req.nextUrl.clone();
