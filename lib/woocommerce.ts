@@ -146,15 +146,49 @@ function authHeaders(): Record<string, string> {
   return h;
 }
 
-async function get<T>(path: string): Promise<T> {
-  const res = await fetch(`${API}${path}`, {
-    next: { revalidate: REVALIDATE },
-    headers: authHeaders(),
-  });
-  if (!res.ok) {
-    throw new Error(`Store API ${res.status} for ${path}`);
+const dormir = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+// El CMS a veces responde 5xx o corta la conexión cuando le llegan muchas
+// peticiones seguidas (por ejemplo al regenerar varias fichas a la vez). Sin
+// reintentos, una ficha se renderizaba con la mitad de las telas disponibles.
+async function get<T>(path: string, intentos = 4): Promise<T> {
+  let ultimo: unknown;
+  for (let i = 0; i < intentos; i++) {
+    try {
+      const res = await fetch(`${API}${path}`, {
+        next: { revalidate: REVALIDATE },
+        headers: authHeaders(),
+      });
+      if (res.ok) return (await res.json()) as T;
+      // 4xx que no sea 429 es un error real: no se reintenta.
+      if (res.status < 500 && res.status !== 429) {
+        throw new Error(`Store API ${res.status} for ${path}`);
+      }
+      ultimo = new Error(`Store API ${res.status} for ${path}`);
+    } catch (e) {
+      ultimo = e;
+      if (e instanceof Error && /Store API 4/.test(e.message)) throw e;
+    }
+    if (i < intentos - 1) await dormir(400 * Math.pow(2, i));
   }
-  return res.json() as Promise<T>;
+  throw ultimo instanceof Error ? ultimo : new Error(`Store API falló: ${path}`);
+}
+
+/** Ejecuta las tareas de a `limite` a la vez, en vez de todas de golpe. */
+async function enTandas<T>(
+  tareas: (() => Promise<T>)[],
+  limite = 5
+): Promise<T[]> {
+  const out: T[] = new Array(tareas.length);
+  let i = 0;
+  const obrero = async () => {
+    while (i < tareas.length) {
+      const n = i++;
+      out[n] = await tareas[n]();
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(limite, tareas.length) }, obrero));
+  return out;
 }
 
 export async function getProducts(params: {
@@ -202,8 +236,11 @@ export async function getCategories(): Promise<WCCategory[]> {
 export async function getVariations(product: WCProduct): Promise<WCVariation[]> {
   if (product.type !== "variable") return [];
   const refs = (product.variations as WCVariationRef[]) ?? [];
-  const resolved = await Promise.all(
-    refs.map(async (ref) => {
+  // Se resuelven de a pocas y con reintentos. Antes iban las 27 de golpe y las
+  // que fallaban se descartaban en silencio: la ficha quedaba con la mitad de
+  // los colores o sin una de las medidas, de forma intermitente.
+  const resolved = await enTandas(
+    refs.map((ref) => async () => {
       try {
         const vp = await get<WCProduct>(`/products/${ref.id}`);
         return {
@@ -214,10 +251,12 @@ export async function getVariations(product: WCProduct): Promise<WCVariation[]> 
           image: vp.images?.[0]?.src,
           attributes: ref.attributes,
         } as WCVariation;
-      } catch {
+      } catch (e) {
+        console.error(`[lafab] no se pudo leer la variación ${ref.id}`, e);
         return null;
       }
-    })
+    }),
+    5
   );
   return resolved.filter((v): v is WCVariation => v !== null);
 }
