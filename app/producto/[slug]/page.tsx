@@ -37,13 +37,14 @@ export const revalidate = 300;
 // Las 11 fichas se generan en el build, así el primer visitante recibe HTML ya
 // hecho en vez de esperar a que Next consulte WooCommerce. Antes cada ficha se
 // renderizaba bajo demanda y eso costaba más de 5 segundos en la primera visita.
+// Las fichas NO se prerenderizan en el build. Con 53 productos y hasta 27
+// variaciones cada uno, el build hacía más de mil peticiones al CMS de golpe y
+// se caía cuando WordPress iba cargado (Hostinger responde 5xx bajo ráfaga).
+// Con la lista vacía, cada ficha se genera la primera vez que alguien la pide y
+// a partir de ahí la sirve la caché de ISR, que se refresca cada 5 minutos.
+// El build queda liviano y deja de depender de que el CMS aguante la ráfaga.
 export async function generateStaticParams() {
-  try {
-    const products = await getProducts({ per_page: 100 });
-    return products.map((p) => ({ slug: p.slug }));
-  } catch {
-    return [];
-  }
+  return [];
 }
 
 // Strip HTML for meta descriptions.
