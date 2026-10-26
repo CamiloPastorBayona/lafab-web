@@ -181,7 +181,11 @@ export async function getProductBySlug(
   const list = await get<WCProduct[]>(
     `/products?slug=${encodeURIComponent(slug)}`
   );
-  return list[0] ?? null;
+  // WooCommerce le pone a algunas variaciones el mismo slug del padre y la
+  // Store API las devuelve primero. Si se toma list[0] a ciegas, la ficha se
+  // renderiza como producto simple (sin selector ni precio por variación).
+  // Nos quedamos siempre con el producto padre.
+  return list.find((p) => p.type !== "variation" && !p.parent) ?? null;
 }
 
 export async function getProductById(id: number): Promise<WCProduct> {
