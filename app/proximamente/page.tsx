@@ -6,7 +6,7 @@ import { UPLOADS as CMS } from "@/lib/cms";
 export const metadata: Metadata = {
   title: "Nueva tienda en línea",
   description:
-    "La nueva tienda en línea de LaFab abre el lunes 26 de octubre a las 8:00 a. m.",
+    "La nueva tienda en línea de LaFab abre el viernes 30 de octubre a las 8:00 a. m.",
   robots: { index: false, follow: false },
 };
 
@@ -64,7 +64,7 @@ export default function ProximamentePage() {
         </div>
 
         <p className="mt-8 text-sm tracking-wide text-cream/80">
-          Lunes 26 de octubre
+          Viernes 30 de octubre
           <span className="mx-2.5 text-gold">·</span>
           8:00 a. m.
         </p>
