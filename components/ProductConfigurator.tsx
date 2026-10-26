@@ -1,28 +1,51 @@
 "use client";
 
-// Selector para productos variables: el cliente elige cada opción (tela, puestos,
-// etc.), el precio se actualiza en vivo y se agrega al carrito la variación exacta.
+// Selector para productos variables: el cliente elige cada opción (material,
+// color, tamaño…), el precio se actualiza en vivo y se agrega al carrito la
+// variación exacta.
 //
 // Las opciones se derivan de las VARIACIONES (que siempre traen el slug correcto
 // de cada valor), no de los términos del atributo padre, que a veces llegan mal
 // agrupados por caché del backend. El nombre visible se toma del término si está
 // disponible; si no, se formatea el slug.
+//
+// Dos detalles que importan:
+//  1. Las opciones de cada atributo se filtran por lo ya elegido, así al pasar
+//     de Microfibra a Cuero solo quedan los colores que existen en cuero.
+//  2. El atributo "Color" se dibuja como círculos con la foto real de la tela o
+//     del cuero (el mismo lenguaje visual del landing de San Diego), no como
+//     pastillas de texto.
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/lib/cart";
-import { money,
+import {
+  money,
   tienePrecio,
-  PRECIO_PENDIENTE, type WCVariation, type WCPrices } from "@/lib/woocommerce";
+  PRECIO_PENDIENTE,
+  type WCVariation,
+  type WCPrices,
+} from "@/lib/woocommerce";
 import { SHIPPING_INLINE } from "@/lib/shipping";
 
 type Term = { name: string; slug: string };
 type Attr = { name: string; terms: Term[] };
-type Choice = { slug: string; name: string };
+type Choice = { slug: string; name: string; image?: string };
 
 const norm = (s: string) => s.trim().toLowerCase();
 const prettify = (slug: string) =>
   slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+const esColor = (name: string) => /color/i.test(name);
+
+/** ¿La variación cumple con esta selección parcial? */
+function coincide(v: WCVariation, sel: Record<string, string>, salvo?: string) {
+  return Object.entries(sel).every(([attr, val]) => {
+    if (!val || attr === salvo) return true;
+    return v.attributes.some(
+      (va) => norm(va.name) === norm(attr) && norm(va.value) === norm(val)
+    );
+  });
+}
 
 export default function ProductConfigurator({
   product,
@@ -41,46 +64,86 @@ export default function ProductConfigurator({
   const { add, openCart } = useCart();
   const router = useRouter();
 
-  // Opciones reales por atributo, en el orden del producto (Tela, Puestos, …).
-  const options = useMemo(() => {
-    return product.attributes
-      .map((a) => {
-        const slugs: string[] = [];
-        for (const v of variations) {
-          const va = v.attributes.find((x) => norm(x.name) === norm(a.name));
-          if (va && !slugs.includes(va.value)) slugs.push(va.value);
-        }
-        const nameFor = (slug: string) => {
-          const t = a.terms.find(
-            (t) => norm(t.slug) === norm(slug) || norm(t.name) === norm(slug)
-          );
-          return t ? t.name : prettify(slug);
-        };
-        const choices: Choice[] = slugs.map((s) => ({ slug: s, name: nameFor(s) }));
-        return { name: a.name, choices };
-      })
-      .filter((o) => o.choices.length > 0);
-  }, [product.attributes, variations]);
+  // Orden de los atributos tal como vienen del producto (Material, Color, Tamaño…).
+  const attrNames = useMemo(
+    () =>
+      product.attributes
+        .map((a) => a.name)
+        .filter((name) =>
+          variations.some((v) =>
+            v.attributes.some((va) => norm(va.name) === norm(name))
+          )
+        ),
+    [product.attributes, variations]
+  );
 
-  // Selección inicial: primera opción de cada atributo.
+  // Selección inicial: la primera variación con precio (o la primera que haya).
   const [selected, setSelected] = useState<Record<string, string>>(() => {
+    const base =
+      variations.find((v) => Number(v.prices?.price) > 0) ?? variations[0];
     const init: Record<string, string> = {};
-    for (const o of options) if (o.choices[0]) init[o.name] = o.choices[0].slug;
+    if (base) {
+      for (const name of attrNames) {
+        const va = base.attributes.find((x) => norm(x.name) === norm(name));
+        if (va) init[name] = va.value;
+      }
+    }
     return init;
   });
   const [busy, setBusy] = useState(false);
 
-  const match = useMemo(() => {
-    return variations.find((v) =>
-      options.every((o) => {
-        const sel = selected[o.name];
-        if (!sel) return false;
-        return v.attributes.some(
-          (va) => norm(va.name) === norm(o.name) && norm(va.value) === norm(sel)
+  // Opciones de cada atributo, filtradas por lo ya elegido en los anteriores.
+  const options = useMemo(() => {
+    return attrNames.map((name) => {
+      const previas: Record<string, string> = {};
+      for (const n of attrNames) {
+        if (n === name) break;
+        if (selected[n]) previas[n] = selected[n];
+      }
+      const term = product.attributes.find((a) => norm(a.name) === norm(name));
+      const vistos = new Map<string, Choice>();
+      for (const v of variations) {
+        if (!coincide(v, previas)) continue;
+        const va = v.attributes.find((x) => norm(x.name) === norm(name));
+        if (!va || vistos.has(va.value)) continue;
+        const t = term?.terms.find(
+          (t) => norm(t.slug) === norm(va.value) || norm(t.name) === norm(va.value)
         );
-      })
-    );
-  }, [variations, selected, options]);
+        vistos.set(va.value, {
+          slug: va.value,
+          name: t ? t.name : prettify(va.value),
+          image: v.image,
+        });
+      }
+      return { name, choices: [...vistos.values()] };
+    });
+  }, [attrNames, product.attributes, variations, selected]);
+
+  // Si al cambiar un atributo la selección de otro queda inválida, se corrige
+  // sola con la primera opción disponible (p. ej. Microfibra → Cuero).
+  useEffect(() => {
+    let cambio: Record<string, string> | null = null;
+    for (const o of options) {
+      if (o.choices.length && !o.choices.some((c) => c.slug === selected[o.name])) {
+        cambio = { ...(cambio ?? selected), [o.name]: o.choices[0].slug };
+      }
+    }
+    if (cambio) setSelected(cambio);
+  }, [options, selected]);
+
+  const match = useMemo(
+    () =>
+      variations.find((v) =>
+        options.every((o) => {
+          const sel = selected[o.name];
+          if (!sel) return false;
+          return v.attributes.some(
+            (va) => norm(va.name) === norm(o.name) && norm(va.value) === norm(sel)
+          );
+        })
+      ),
+    [variations, selected, options]
+  );
 
   const pick = (attr: string, slug: string) =>
     setSelected((prev) => ({ ...prev, [attr]: slug }));
@@ -98,7 +161,8 @@ export default function ProductConfigurator({
         id: match.id, // id de la variación → línea única por configuración
         name: `${product.name} · ${labels.join(" · ")}`,
         slug: product.slug,
-        image: match.image || product.image,
+        // En el carrito se muestra el mueble, no el retazo de tela.
+        image: product.image || match.image || "",
         price: priceNum,
       },
       1
@@ -159,26 +223,74 @@ export default function ProductConfigurator({
       )}
 
       {/* Selectores */}
-      <div className="mt-6 space-y-5">
-        {options.map((o) => (
-          <div key={o.name}>
-            <span className="mb-2 block text-xs font-medium uppercase tracking-[0.18em] text-ink/45">
-              {o.name}
-            </span>
-            <div className="flex flex-wrap gap-2">
-              {o.choices.map((c) => (
-                <button
-                  key={c.slug}
-                  type="button"
-                  onClick={() => pick(o.name, c.slug)}
-                  className={pill(selected[o.name] === c.slug)}
-                >
-                  {c.name}
-                </button>
-              ))}
+      <div className="mt-6 space-y-6">
+        {options.map((o) => {
+          const circulos = esColor(o.name) && o.choices.some((c) => c.image);
+          return (
+            <div key={o.name}>
+              <span className="mb-2 block text-xs font-medium uppercase tracking-[0.18em] text-ink/45">
+                {o.name}
+                {circulos && selected[o.name] && (
+                  <span className="ml-2 normal-case tracking-normal text-ink/70">
+                    {o.choices.find((c) => c.slug === selected[o.name])?.name}
+                  </span>
+                )}
+              </span>
+
+              {circulos ? (
+                <div className="flex flex-wrap gap-5">
+                  {o.choices.map((c) => {
+                    const activo = selected[o.name] === c.slug;
+                    return (
+                      <button
+                        key={c.slug}
+                        type="button"
+                        onClick={() => pick(o.name, c.slug)}
+                        title={c.name}
+                        aria-label={c.name}
+                        aria-pressed={activo}
+                        className="group flex w-[72px] flex-col items-center gap-2 focus:outline-none"
+                      >
+                        <span
+                          className={`block h-[58px] w-[58px] rounded-full bg-cover bg-center shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)] transition-all duration-200 group-hover:-translate-y-0.5 group-hover:shadow-[0_6px_14px_rgba(0,0,0,0.10)] ${
+                            activo
+                              ? "ring-2 ring-ink ring-offset-2 ring-offset-white"
+                              : "ring-1 ring-black/10"
+                          }`}
+                          style={
+                            c.image
+                              ? { backgroundImage: `url('${c.image}')` }
+                              : { backgroundColor: "#EDE8E0" }
+                          }
+                        />
+                        <span
+                          className={`text-center text-[12.5px] leading-tight ${
+                            activo ? "text-ink" : "text-ink/55"
+                          }`}
+                        >
+                          {c.name}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="flex flex-wrap gap-2">
+                  {o.choices.map((c) => (
+                    <button
+                      key={c.slug}
+                      type="button"
+                      onClick={() => pick(o.name, c.slug)}
+                      className={pill(selected[o.name] === c.slug)}
+                    >
+                      {c.name}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Acciones */}
