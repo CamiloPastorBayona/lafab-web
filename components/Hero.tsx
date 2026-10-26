@@ -93,9 +93,9 @@ const SLIDES: Slide[] = [
       [1536, "Banner-5_1@4x-100-1536x735.jpg"],
     ]),
     eyebrow: "Dormitorios",
-    title: <>Cama Kenia.</>,
+    title: <>Alcoba Kenia.</>,
     sub: "Donde la comodidad se une a la relajación.",
-    ctaLabel: "Ver camas",
+    ctaLabel: "Ver alcobas",
     href: "/camas",
   },
 ];

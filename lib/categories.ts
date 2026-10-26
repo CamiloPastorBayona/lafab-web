@@ -176,23 +176,28 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
   camas: {
     slug: "camas",
     catId: 95, // Dormitorio (incluye Camas)
-    eyebrow: "Camas",
-    h1: "Camas tapizadas a la medida en Medellín",
-    metaTitle: "Camas tapizadas a la medida en Medellín",
+    eyebrow: "Alcobas",
+    // En LaFab una alcoba es el conjunto completo: espaldar, base de cama y dos
+    // mesas de noche. No se dice "cama" para referirse al conjunto, aunque el
+    // término sí se conserva en el texto de SEO porque es lo que la gente busca.
+    h1: "Alcobas a la medida en Medellín",
+    metaTitle: "Alcobas y camas tapizadas a la medida en Medellín",
     metaDescription:
-      "Camas tapizadas a la medida en Medellín: matrimonial, queen y king, con estructura en madera y acabados de calidad. Fabricación propia y envío nacional.",
+      "Alcobas a la medida en Medellín: espaldar tapizado, base de cama y dos mesas de noche, en matrimonial, queen y king. Fabricación propia y envío nacional.",
     keywords: [
+      "alcobas a la medida Medellín",
       "camas tapizadas Medellín",
       "cama matrimonial a la medida",
       "cama king a la medida Medellín",
     ],
     image: `${U}/2025/05/VASSUE.jpg`,
     intro: [
-      "Fabricamos camas tapizadas a la medida en Medellín para convertir tu dormitorio en un verdadero refugio. Diseño propio, estructura en madera inmunizada y tapizados cómodos y resistentes.",
+      "Fabricamos alcobas a la medida en Medellín para convertir tu dormitorio en un verdadero refugio. Cada alcoba es un conjunto completo: espaldar tapizado, base de cama y dos mesas de noche, con diseño propio, estructura en madera inmunizada y tapizados cómodos y resistentes.",
       "Elige el tamaño (matrimonial, queen o king), la tela y el color. Todo se fabrica en nuestro taller de Itagüí, con envío incluido en Medellín y su área metropolitana y envío a otras ciudades del país.",
     ],
     faq: [
-      { q: "¿Qué tamaños de cama manejan?", a: "Fabricamos camas matrimoniales, queen y king, y adaptamos medidas especiales si lo necesitas." },
+      { q: "¿Qué incluye la alcoba?", a: "El conjunto completo: el espaldar tapizado, la base de cama y dos mesas de noche. No es solo la cama." },
+      { q: "¿Qué tamaños manejan?", a: "Fabricamos alcobas matrimoniales, queen y king, y adaptamos medidas especiales si lo necesitas." },
       { q: "¿La estructura es resistente?", a: "Sí: estructura en madera de pino inmunizado y ensambles reforzados para larga durabilidad." },
       { q: "¿Puedo elegir la tela y el color?", a: "Claro. Eliges el tapizado y el color para que combine con tu dormitorio." },
       { q: "¿Hacen envíos fuera de Medellín?", a: "Sí. En Medellín y su área metropolitana el envío está incluido en el precio; a las demás ciudades capitales tiene un costo adicional de $200.000." },

@@ -46,7 +46,7 @@ const NAV: NavItem[] = [
       { label: "Sofás en L", href: "/sofas-en-l" },
       { label: "Poltronas", href: "/poltronas" },
       { label: "Comedores", href: "/comedores" },
-      { label: "Camas", href: "/camas" },
+      { label: "Alcobas", href: "/camas" },
     ],
   },
   { label: "Proyectos", href: "/proyectos" },

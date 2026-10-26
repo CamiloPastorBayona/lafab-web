@@ -149,7 +149,7 @@ export const SPACES = [
     name: "Dormitorio",
     slug: "dormitorio",
     catId: 95,
-    description: "Camas tapizadas y muebles que hacen de tu dormitorio un refugio.",
+    description: "Alcobas completas, con espaldar, base y dos mesas de noche.",
     href: "/camas",
     image: `${UPLOADS}/2025/05/VASSUE-1024x768.jpg`,
   },
