@@ -2,34 +2,49 @@
 // Diego y cambia solo lo propio del modelo. Los textos salen del Excel de
 // producto del 19/10/2026, no están inventados.
 //
-// Fotos propias del Luton (27/10/2026): frontal, diagonal, lateral, posterior,
-// detalle del cuero y ambientadas. Sustituyen al arte del post de Instagram que
-// se usaba en todas las secciones mientras no hubo fotos reales.
+// Fotos propias del Luton (27/10/2026). Cada una se produjo con la forma que
+// pide su posición, igual que en la landing del San Diego y que los espacios
+// del Portal (lafab-portal.vercel.app → Producto → Fotos y vistas):
 //
-// OJO — las telas del configurador siguen siendo las del San Diego (Microfibra
-// Mon y Chenil Milan), porque los nombres y texturas están fijos en
-// SanDiegoConfigurator. El Luton se vende en Microfibra Pompeya, Lino Zajari y
-// Cuero: para corregirlo hay que volver ese componente configurable por landing.
+//   Portada            16:9  (1672×941)   · 1 foto
+//   Vistas             4:5   (1122×1402)  · 4 fotos, producto solo, mismo fondo
+//   Ficha técnica      4:5   (1122×1402)  · 1 foto
+//   Ambientes          4:3   (1448×1086)  · 4 fotos, el sofá en uso
+//   Diseño y confort   3:2   (1536×1024)  · 2 fotos de detalle
+//
+// Pendiente: falta la tercera foto 3:2 para "Calidad"; mientras tanto esa
+// posición usa una 4:3, que entra algo recortada.
 import { SANDIEGO_LANDING, type Landing } from "@/lib/sandiego";
 import { STORE_URL } from "@/lib/woocommerce";
 
 const U = `${STORE_URL}/wp-content/uploads/2026/10`;
 
-const FOTO = {
-  hero: `${U}/sofa-luton-moderna-con-sofa-de-cuero-y-vistas-montanosas-lafab-medellin.webp`,
-  frontal: `${U}/sofa-luton-de-cuero-bajo-el-sol-lafab-medellin.webp`,
-  diagonal: `${U}/sofa-luton-de-cuero-bajo-luz-dorada-2-lafab-medellin.webp`,
-  lateral: `${U}/sofa-luton-de-cuero-bajo-luz-dorada-lafab-medellin.webp`,
-  posterior: `${U}/sofa-luton-de-cuero-caramelo-al-sol-lafab-medellin.webp`,
-  detalle: `${U}/sofa-luton-de-cuero-marron-en-primer-plano-lafab-medellin.webp`,
-  patas: `${U}/sofa-luton-de-cuero-junto-a-ventanales-luminosos-lafab-medellin.webp`,
-  salaAmplia: `${U}/sofa-luton-minimalista-con-sofa-de-cuero-caramelo-lafab-medellin.webp`,
-  ventanal: `${U}/sofa-luton-moderno-banado-por-el-sol-lafab-medellin.webp`,
-  luzSuave: `${U}/sofa-luton-acogedor-con-sofa-de-cuero-caramelo-lafab-medellin.webp`,
-  salaCompleta: `${U}/sofa-luton-calido-con-sofa-de-cuero-caramelo-lafab-medellin.webp`,
-  limpia: `${U}/sofa-luton-de-cuero-caramelo-en-sala-luminosa-lafab-medellin.webp`,
-  specs: `${U}/sofa-luton-de-cuero-caramelo-en-interior-clasico-moderno-lafab-medellin.webp`,
-  config: `${U}/sofa-luton-de-cuero-en-sala-luminosa-lafab-medellin.webp`,
+// 16:9 — portada a pantalla completa
+const PORTADA = `${U}/sofa-luton-minimalista-con-sofa-de-cuero-caramelo-lafab-medellin.webp`;
+
+// 4:5 — el producto solo, mismo fondo y misma luz
+const VISTA = {
+  frontal: `${U}/sofa-luton-de-cuero-caramelo-en-interior-clasico-moderno-lafab-medellin.webp`,
+  diagonal: `${U}/sofa-luton-de-cuero-caramelo-en-sala-luminosa-lafab-medellin.webp`,
+  lateral: `${U}/sofa-luton-de-cuero-bajo-el-sol-lafab-medellin.webp`,
+  posterior: `${U}/sofa-luton-de-cuero-bajo-luz-dorada-lafab-medellin.webp`,
+  ficha: `${U}/sofa-luton-calido-con-sofa-de-cuero-caramelo-lafab-medellin.webp`,
+};
+
+// 4:3 — el sofá en uso en un espacio real
+const AMBIENTE = {
+  peliculas: `${U}/sofa-luton-moderno-banado-por-el-sol-lafab-medellin.webp`,
+  familia: `${U}/sofa-luton-de-cuero-en-sala-luminosa-lafab-medellin.webp`,
+  descansar: `${U}/sofa-luton-de-cuero-junto-a-ventanales-luminosos-lafab-medellin.webp`,
+  visitas: `${U}/sofa-luton-acogedor-con-sofa-de-cuero-caramelo-lafab-medellin.webp`,
+  config: `${U}/sofa-luton-de-cuero-bajo-luz-dorada-2-lafab-medellin.webp`,
+};
+
+// 3:2 — detalle
+const DETALLE = {
+  diseno: `${U}/sofa-luton-de-cuero-bajo-luz-calida-lafab-medellin.webp`,
+  confort: `${U}/sofa-luton-de-cuero-marron-en-primer-plano-lafab-medellin.webp`,
+  calidad: `${U}/sofa-luton-de-cuero-caramelo-al-sol-lafab-medellin.webp`, // 4:3 provisional
 };
 
 export const LUTON: Landing = {
@@ -41,37 +56,37 @@ export const LUTON: Landing = {
   tagline: "Líneas contemporáneas y volúmenes generosos",
   price: 4000000,
   regularPrice: 4300000,
-  hero: FOTO.hero,
-  configImage: FOTO.config,
+  hero: PORTADA,
+  configImage: AMBIENTE.config,
 
   medidas: ["180 cm", "200 cm"],
 
   configColors: {
-    mon: SANDIEGO_LANDING.configColors.mon.map((c) => ({ ...c, img: FOTO.config })),
-    milan: SANDIEGO_LANDING.configColors.milan.map((c) => ({ ...c, img: FOTO.config })),
+    mon: SANDIEGO_LANDING.configColors.mon.map((c) => ({ ...c, img: AMBIENTE.config })),
+    milan: SANDIEGO_LANDING.configColors.milan.map((c) => ({ ...c, img: AMBIENTE.config })),
   },
 
   lifestyle: [
-    { img: FOTO.salaAmplia, title: "Compartir en familia", text: "El punto de encuentro de todos." },
-    { img: FOTO.ventanal, title: "Ver películas", text: "El plan perfecto para quedarse en casa." },
-    { img: FOTO.luzSuave, title: "Descansar", text: "Tu rincón para recargar energías." },
-    { img: FOTO.salaCompleta, title: "Recibir visitas", text: "Siempre listo para una buena charla." },
+    { img: AMBIENTE.peliculas, title: "Ver películas", text: "El plan perfecto para quedarse en casa." },
+    { img: AMBIENTE.familia, title: "Compartir en familia", text: "El punto de encuentro de todos." },
+    { img: AMBIENTE.descansar, title: "Descansar", text: "Tu rincón para recargar energías." },
+    { img: AMBIENTE.visitas, title: "Recibir visitas", text: "Siempre listo para una buena charla." },
   ],
 
   vistas: [
-    { img: FOTO.frontal, label: "Frontal" },
-    { img: FOTO.diagonal, label: "Diagonal" },
-    { img: FOTO.lateral, label: "Lateral" },
-    { img: FOTO.posterior, label: "Posterior" },
+    { img: VISTA.frontal, label: "Frontal" },
+    { img: VISTA.diagonal, label: "Diagonal" },
+    { img: VISTA.lateral, label: "Lateral" },
+    { img: VISTA.posterior, label: "Posterior" },
   ],
 
   bondades: [
-    { img: FOTO.limpia, n: "01", title: "Diseño", sub: "contemporáneo y sencillo." },
-    { img: FOTO.patas, n: "02", title: "Madera", sub: "de roble en la base." },
-    { img: FOTO.detalle, n: "03", title: "Confort", sub: "en cojines amplios." },
+    { img: DETALLE.diseno, n: "01", title: "Diseño", sub: "contemporáneo y sencillo." },
+    { img: DETALLE.confort, n: "02", title: "Confort", sub: "en cojines amplios." },
+    { img: DETALLE.calidad, n: "03", title: "Calidad", sub: "en cuero y madera de roble." },
   ],
 
-  specsImage: FOTO.specs,
+  specsImage: VISTA.ficha,
 
   specsTop: [
     { key: "Largo", val: "Disponible en 180 cm · 200 cm" },
