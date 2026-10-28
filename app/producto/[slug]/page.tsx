@@ -219,6 +219,14 @@ export default async function ProductPage({
             {product.name}
           </h1>
 
+          {/* Referencia: le sirve al cliente para pedirlo por WhatsApp y a
+              nosotros para seguirle el rastro en producción. */}
+          {product.sku && (
+            <p className="mt-2 text-xs uppercase tracking-[0.18em] text-ink/40">
+              Ref. {product.sku}
+            </p>
+          )}
+
           <ReviewsBadge className="mt-3" />
 
           {!showConfigurator && (

@@ -49,6 +49,8 @@ export interface WCProduct {
   id: number;
   name: string;
   slug: string;
+  /** Referencia interna (LF-SOF-LATINA). La Store API ya la devuelve. */
+  sku?: string;
   parent: number;
   type: string;
   permalink: string;
