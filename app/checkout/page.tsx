@@ -14,6 +14,8 @@ import {
 import Ico from "@/components/LandingIcons";
 import { trackBeginCheckout } from "@/lib/analytics";
 import { SHIPPING_NOTE, SHIPPING_NATIONAL_COST, cop as copShip } from "@/lib/shipping";
+import { TOPE_BOLD, superaTopeBold, mensajeLimpio } from "@/lib/pagos";
+import { WHATSAPP } from "@/lib/content";
 
 export default function CheckoutPage() {
   const { items, subtotal, count, clear } = useCart();
@@ -51,6 +53,10 @@ export default function CheckoutPage() {
     ) =>
       setForm((f) => ({ ...f, [k]: e.target.value }));
 
+  // Bold no acepta transacciones de más de diez millones. Por encima del tope
+  // el pedido se cierra por transferencia, que no tiene límite.
+  const porTransferencia = superaTopeBold(subtotal);
+
   const canPay =
     items.length > 0 &&
     form.nombre &&
@@ -84,12 +90,12 @@ export default function CheckoutPage() {
       // 1) Sincroniza el carrito local con WooCommerce.
       const sync = await syncCart(items.map((i) => ({ id: i.id, qty: i.qty })));
       if (sync && !sync.ok)
-        throw new Error(sync.error || "No pudimos preparar tu carrito.");
+        throw new Error(mensajeLimpio(sync.error || "", "No pudimos preparar tu carrito."));
 
       // 2) Fija los datos del cliente → devuelve las opciones de envío.
       const cust = await updateCustomer(billing, shipping);
       if (!cust.ok || !cust.data)
-        throw new Error(cust.error || "Revisa tus datos de envío.");
+        throw new Error(mensajeLimpio(cust.error || "", "Revisa tus datos de envío."));
 
       // 3) Selecciona la primera opción de envío disponible.
       const pkg = cust.data.shipping_rates?.[0];
@@ -97,10 +103,16 @@ export default function CheckoutPage() {
         await selectShipping(pkg.package_id, pkg.shipping_rates[0].rate_id);
       }
 
-      // 4) Crea el pedido y paga con Bold.
-      const order = await placeOrder(billing, shipping, "bold_co", form.notas);
+      // 4) Crea el pedido. Bold si cabe en su tope; si no, transferencia.
+      const metodo = porTransferencia ? "bacs" : "bold_co";
+      const order = await placeOrder(billing, shipping, metodo, form.notas);
       if (!order.ok || !order.data)
-        throw new Error(order.error || "No pudimos crear tu pedido. Intenta de nuevo.");
+        throw new Error(
+          mensajeLimpio(
+            order.error || "",
+            "No pudimos crear tu pedido. Escríbenos por WhatsApp y lo cerramos contigo."
+          )
+        );
 
       // El pedido ya existe en WooCommerce; vaciamos el carrito local.
       clear();
@@ -109,7 +121,9 @@ export default function CheckoutPage() {
         window.location.href = redirect; // → página de pago de Bold
         return;
       }
-      window.location.href = `/gracias?pedido=${order.data.order_id}`;
+      window.location.href = `/gracias?pedido=${order.data.order_id}${
+        porTransferencia ? "&pago=transferencia" : ""
+      }`;
     } catch (e) {
       setError(
         e instanceof Error ? e.message : "Ocurrió un error. Intenta de nuevo."
@@ -262,13 +276,38 @@ export default function CheckoutPage() {
                 </p>
               )}
 
+              {porTransferencia && (
+                <div className="mt-4 rounded-xl border border-gold/40 bg-gold/10 px-4 py-3 text-sm text-ink/75">
+                  <p className="font-medium text-ink">
+                    Este pedido se paga por transferencia
+                  </p>
+                  <p className="mt-1">
+                    Bold, nuestra pasarela, solo procesa pagos de hasta{" "}
+                    {formatCOP(TOPE_BOLD)}. Confirmas el pedido aquí y te
+                    enviamos los datos de la cuenta para hacer la transferencia.
+                  </p>
+                  <a
+                    href={WHATSAPP}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2 inline-block font-medium text-gold-dark underline"
+                  >
+                    ¿Prefieres que te acompañemos por WhatsApp?
+                  </a>
+                </div>
+              )}
+
               <button
                 onClick={handlePay}
                 disabled={!canPay || loading}
                 className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-ink px-6 py-4 text-sm font-medium uppercase tracking-[0.12em] text-white transition-transform hover:scale-[1.02] disabled:cursor-not-allowed disabled:bg-ink/40"
               >
                 <Ico name="lock" className="h-4 w-4" />
-                {loading ? "Procesando…" : "Pagar con Bold"}
+                {loading
+                  ? "Procesando…"
+                  : porTransferencia
+                    ? "Confirmar pedido"
+                    : "Pagar con Bold"}
               </button>
               {!canPay && (
                 <p className="mt-2 text-center text-xs text-ink/40">

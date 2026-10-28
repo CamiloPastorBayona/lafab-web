@@ -3,10 +3,19 @@
 // Botón flotante de WhatsApp, visible en todo el sitio. Dispara evento de
 // contacto (GA4 generate_lead + Pixel Contact) al hacer clic.
 
+import { usePathname } from "next/navigation";
 import { WHATSAPP } from "@/lib/content";
 import { trackContact } from "@/lib/analytics";
 
+// Donde el cliente está llenando sus datos, el botón estorba: en móvil se monta
+// encima del campo de la ciudad. En esas dos páginas no aparece; el enlace de
+// WhatsApp sigue estando dentro del propio checkout cuando hace falta.
+const SIN_BOTON = ["/checkout", "/carrito"];
+
 export default function WhatsAppFab() {
+  const ruta = usePathname();
+  if (SIN_BOTON.includes(ruta)) return null;
+
   return (
     <a
       href={WHATSAPP}
