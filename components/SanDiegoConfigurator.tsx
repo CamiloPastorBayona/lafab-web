@@ -336,15 +336,17 @@ export default function SanDiegoConfigurator() {
                 alt={`${L.name} ${fabric.name} ${color.name}`}
               />
               <span className="lfb-cname">
-                <span
-                  className="lfb-cname-dot"
-                  style={
-                    color.img
-                      ? { backgroundImage: `url('${color.img}')` }
-                      : { backgroundColor: color.hex }
-                  }
-                />
-                Tu elección: {fabric.name} · {color.name}
+                {cat && (
+                  <span
+                    className="lfb-cname-dot"
+                    style={
+                      color.img
+                        ? { backgroundImage: `url('${color.img}')` }
+                        : { backgroundColor: color.hex }
+                    }
+                  />
+                )}
+                {cat ? `Tu elección: ${fabric.name} · ${color.name}` : color.name}
               </span>
             </div>
 
@@ -416,9 +418,9 @@ export default function SanDiegoConfigurator() {
                   ))}
                 </div>
                 <p className="lfb-disclaimer">
-                  Las fotos son de referencia; el acabado que elijas se ve en el
-                  círculo. El tono puede variar según el dispositivo y el lote
-                  de la tela.
+                  {cat
+                    ? "Las fotos son de referencia; el acabado que elijas se ve en el círculo. El tono puede variar según el dispositivo y el lote de la tela."
+                    : "El tono puede variar según el dispositivo y el lote de la tela."}
                 </p>
               </div>
 
