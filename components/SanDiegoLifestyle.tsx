@@ -7,6 +7,7 @@
 
 import { useEffect, useRef } from "react";
 import { useLanding } from "@/components/LandingContext";
+import { srcSetDe } from "@/lib/imagenes";
 
 const CSS = `
 #lf-benefits,#lf-benefits *{box-sizing:border-box;margin:0;padding:0;}
@@ -94,8 +95,11 @@ export default function SanDiegoLifestyle() {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={l.img}
+                  srcSet={srcSetDe(l.img)}
+                  sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 600px"
                   alt={`${l.title} en el ${L.name}`}
                   loading="lazy"
+                  decoding="async"
                 />
                 <div className="lfb2-cap">
                   <h3>{l.title}</h3>

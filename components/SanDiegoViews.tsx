@@ -6,6 +6,8 @@
 
 import { useEffect, useRef } from "react";
 import { useLanding } from "@/components/LandingContext";
+import { useEnPantalla } from "@/components/useEnPantalla";
+import { srcSetDe } from "@/lib/imagenes";
 
 const CSS = `
 #lf-views,#lf-views *{box-sizing:border-box;margin:0;padding:0;}
@@ -34,17 +36,18 @@ const CSS = `
 }
 `;
 
-const PER_SET = 4;
 const SPEED = 0.5;
 
 export default function SanDiegoViews() {
   const rootRef = useRef<HTMLElement | null>(null);
   const L = useLanding();
   const views = L.vistas;
+  const aLaVista = useEnPantalla(rootRef);
+  const perSet = views.length;
 
   useEffect(() => {
     const root = rootRef.current;
-    if (!root) return;
+    if (!root || !aLaVista) return;
     const vp = root.querySelector(".lfv-marquee") as HTMLElement | null;
     const track = root.querySelector(".lfv-track") as HTMLElement | null;
     if (!vp || !track) return;
@@ -61,10 +64,14 @@ export default function SanDiegoViews() {
     let lastX = 0;
     let raf = 0;
 
+    // El periodo es el ancho de un set completo. Antes se tomaba el offsetLeft
+    // de la quinta tarjeta a secas: con un set de distinto tamaño, o con la
+    // cinta desplazada, la medida salía mal y el bucle daba un salto.
     const measure = () => {
-      if (cards.length > PER_SET) {
-        const w = (cards[PER_SET] as HTMLElement).offsetLeft;
-        if (w > 0) period = w;
+      if (cards.length > perSet) {
+        const a = (cards[0] as HTMLElement).offsetLeft;
+        const b = (cards[perSet] as HTMLElement).offsetLeft;
+        if (b - a > 0) period = b - a;
       }
     };
     const wrap = () => {
@@ -118,12 +125,20 @@ export default function SanDiegoViews() {
       measure();
     };
     window.addEventListener("resize", onResize);
+    // Las fotos cambian el alto de la tarjeta al llegar; se vuelve a medir.
+    const alCargar = () => {
+      period = 0;
+      measure();
+    };
+    const imgs = Array.from(root.querySelectorAll("img"));
+    for (const img of imgs) img.addEventListener("load", alCargar);
     measure();
     raf = requestAnimationFrame(frame);
 
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", onResize);
+      for (const img of imgs) img.removeEventListener("load", alCargar);
       if (isTouch) {
         vp.removeEventListener("pointerdown", onDown);
         vp.removeEventListener("pointermove", onMove);
@@ -131,7 +146,7 @@ export default function SanDiegoViews() {
         vp.removeEventListener("pointercancel", endDrag);
       }
     };
-  }, []);
+  }, [aLaVista, perSet]);
 
   const cards = [...views, ...views];
 
@@ -157,8 +172,10 @@ export default function SanDiegoViews() {
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={v.img}
+                      srcSet={srcSetDe(v.img)}
+                      sizes="(max-width: 600px) 72vw, 360px"
                       alt={dup ? "" : `Vista ${v.label} del ${L.name}`}
-                      loading="lazy"
+                      loading={idx === 0 ? "eager" : "lazy"}
                       decoding="async"
                     />
                   </div>

@@ -27,6 +27,7 @@ import Reviews from "@/components/Reviews";
 import { WHATSAPP } from "@/lib/content";
 import { catLabel } from "@/lib/categories";
 import ShippingPrice from "@/components/ShippingPrice";
+import ShareButtons from "@/components/ShareButtons";
 import { SHIPPING_INLINE } from "@/lib/shipping";
 import { landingFor } from "@/lib/landings";
 import ProductTabs from "@/components/ProductTabs";
@@ -325,6 +326,14 @@ export default async function ProductPage({
             <Ico name="headset" className="h-4 w-4 text-gold-dark" /> ¿Dudas? Habla
             con un asesor
           </a>
+
+          {/* Compartir: muchas compras empiezan porque alguien le manda el
+              enlace a su pareja por WhatsApp. */}
+          <ShareButtons
+            className="mt-7"
+            url={`https://lafab.com.co/producto/${product.slug}`}
+            title={product.name}
+          />
 
           {/* Envío: precio base + costo adicional (criterio San Diego) */}
           <ShippingPrice className="mt-6" />

@@ -8,6 +8,7 @@
 import { useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 import { swatchImg } from "@/lib/sandiego";
+import { versionDe } from "@/lib/imagenes";
 
 const CSS = `
 #lf-fabrics,#lf-fabrics *{box-sizing:border-box;margin:0;padding:0;}
@@ -313,7 +314,10 @@ export default function SanDiegoFabrics() {
                       <span
                         className="lff-sw"
                         style={{
-                          backgroundImage: `url('${swatchImg(f.key, c)}')`,
+                          backgroundImage: `url('${versionDe(
+                            swatchImg(f.key, c),
+                            80
+                          )}')`,
                         }}
                       />
                       <span className="lff-nm">{c}</span>

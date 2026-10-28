@@ -6,6 +6,8 @@
 
 import { useEffect, useRef, useState, type TouchEvent } from "react";
 import { useLanding } from "@/components/LandingContext";
+import { useEnPantalla } from "@/components/useEnPantalla";
+import { srcSetDe } from "@/lib/imagenes";
 
 const CSS = `
 #lf-story,#lf-story *{box-sizing:border-box;margin:0;padding:0;}
@@ -44,6 +46,8 @@ export default function SanDiegoBondades() {
   const slides = L.bondades;
   const N = slides.length;
   const [i, setI] = useState(0);
+  const seccion = useRef<HTMLElement | null>(null);
+  const aLaVista = useEnPantalla(seccion);
   const lastRef = useRef(0);
   const x0 = useRef<number | null>(null);
   const y0 = useRef<number | null>(null);
@@ -51,7 +55,10 @@ export default function SanDiegoBondades() {
 
   useEffect(() => {
     const reduce = window.matchMedia?.("(prefers-reduced-motion:reduce)").matches;
-    if (reduce) return;
+    // Hasta que la sección no se asome, el carrusel no avanza: antes giraba
+    // desde que cargaba la página y el visitante llegaba a la lámina 3.
+    if (reduce || !aLaVista) return;
+    lastRef.current = 0;
     let raf = 0;
     const frame = (t: number) => {
       if (!lastRef.current) lastRef.current = t;
@@ -70,7 +77,7 @@ export default function SanDiegoBondades() {
       cancelAnimationFrame(raf);
       document.removeEventListener("visibilitychange", onVis);
     };
-  }, [N]);
+  }, [N, aLaVista]);
 
   const go = (idx: number) => {
     setI(((idx % N) + N) % N);
@@ -97,7 +104,7 @@ export default function SanDiegoBondades() {
   };
 
   return (
-    <section id="lf-story">
+    <section id="lf-story" ref={seccion}>
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
       <div className="lfst-head">
         <span className="lfst-eyebrow">Diseñado para vivirse a diario</span>
@@ -117,7 +124,14 @@ export default function SanDiegoBondades() {
             <article className="lfst-slide" key={s.n}>
               <div className="lfst-media">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={s.img} alt={`${s.title} del ${L.name}`} loading="lazy" />
+                <img
+                  src={s.img}
+                  srcSet={srcSetDe(s.img)}
+                  sizes="(max-width: 860px) 100vw, 600px"
+                  alt={`${s.title} del ${L.name}`}
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
               <div className="lfst-text">
                 <span className="lfst-num">{s.n}</span>

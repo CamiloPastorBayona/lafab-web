@@ -12,6 +12,7 @@ import { useLandingCatalog } from "@/components/LandingCatalogContext";
 import { useCart } from "@/lib/cart";
 import { SHIPPING_ZONES, cop } from "@/lib/shipping";
 import { UPLOADS } from "@/lib/cms";
+import { versionDe } from "@/lib/imagenes";
 
 // Descripción corta de cada material, para el botón del configurador.
 const TAGS: Record<string, string> = {
@@ -330,9 +331,9 @@ export default function SanDiegoConfigurator() {
             <div className="lfb-stage">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                key={color.foto}
+                key={versionDe(color.foto, 620)}
                 className="lfb-photo lf-fade"
-                src={color.foto}
+                src={versionDe(color.foto, 620)}
                 alt={`${L.name} ${fabric.name} ${color.name}`}
               />
               <span className="lfb-cname">
@@ -341,7 +342,7 @@ export default function SanDiegoConfigurator() {
                     className="lfb-cname-dot"
                     style={
                       color.img
-                        ? { backgroundImage: `url('${color.img}')` }
+                        ? { backgroundImage: `url('${versionDe(color.img, 26)}')` }
                         : { backgroundColor: color.hex }
                     }
                   />
@@ -409,7 +410,7 @@ export default function SanDiegoConfigurator() {
                         style={
                           {
                             "--c": c.hex,
-                            backgroundImage: `url('${c.img}')`,
+                            backgroundImage: `url('${versionDe(c.img, 60)}')`,
                           } as CSSProperties
                         }
                       />
