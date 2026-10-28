@@ -3,6 +3,10 @@
 // esta página. Referencia: lib/sandiego.ts (San Diego) y lib/landings/*.
 import { type Landing } from "@/lib/sandiego";
 import { LandingProvider } from "@/components/LandingContext";
+import {
+  LandingCatalogProvider,
+  type LandingCatalog,
+} from "@/components/LandingCatalogContext";
 import WpImage from "@/components/WpImage";
 import SanDiegoConfigurator from "@/components/SanDiegoConfigurator";
 import Reveal from "@/components/Reveal";
@@ -24,9 +28,17 @@ const eyebrow =
   "text-xs md:text-sm font-medium uppercase tracking-[0.28em] text-gold";
 const heading = "font-light text-3xl md:text-5xl text-ink";
 
-export default function LandingPage({ data }: { data: Landing }) {
+export default function LandingPage({
+  data,
+  catalog = null,
+}: {
+  data: Landing;
+  /** Variaciones reales del CMS para el configurador. */
+  catalog?: LandingCatalog | null;
+}) {
   return (
     <LandingProvider value={data}>
+      <LandingCatalogProvider value={catalog}>
       <div className="font-morality">
       <LandingHeader productName={data.name} />
       <TrackView id={data.productId} name={data.name} price={data.price} />
@@ -165,6 +177,7 @@ export default function LandingPage({ data }: { data: Landing }) {
       {/* Personalización CTA */}
       <SanDiegoCustom />
       </div>
+      </LandingCatalogProvider>
     </LandingProvider>
   );
 }

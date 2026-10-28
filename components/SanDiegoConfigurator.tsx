@@ -5,12 +5,25 @@
 // navega a /checkout (no usa el AJAX/checkout de WordPress). Acoplado a la marca:
 // título en morality, base Poppins del sitio, acentos gold/cream, sale #C0392B.
 
-import { useState, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type CSSProperties, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { useLanding } from "@/components/LandingContext";
+import { useLandingCatalog } from "@/components/LandingCatalogContext";
 import { useCart } from "@/lib/cart";
 import { SHIPPING_ZONES, cop } from "@/lib/shipping";
 import { UPLOADS } from "@/lib/cms";
+
+// Descripción corta de cada material, para el botón del configurador.
+const TAGS: Record<string, string> = {
+  microfibra: "Pet Friendly · Antifluido",
+  lino: "Textura natural · Fresca",
+  cuero: "Cuero · Durabilidad",
+  chenille: "Cálida · Antifluido",
+};
+
+/** Valor de un atributo de la variación, buscando el nombre sin importar mayúsculas. */
+const valorDe = (v: { attributes: { name: string; value: string }[] }, attr: string) =>
+  v.attributes.find((a) => a.name.trim().toLowerCase() === attr)?.value;
 
 const TEX = `${UPLOADS}/2026/06/`; // texturas (swatches)
 const FOTO = `${UPLOADS}/2026/07/`; // fotos por tela+color
@@ -65,8 +78,10 @@ const CSS = `
 #lf-buy .lfb-stage{position:relative;border-radius:22px;overflow:hidden;background:#EFECE4;
   min-height:clamp(320px,40vw,520px);box-shadow:0 18px 40px rgba(0,0,0,.08);}
 #lf-buy .lfb-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
-#lf-buy .lfb-cname{position:absolute;left:18px;bottom:16px;z-index:2;font-size:12px;letter-spacing:.04em;color:#3a3631;
+#lf-buy .lfb-cname{position:absolute;left:18px;bottom:16px;z-index:2;display:inline-flex;align-items:center;gap:9px;font-size:12px;letter-spacing:.04em;color:#3a3631;
   background:rgba(255,255,255,.85);backdrop-filter:blur(6px);padding:7px 14px;border-radius:999px;}
+#lf-buy .lfb-cname-dot{display:block;width:22px;height:22px;border-radius:999px;background-size:cover;background-position:center;
+  box-shadow:0 0 0 1px rgba(0,0,0,.12);flex:0 0 auto;}
 #lf-buy .lfb-panel{display:flex;flex-direction:column;}
 #lf-buy .lfb-eyebrow{font-size:clamp(14px,1.6vw,18px);letter-spacing:3px;text-transform:uppercase;color:#7A6A45;font-weight:500;line-height:1.3;}
 #lf-buy .lfb-name{font-weight:300;font-size:clamp(26px,3.2vw,40px);letter-spacing:-.01em;margin-top:10px;}
@@ -157,34 +172,124 @@ const CSS = `
 
 export default function SanDiegoConfigurator() {
   const L = useLanding();
+  const cat = useLandingCatalog();
   const { add, remove } = useCart();
   const router = useRouter();
 
-  // Precio y medidas salen del modelo que se esté mostrando.
-  const PRICE = L.price;
-  const REAL = L.regularPrice;
-  const SIZES = L.medidas;
+  // El catálogo manda: materiales, colores, medidas y precios salen de las
+  // variaciones reales del CMS. Antes estaban escritos a mano y la landing del
+  // Luton ofrecía las telas del San Diego con un precio que no era el suyo.
+  // Si por algún motivo no llegan las variaciones, se usa el listado antiguo
+  // para que la sección no desaparezca.
+  const FABRICS = useMemo<Fabric[]>(() => {
+    // Foto del sofá para un color concreto de un material concreto. Solo se usa
+    // una foto propia si está declarada para ESE material: si no, se muestra la
+    // foto de estudio del modelo. Nunca el retazo de tela, que es lo que trae
+    // la variación como imagen y confundía al visitante.
+    const fotoDe = (key: string, colorName: string, fallback?: string) =>
+      L.configColors?.[key]?.find((c) => c.name === colorName)?.img ||
+      L.configImage ||
+      fallback ||
+      cat?.productImage ||
+      L.hero;
+    // El círculo del color sí muestra el retazo: el del CMS si no hay uno propio.
+    const swatchDe = (key: string, colorName: string, fallback?: string) =>
+      L.configColors?.[key]?.find((c) => c.name === colorName)?.swatch ||
+      fallback ||
+      "";
 
-  // Las telas y sus colores son los mismos para todos los sofás; lo que cambia
-  // es la foto. Si el modelo no tiene foto propia de ese color, se usa la suya
-  // de estudio en vez de mostrar otro sofá.
-  const fotoDe = (fabricKey: string, colorName: string, fallback: string) =>
-    L.configColors?.[fabricKey]?.find((c) => c.name === colorName)?.img ||
-    L.configImage ||
-    fallback;
-  const FABRICS = BASE_FABRICS.map((f) => ({
-    ...f,
-    colors: f.colors.map((c) => ({ ...c, foto: fotoDe(f.key, c.name, c.foto) })),
-  }));
+    if (!cat || !cat.variations.length) {
+      return BASE_FABRICS.map((f) => ({
+        ...f,
+        colors: f.colors.map((c) => ({
+          ...c,
+          foto: fotoDe(f.key, c.name, c.foto),
+        })),
+      }));
+    }
 
-  const [size, setSize] = useState(L.medidas[0] ?? "180 cm");
+    const orden: string[] = [];
+    const porMaterial = new Map<string, Map<string, string | undefined>>();
+    for (const v of cat.variations) {
+      const mat = valorDe(v, "material");
+      const col = valorDe(v, "color");
+      if (!mat || !col) continue;
+      if (!porMaterial.has(mat)) {
+        porMaterial.set(mat, new Map());
+        orden.push(mat);
+      }
+      const colores = porMaterial.get(mat)!;
+      if (!colores.has(col)) colores.set(col, v.image);
+    }
+    if (!porMaterial.size) {
+      return BASE_FABRICS.map((f) => ({
+        ...f,
+        colors: f.colors.map((c) => ({
+          ...c,
+          foto: fotoDe(f.key, c.name, c.foto),
+        })),
+      }));
+    }
+    return orden.map((mat) => {
+      const key = mat.toLowerCase();
+      return {
+        key,
+        name: mat,
+        tag: TAGS[key] ?? "Tapizado LaFab",
+        colors: [...porMaterial.get(mat)!.entries()].map(([nombre, swatch]) => ({
+          name: nombre,
+          hex: "#EDE8E0",
+          img: swatchDe(key, nombre, swatch),
+          foto: fotoDe(key, nombre),
+        })),
+      };
+    });
+  }, [cat, L]);
+
   const [fabricName, setFabricName] = useState(FABRICS[0].name);
   const [colorName, setColorName] = useState(FABRICS[0].colors[0].name);
+  const [size, setSize] = useState("");
   const [ship, setShip] = useState(SHIPS[0]);
   const [busy, setBusy] = useState(false);
 
   const fabric = FABRICS.find((f) => f.name === fabricName) ?? FABRICS[0];
   const color = fabric.colors.find((c) => c.name === colorName) ?? fabric.colors[0];
+
+  // Medidas disponibles para el material y color elegidos.
+  const SIZES = useMemo(() => {
+    if (!cat || !cat.variations.length) return L.medidas;
+    const vistas: string[] = [];
+    for (const v of cat.variations) {
+      if (valorDe(v, "material") !== fabric.name) continue;
+      if (valorDe(v, "color") !== color.name) continue;
+      const largo = valorDe(v, "largo");
+      if (largo && !vistas.includes(largo)) vistas.push(largo);
+    }
+    return vistas.length ? vistas : L.medidas;
+  }, [cat, L.medidas, fabric.name, color.name]);
+
+  // Si al cambiar material o color la medida elegida ya no existe, se corrige.
+  useEffect(() => {
+    if (!SIZES.includes(size)) setSize(SIZES[0] ?? "");
+  }, [SIZES, size]);
+
+  // La variación exacta que corresponde a lo elegido.
+  const match = useMemo(() => {
+    if (!cat) return null;
+    return (
+      cat.variations.find(
+        (v) =>
+          valorDe(v, "material") === fabric.name &&
+          valorDe(v, "color") === color.name &&
+          valorDe(v, "largo") === size
+      ) ?? null
+    );
+  }, [cat, fabric.name, color.name, size]);
+
+  const PRICE = match ? Number(match.prices.price) || L.price : L.price;
+  const REAL = match
+    ? Number(match.prices.regular_price) || PRICE
+    : L.regularPrice;
 
   const changeFabric = (name: string) => {
     const f = FABRICS.find((x) => x.name === name)!;
@@ -197,12 +302,13 @@ export default function SanDiegoConfigurator() {
 
   const buy = () => {
     setBusy(true);
-    // Reemplaza cualquier San Diego previo para que el carrito refleje siempre
-    // la última configuración elegida (mantiene el id real del producto).
+    // Reemplaza cualquier configuración previa de este mismo sofá para que el
+    // carrito refleje siempre la última elegida.
     remove(L.productId);
+    for (const v of cat?.variations ?? []) remove(v.id);
     add(
       {
-        id: L.productId,
+        id: match?.id ?? L.productId,
         name: `${L.name} · ${size} · ${fabric.name} · ${color.name} · Envío: ${ship.label}${ship.cost > 0 ? ` (+${cop(ship.cost)})` : " (incluido)"}`,
         slug: L.slug,
         image: color.foto,
@@ -229,7 +335,17 @@ export default function SanDiegoConfigurator() {
                 src={color.foto}
                 alt={`${L.name} ${fabric.name} ${color.name}`}
               />
-              <span className="lfb-cname">{color.name}</span>
+              <span className="lfb-cname">
+                <span
+                  className="lfb-cname-dot"
+                  style={
+                    color.img
+                      ? { backgroundImage: `url('${color.img}')` }
+                      : { backgroundColor: color.hex }
+                  }
+                />
+                Tu elección: {fabric.name} · {color.name}
+              </span>
             </div>
 
             <div className="lfb-panel">
@@ -300,7 +416,9 @@ export default function SanDiegoConfigurator() {
                   ))}
                 </div>
                 <p className="lfb-disclaimer">
-                  El tono puede variar según el dispositivo y el lote de la tela.
+                  Las fotos son de referencia; el acabado que elijas se ve en el
+                  círculo. El tono puede variar según el dispositivo y el lote
+                  de la tela.
                 </p>
               </div>
 
@@ -327,9 +445,11 @@ export default function SanDiegoConfigurator() {
                 <div className="lfb-price-wrap">
                   <span className="lfb-from">Total</span>
                   <span className="lfb-price">{cop(total)}</span>
-                  <span className="lfb-real">
-                    Precio regular <s>{cop(realTotal)}</s>
-                  </span>
+                  {REAL > PRICE && (
+                    <span className="lfb-real">
+                      Precio regular <s>{cop(realTotal)}</s>
+                    </span>
+                  )}
                   <span className="lfb-pricenote">
                     Sofá {cop(PRICE)} · Envío{" "}
                     {ship.cost > 0 ? cop(ship.cost) : "incluido"}

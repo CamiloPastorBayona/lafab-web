@@ -105,10 +105,22 @@ export default async function ProductPage({
 
   // Las tres consultas que faltan no dependen entre sí, así que van juntas.
   // Antes iban una detrás de otra y cada una esperaba a la anterior.
+  //
+  // Los relacionados y el contenido extra son adornos: si el CMS falla justo
+  // en ese momento (pasa bajo ráfaga en Hostinger) la ficha se muestra igual,
+  // sin ellos, en vez de devolver un error 500 al visitante.
   const [relatedRaw, variations, extra] = await Promise.all([
-    cat ? getProducts({ category: cat.id, per_page: 5 }) : Promise.resolve([]),
+    cat
+      ? getProducts({ category: cat.id, per_page: 5 }).catch((e) => {
+          console.error("relacionados:", params.slug, e);
+          return [];
+        })
+      : Promise.resolve([]),
     isVariable ? getVariations(product) : Promise.resolve([]),
-    getProductExtra(product.id),
+    getProductExtra(product.id).catch((e) => {
+      console.error("contenido extra:", params.slug, e);
+      return null;
+    }),
   ]);
 
   // Related: same category, exclude current.
