@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import { getProducts } from "@/lib/woocommerce";
 import { ARTICLES } from "@/lib/blog";
+import { LANDING_BY_SLUG } from "@/lib/landings";
 
 const SITE = "https://lafab.com.co";
 
@@ -16,8 +17,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/comedores",
     "/alcobas",
     "/poltronas",
-    "/san-diego",
-    "/latina",
+    // Las landings salen del mismo mapa que usa la ficha de producto, así no se
+    // vuelve a olvidar ninguna: /luton estuvo fuera del sitemap desde que se
+    // publicó.
+    ...Object.values(LANDING_BY_SLUG),
     "/espacios",
     "/proyectos",
     "/nosotros",
