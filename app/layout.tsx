@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     template: "%s | LaFab",
   },
   description:
-    "Fabricamos muebles a la medida en Medellín: sofás, comedores, camas y closets. Diseño propio, materiales de calidad y envío a todo el país.",
+    "Fabricamos muebles a la medida en Medellín: sofás, comedores, alcobas y closets. Diseño propio, materiales de calidad y envío a todo el país.",
   icons: {
     icon: `${UPLOADS}/2024/11/cropped-favicon-lafab-270x270.png`,
   },

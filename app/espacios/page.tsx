@@ -13,7 +13,7 @@ export const revalidate = 300;
 export const metadata: Metadata = {
   title: "Compra por espacios",
   description:
-    "Explora los muebles a la medida de LaFab por espacio: sala, dormitorio y comedor. Diseño propio y fabricación en Itagüí.",
+    "Explora los muebles a la medida de LaFab por espacio: sala, alcoba y comedor. Diseño propio y fabricación en Itagüí.",
 };
 
 export default async function EspaciosPage() {

@@ -142,7 +142,7 @@ export default function ArticlePage({
               <ul className="space-y-2 text-sm">
                 <li><Link href="/sofas" className={sideLink}>Sofás a la medida</Link></li>
                 <li><Link href="/comedores" className={sideLink}>Comedores de madera</Link></li>
-                <li><Link href="/camas" className={sideLink}>Alcobas</Link></li>
+                <li><Link href="/alcobas" className={sideLink}>Alcobas</Link></li>
                 <li><Link href="/poltronas" className={sideLink}>Poltronas</Link></li>
                 <li><Link href="/shop" className={sideLink}>Ver toda la tienda</Link></li>
               </ul>

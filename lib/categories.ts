@@ -24,6 +24,8 @@ export type CategoryConfig = {
 // nombre que ve el cliente, para no depender de un cambio en el backend.
 const CATEGORY_LABELS: Record<string, string> = {
   asientos: "Sofás",
+  dormitorio: "Alcobas",
+  camas: "Alcobas",
   "sofas angulares": "Sofás en L",
   "sofás angulares": "Sofás en L",
   "sofas en l (angulares)": "Sofás en L",
@@ -173,15 +175,15 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     ],
   },
 
-  camas: {
-    slug: "camas",
-    catId: 95, // Dormitorio (incluye Camas)
+  alcobas: {
+    slug: "alcobas",
+    catId: 95, // Alcobas
     eyebrow: "Alcobas",
     // En LaFab una alcoba es el conjunto completo: espaldar, base de cama y dos
     // mesas de noche. No se dice "cama" para referirse al conjunto, aunque el
     // término sí se conserva en el texto de SEO porque es lo que la gente busca.
     h1: "Alcobas a la medida en Medellín",
-    metaTitle: "Alcobas y camas tapizadas a la medida en Medellín",
+    metaTitle: "Alcobas a la medida en Medellín",
     metaDescription:
       "Alcobas a la medida en Medellín: espaldar tapizado, base de cama y dos mesas de noche, en matrimonial, queen y king. Fabricación propia y envío nacional.",
     keywords: [
@@ -199,7 +201,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       { q: "¿Qué incluye la alcoba?", a: "El conjunto completo: el espaldar tapizado, la base de cama y dos mesas de noche. No es solo la cama." },
       { q: "¿Qué tamaños manejan?", a: "Fabricamos alcobas matrimoniales, queen y king, y adaptamos medidas especiales si lo necesitas." },
       { q: "¿La estructura es resistente?", a: "Sí: estructura en madera de pino inmunizado y ensambles reforzados para larga durabilidad." },
-      { q: "¿Puedo elegir la tela y el color?", a: "Claro. Eliges el tapizado y el color para que combine con tu dormitorio." },
+      { q: "¿Puedo elegir la tela y el color?", a: "Claro. Eliges el tapizado y el color para que combine con tu alcoba." },
       { q: "¿Hacen envíos fuera de Medellín?", a: "Sí. En Medellín y su área metropolitana el envío está incluido en el precio; a las demás ciudades capitales tiene un costo adicional de $200.000." },
     ],
   },
@@ -219,7 +221,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     ],
     image: `${U}/2026/07/2.webp`,
     intro: [
-      "Fabricamos poltronas a la medida en Medellín: ese rincón cómodo y con estilo que le hace falta a tu sala o a tu dormitorio. Diseño propio y tapizados de calidad, en la tela y el color que prefieras.",
+      "Fabricamos poltronas a la medida en Medellín: ese rincón cómodo y con estilo que le hace falta a tu sala o a tu alcoba. Diseño propio y tapizados de calidad, en la tela y el color que prefieras.",
       "Cada poltrona se fabrica en nuestro taller de Itagüí con materiales seleccionados y acabados impecables. Envío incluido en Medellín y el área metropolitana, y envío a otras ciudades del país.",
     ],
     faq: [

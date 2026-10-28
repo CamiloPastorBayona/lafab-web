@@ -64,7 +64,6 @@ function Group({ title, children }: { title: string; children: ReactNode }) {
 const CATEGORIA_MADRE: Record<number, number> = {
   105: 102, // Sofás Lineales → Sofás
   118: 102, // Sofás en L     → Sofás
-  96: 95, //  Camas          → Dormitorio
 };
 
 export default function ShopBrowser({ products }: { products: WCProduct[] }) {

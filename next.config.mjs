@@ -6,6 +6,11 @@ const CMS = (
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // La categoría se llamaba "camas" antes de unificar el término en "alcobas".
+  async redirects() {
+    return [{ source: "/camas", destination: "/alcobas", permanent: true }];
+  },
+
   async headers() {
     return [
       {

@@ -146,11 +146,11 @@ export const SPACES = [
     image: `${UPLOADS}/2026/07/3-825x1024.webp`,
   },
   {
-    name: "Dormitorio",
-    slug: "dormitorio",
+    name: "Alcobas",
+    slug: "alcobas",
     catId: 95,
     description: "Alcobas completas, con espaldar, base y dos mesas de noche.",
-    href: "/camas",
+    href: "/alcobas",
     image: `${UPLOADS}/2025/05/VASSUE-1024x768.jpg`,
   },
   {

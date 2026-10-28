@@ -11,6 +11,22 @@ export const metadata: Metadata = {
     "En LaFab diseñamos y fabricamos muebles a la medida con fabricación propia en Itagüí. Conoce nuestra historia, nuestro taller y nuestra forma de trabajar.",
 };
 
+// Las caras del taller. Nueve fotos reales de los muchachos trabajando, las
+// mismas que sostienen la sección "Nuestro proceso" de la landing del San
+// Diego. Se muestran en mosaico: tres piezas altas marcan el ritmo y el resto
+// acompaña, para que la sección respire en vez de verse como una grilla.
+const EQUIPO = [
+  { src: "2026/06/taller1.webp", alt: "Corte de la madera en el taller de LaFab", alto: true },
+  { src: "2026/06/taller2.webp", alt: "Costura de un tapizado en el taller de LaFab" },
+  { src: "2026/06/taller3.webp", alt: "Ensamble de la esqueletería en madera" },
+  { src: "2026/06/taller4-1.webp", alt: "Revisión manual de cada unión", alto: true },
+  { src: "2026/06/taller5.webp", alt: "Acabado artesanal de la tapicería" },
+  { src: "2026/06/taller1-1.webp", alt: "Preparación de las piezas antes del ensamble" },
+  { src: "2026/06/taller2-1.webp", alt: "Detalle de una costura reforzada", alto: true },
+  { src: "2026/06/taller3-1.webp", alt: "Trabajo de carpintería en el taller" },
+  { src: "2026/06/taller4.webp", alt: "Control de calidad pieza por pieza" },
+];
+
 const VALUES = [
   {
     title: "Fabricación propia",
@@ -106,6 +122,42 @@ export default function NosotrosPage() {
               </Reveal>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Las caras del taller */}
+      <section className="mx-auto max-w-site px-4 py-16 md:px-6 md:py-20">
+        <Reveal>
+          <p className="text-sm font-medium uppercase tracking-wide text-gold-dark">
+            Quiénes lo hacen
+          </p>
+          <h2 className="mt-1 max-w-2xl text-3xl font-light text-ink md:text-4xl">
+            Detrás de cada mueble hay un equipo que lo arma a mano
+          </h2>
+          <p className="mt-4 max-w-2xl text-ink/70">
+            No tercerizamos. Cortamos, cosemos, ensamblamos y tapizamos en
+            nuestro taller de Itagüí, con gente que lleva años haciéndolo. Estas
+            son algunas de esas manos.
+          </p>
+        </Reveal>
+
+        <div className="mt-10 columns-2 gap-4 md:columns-3 [&>*]:mb-4">
+          {EQUIPO.map((f, i) => (
+            <Reveal key={f.src} delay={(i % 3) * 90}>
+              <figure
+                className={`group relative overflow-hidden rounded-2xl bg-cream ${
+                  f.alto ? "aspect-[3/4]" : "aspect-square"
+                }`}
+              >
+                <WpImage
+                  src={`${UPLOADS}/${f.src}`}
+                  alt={f.alt}
+                  sizes="(min-width: 768px) 33vw, 50vw"
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                />
+              </figure>
+            </Reveal>
+          ))}
         </div>
       </section>
 

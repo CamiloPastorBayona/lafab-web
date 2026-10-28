@@ -84,7 +84,7 @@ export default function Footer() {
             <h4 className={head}>Explora</h4>
             <Link href="/sofas" className={`block ${link}`}>Sofás</Link>
             <Link href="/comedores" className={`block ${link}`}>Comedores</Link>
-            <Link href="/camas" className={`block ${link}`}>Camas</Link>
+            <Link href="/alcobas" className={`block ${link}`}>Alcobas</Link>
             <Link href="/poltronas" className={`block ${link}`}>Poltronas</Link>
             <Link href="/proyectos" className={`block ${link}`}>Proyectos</Link>
             <Link href="/nosotros" className={`block ${link}`}>Nosotros</Link>

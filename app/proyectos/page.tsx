@@ -13,7 +13,7 @@ export const revalidate = 300;
 export const metadata: Metadata = {
   title: "Proyectos",
   description:
-    "Muebles a la medida que hemos diseñado y fabricado en LaFab: sofás, camas, comedores y más, pensados para espacios reales.",
+    "Muebles a la medida que hemos diseñado y fabricado en LaFab: sofás, alcobas, comedores y más, pensados para espacios reales.",
 };
 
 const HIGHLIGHTS = [

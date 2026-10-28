@@ -4,7 +4,7 @@ import CategoryPage from "@/components/CategoryPage";
 import { getProducts } from "@/lib/woocommerce";
 
 export const revalidate = 300;
-const cfg = CATEGORIES.camas;
+const cfg = CATEGORIES.alcobas;
 
 export const metadata: Metadata = {
   title: cfg.metaTitle,
