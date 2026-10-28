@@ -194,7 +194,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     ],
     image: `${U}/2025/05/VASSUE.jpg`,
     intro: [
-      "Fabricamos alcobas a la medida en Medellín para convertir tu dormitorio en un verdadero refugio. Cada alcoba es un conjunto completo: espaldar tapizado, base de cama y dos mesas de noche, con diseño propio, estructura en madera inmunizada y tapizados cómodos y resistentes.",
+      "Fabricamos alcobas a la medida en Medellín para que tu espacio de descanso sea un verdadero refugio. Cada alcoba es un conjunto completo: espaldar tapizado, base de cama y dos mesas de noche, con diseño propio, estructura en madera inmunizada y tapizados cómodos y resistentes.",
       "Elige el tamaño (matrimonial, queen o king), la tela y el color. Todo se fabrica en nuestro taller de Itagüí, con envío incluido en Medellín y su área metropolitana y envío a otras ciudades del país.",
     ],
     faq: [
