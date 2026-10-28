@@ -21,10 +21,12 @@ type Facet = {
   terms: Map<string, { name: string; count: number }>;
 };
 
+// El primero es el que se usa al entrar: la tienda abre de menor a mayor
+// precio, para que quien llega mirando presupuesto vea primero lo accesible.
 const SORTS = [
-  { key: "date", label: "Novedades" },
   { key: "price-asc", label: "Precio: menor a mayor" },
   { key: "price-desc", label: "Precio: mayor a menor" },
+  { key: "date", label: "Novedades" },
   { key: "name", label: "Nombre (A–Z)" },
 ];
 
@@ -69,7 +71,7 @@ const CATEGORIA_MADRE: Record<number, number> = {
 export default function ShopBrowser({ products }: { products: WCProduct[] }) {
   const [activeCat, setActiveCat] = useState<number | null>(null);
   const [query, setQuery] = useState("");
-  const [sort, setSort] = useState("date");
+  const [sort, setSort] = useState(SORTS[0].key);
   const [priceIdx, setPriceIdx] = useState<number | null>(null);
   const [terms, setTerms] = useState<Record<string, Set<string>>>({});
   const [drawer, setDrawer] = useState(false);

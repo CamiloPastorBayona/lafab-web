@@ -21,6 +21,7 @@ import { useRouter } from "next/navigation";
 import { useCart } from "@/lib/cart";
 import {
   money,
+  descuento,
   tienePrecio,
   PRECIO_PENDIENTE,
   type WCVariation,
@@ -201,8 +202,8 @@ export default function ProductConfigurator({
               <span className="text-lg text-ink/40 line-through">
                 {money(match.prices.regular_price, match.prices)}
               </span>
-              <span className="rounded-full bg-sale/10 px-3 py-1 text-xs font-semibold text-sale">
-                Oferta
+              <span className="rounded-full bg-sale px-3 py-1 text-xs font-bold text-white">
+                -{descuento(match.prices)}%
               </span>
             </>
           ) : (

@@ -104,6 +104,19 @@ export interface WCVariation {
 // tarjeta dicen que el precio está por confirmar.
 export const PRECIO_PENDIENTE = "Precio por confirmar";
 
+/**
+ * Porcentaje de descuento redondeado, o null si no hay oferta real.
+ * Se calcula, no se escribe a mano: si mañana una promoción es del 15% el
+ * cartel lo dice solo.
+ */
+export function descuento(prices: WCPrices): number | null {
+  const reg = parseInt(prices.regular_price || "", 10);
+  const ofe = parseInt(prices.sale_price || "", 10);
+  if (!reg || !ofe || ofe >= reg) return null;
+  const pct = Math.round(((reg - ofe) / reg) * 100);
+  return pct > 0 ? pct : null;
+}
+
 export function tienePrecio(prices: WCPrices): boolean {
   const n = (v?: string | null) => (v ? parseInt(v, 10) : 0);
   return n(prices.price) > 0 || n(prices.price_range?.min_amount) > 0;

@@ -54,8 +54,8 @@ export const LUTON: Landing = {
   slug: "sofa-luton",
   name: "Sofá Luton",
   tagline: "Líneas contemporáneas y volúmenes generosos",
-  price: 4000000,
-  regularPrice: 4300000,
+  price: 4580000,
+  regularPrice: 5725000,
   hero: PORTADA,
   configImage: AMBIENTE.config,
 

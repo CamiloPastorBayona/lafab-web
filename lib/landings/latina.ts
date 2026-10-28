@@ -26,8 +26,8 @@ export const LATINA: Landing = {
   slug: "sofa-latina",
   name: "Sofá Latina",
   tagline: "Líneas limpias y la calidez de la madera",
-  price: 3490000,
-  regularPrice: 3990000,
+  price: 3500000,
+  regularPrice: 4375000,
   hero: FOTO.ambientado,
   configImage: FOTO.estudio,
 

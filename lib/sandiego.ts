@@ -11,8 +11,8 @@ export const SANDIEGO = {
   slug: "sofa-san-diego",
   name: "Sofá San Diego",
   tagline: "Confort superior para disfrutar todos los días",
-  price: 3390000,
-  regularPrice: 3790000,
+  price: 3550000,
+  regularPrice: 4437500,
   hero: `${U}/2026/06/SANDIEGO.webp`,
   configImage: `${U}/2026/07/01-Mon-Marfil.webp`,
 

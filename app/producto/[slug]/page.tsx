@@ -8,6 +8,7 @@ import {
   getProductExtra,
   hasExtraContent,
   money,
+  descuento,
   tienePrecio,
   PRECIO_PENDIENTE,
   type WCProductAttribute,
@@ -245,8 +246,8 @@ export default async function ProductPage({
                     <span className="text-lg text-ink/40 line-through">
                       {money(p.regular_price, p)}
                     </span>
-                    <span className="rounded-full bg-sale/10 px-3 py-1 text-xs font-semibold text-sale">
-                      Oferta
+                    <span className="rounded-full bg-sale px-3 py-1 text-xs font-bold text-white">
+                      -{descuento(p)}%
                     </span>
                   </>
                 ) : (

@@ -4,6 +4,7 @@ import Link from "next/link";
 import {
   WCProduct,
   money,
+  descuento,
   tienePrecio,
   PRECIO_PENDIENTE,
 } from "@/lib/woocommerce";
@@ -21,6 +22,7 @@ export default function ProductCard({ product }: { product: WCProduct }) {
   // opciones.
   const isVariable = product.type === "variable" || product.has_options;
   const sinPrecio = !tienePrecio(p);
+  const pct = descuento(p);
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -113,9 +115,11 @@ export default function ProductCard({ product }: { product: WCProduct }) {
           )}
         </Link>
 
-        {product.on_sale && (
-          <span className="absolute left-3 top-3 z-10 rounded-full bg-sale px-3 py-1 text-xs font-semibold text-white">
-            Oferta
+        {/* Cuánto se ahorra, no la palabra "Oferta": el número vende más y
+            sale del propio precio, así que nunca miente. */}
+        {product.on_sale && pct !== null && (
+          <span className="absolute left-3 top-3 z-10 rounded-full bg-sale px-2.5 py-1 text-xs font-bold leading-none text-white shadow-[0_2px_10px_rgba(0,0,0,0.18)]">
+            -{pct}%
           </span>
         )}
 

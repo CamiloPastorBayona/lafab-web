@@ -21,8 +21,8 @@ export const VITTORIO: Landing = {
   slug: "sofa-vittorio",
   name: "Sofá Vittorio",
   tagline: "Inspiración italiana, elaboración artesanal",
-  price: 5100000,
-  regularPrice: 5800000,
+  price: 5240000,
+  regularPrice: 6550000,
   hero: FOTO.principal,
   configImage: FOTO.principal,
 
