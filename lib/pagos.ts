@@ -4,8 +4,12 @@
 // null en vez de un resultado y WooCommerce revienta con un error de PHP que el
 // cliente veía en crudo en la página de pago ("Ha habido un error crítico en
 // esta web"). Como una alcoba en cuero o una sala completa pasan de ese tope
-// con facilidad, el checkout detecta el caso antes de llamar a Bold y cierra el
-// pedido por transferencia, que no tiene tope.
+// con facilidad, el checkout lo detecta antes de llamar a Bold.
+//
+// Por decisión de Mauricio y Camilo, una compra así no se cierra en línea: se
+// atiende por WhatsApp, donde se verifica al cliente antes de recibir el
+// dinero. Mover millones por un formulario sin verificar a quien paga es un
+// riesgo para las dos partes.
 //
 // Comprobado contra la tienda: $9.900.000 pasa, $10.200.000 revienta.
 export const TOPE_BOLD = 10_000_000;

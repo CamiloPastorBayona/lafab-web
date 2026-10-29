@@ -53,11 +53,12 @@ export default function CheckoutPage() {
     ) =>
       setForm((f) => ({ ...f, [k]: e.target.value }));
 
-  // Bold no acepta transacciones de más de diez millones. Por encima del tope
-  // el pedido se cierra por transferencia, que no tiene límite.
-  const porTransferencia = superaTopeBold(subtotal);
+  // Bold no acepta transacciones de más de diez millones, y una compra de ese
+  // tamaño no se cierra por un formulario: se atiende por WhatsApp.
+  const sobreTope = superaTopeBold(subtotal);
 
   const canPay =
+    !sobreTope &&
     items.length > 0 &&
     form.nombre &&
     form.apellidos &&
@@ -103,9 +104,8 @@ export default function CheckoutPage() {
         await selectShipping(pkg.package_id, pkg.shipping_rates[0].rate_id);
       }
 
-      // 4) Crea el pedido. Bold si cabe en su tope; si no, transferencia.
-      const metodo = porTransferencia ? "bacs" : "bold_co";
-      const order = await placeOrder(billing, shipping, metodo, form.notas);
+      // 4) Crea el pedido y paga con Bold.
+      const order = await placeOrder(billing, shipping, "bold_co", form.notas);
       if (!order.ok || !order.data)
         throw new Error(
           mensajeLimpio(
@@ -121,9 +121,7 @@ export default function CheckoutPage() {
         window.location.href = redirect; // → página de pago de Bold
         return;
       }
-      window.location.href = `/gracias?pedido=${order.data.order_id}${
-        porTransferencia ? "&pago=transferencia" : ""
-      }`;
+      window.location.href = `/gracias?pedido=${order.data.order_id}`;
     } catch (e) {
       setError(
         e instanceof Error ? e.message : "Ocurrió un error. Intenta de nuevo."
@@ -276,40 +274,42 @@ export default function CheckoutPage() {
                 </p>
               )}
 
-              {porTransferencia && (
+              {sobreTope && (
                 <div className="mt-4 rounded-xl border border-gold/40 bg-gold/10 px-4 py-3 text-sm text-ink/75">
                   <p className="font-medium text-ink">
-                    Este pedido se paga por transferencia
+                    Este pedido lo cerramos contigo, no en línea
                   </p>
                   <p className="mt-1">
-                    Bold, nuestra pasarela, solo procesa pagos de hasta{" "}
-                    {formatCOP(TOPE_BOLD)}. Confirmas el pedido aquí y te
-                    enviamos los datos de la cuenta para hacer la transferencia.
+                    Por seguridad tuya y nuestra no recibimos pagos de más de{" "}
+                    {formatCOP(TOPE_BOLD)} por la tienda. Un asesor te atiende
+                    por WhatsApp, verifica el pedido contigo y coordina la forma
+                    de pago.
                   </p>
                   <a
                     href={WHATSAPP}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-2 inline-block font-medium text-gold-dark underline"
+                    className="mt-3 inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 font-semibold text-white transition-transform hover:scale-[1.02]"
                   >
-                    ¿Prefieres que te acompañemos por WhatsApp?
+                    <Ico name="headset" className="h-4 w-4 text-gold" />
+                    Hablar con un asesor
                   </a>
                 </div>
               )}
 
-              <button
-                onClick={handlePay}
-                disabled={!canPay || loading}
-                className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-ink px-6 py-4 text-sm font-medium uppercase tracking-[0.12em] text-white transition-transform hover:scale-[1.02] disabled:cursor-not-allowed disabled:bg-ink/40"
-              >
-                <Ico name="lock" className="h-4 w-4" />
-                {loading
-                  ? "Procesando…"
-                  : porTransferencia
-                    ? "Confirmar pedido"
-                    : "Pagar con Bold"}
-              </button>
-              {!canPay && (
+              {/* Por encima del tope no hay botón de pagar: el único camino es
+                  el asesor, y un botón apagado al lado solo confunde. */}
+              {!sobreTope && (
+                <button
+                  onClick={handlePay}
+                  disabled={!canPay || loading}
+                  className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-ink px-6 py-4 text-sm font-medium uppercase tracking-[0.12em] text-white transition-transform hover:scale-[1.02] disabled:cursor-not-allowed disabled:bg-ink/40"
+                >
+                  <Ico name="lock" className="h-4 w-4" />
+                  {loading ? "Procesando…" : "Pagar con Bold"}
+                </button>
+              )}
+              {!canPay && !sobreTope && (
                 <p className="mt-2 text-center text-xs text-ink/40">
                   Completa tus datos y dirección para continuar.
                 </p>

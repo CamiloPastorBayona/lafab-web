@@ -5,12 +5,10 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCart } from "@/lib/cart";
 import Ico from "@/components/LandingIcons";
-import { WHATSAPP } from "@/lib/content";
 
 function Gracias() {
   const params = useSearchParams();
   const pedido = params.get("pedido");
-  const porTransferencia = params.get("pago") === "transferencia";
   const { clear } = useCart();
 
   // Por si el cliente vuelve del pago, aseguramos el carrito vacío.
@@ -29,27 +27,6 @@ function Gracias() {
         confirmación por correo y te contactaremos para coordinar la fabricación
         y el envío de tu mueble.
       </p>
-      {porTransferencia && (
-        <div className="mx-auto mt-6 max-w-lg rounded-2xl border border-gold/40 bg-gold/10 px-5 py-4 text-left text-sm text-ink/75">
-          <p className="font-medium text-ink">Falta la transferencia</p>
-          <p className="mt-1">
-            Tu pedido quedó reservado, pero todavía no está pagado. Te enviamos
-            los datos de nuestra cuenta por correo; cuando hagas la
-            transferencia, pon el número del pedido
-            {pedido ? ` (#${pedido})` : ""} como referencia y mándanos el
-            comprobante por WhatsApp. Ahí arrancamos la fabricación.
-          </p>
-          <a
-            href={WHATSAPP}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-3 inline-block font-medium text-gold-dark underline"
-          >
-            Enviar el comprobante por WhatsApp
-          </a>
-        </div>
-      )}
-
       <p className="mt-2 text-sm text-ink/50">
         ¿Dudas sobre tu pedido? Escríbenos por WhatsApp y con gusto te ayudamos.
       </p>
