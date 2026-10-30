@@ -71,8 +71,10 @@ export const SANDIEGO = {
       { name: "Pompeya Marfil", img: `${U}/2026/07/01-Mon-Marfil.webp`, swatch: "" },
       { name: "Pompeya Almendra", img: `${U}/2026/07/02-Mon-Avellana.webp`, swatch: "" },
       { name: "Pompeya Plata", img: `${U}/2026/07/03-Mon-Plata.webp`, swatch: "" },
+      { name: "Gris", img: `${U}/2026/07/04-Mon-Gris.webp`, swatch: "" },
     ],
     lino: [
+      { name: "Marfil", img: `${U}/2026/07/Chenil-01-Marfil.webp`, swatch: "" },
       { name: "Zajari Beige", img: `${U}/2026/07/Chenil-02-Beige.webp`, swatch: "" },
       { name: "Zajari Sand", img: `${U}/2026/07/Chenil-03-Avellana.webp`, swatch: "" },
       { name: "Zajari Gris Light", img: `${U}/2026/07/04-Mon-Gris.webp`, swatch: "" },
