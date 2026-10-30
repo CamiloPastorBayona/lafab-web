@@ -35,10 +35,15 @@ export const LATINA: Landing = {
 
   // Pendiente: fotos del Latina en cada color. Mientras tanto todas las
   // opciones muestran la foto de estudio para no inventar un color que no es.
-  configColors: {
-    mon: SANDIEGO_LANDING.configColors.mon.map((c) => ({ ...c, img: FOTO.estudio })),
-    milan: SANDIEGO_LANDING.configColors.milan.map((c) => ({ ...c, img: FOTO.estudio })),
-  },
+  // Mismas claves que el San Diego (las telas reales del CMS), pero con la
+  // foto de este modelo. Si se hiciera por nombre fijo, al renombrar una tela
+  // la landing se quedaba sin fotos, que fue justo lo que pasó.
+  configColors: Object.fromEntries(
+    Object.entries(SANDIEGO_LANDING.configColors).map(([tela, colores]) => [
+      tela,
+      colores.map((c) => ({ ...c, img: FOTO.estudio })),
+    ])
+  ) as typeof SANDIEGO_LANDING.configColors,
 
   lifestyle: [
     { img: FOTO.ambientado, title: "Compartir en familia", text: "El punto de encuentro de todos." },

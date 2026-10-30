@@ -28,10 +28,15 @@ export const VITTORIO: Landing = {
 
   medidas: ["190 cm", "210 cm", "240 cm"],
 
-  configColors: {
-    mon: SANDIEGO_LANDING.configColors.mon.map((c) => ({ ...c, img: FOTO.principal })),
-    milan: SANDIEGO_LANDING.configColors.milan.map((c) => ({ ...c, img: FOTO.principal })),
-  },
+  // Mismas claves que el San Diego (las telas reales del CMS), pero con la
+  // foto de este modelo. Si se hiciera por nombre fijo, al renombrar una tela
+  // la landing se quedaba sin fotos, que fue justo lo que pasó.
+  configColors: Object.fromEntries(
+    Object.entries(SANDIEGO_LANDING.configColors).map(([tela, colores]) => [
+      tela,
+      colores.map((c) => ({ ...c, img: FOTO.principal })),
+    ])
+  ) as typeof SANDIEGO_LANDING.configColors,
 
   lifestyle: [
     { img: FOTO.principal, title: "Recibir visitas", text: "Una pieza que marca el espacio." },

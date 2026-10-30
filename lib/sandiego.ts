@@ -61,19 +61,28 @@ export const SANDIEGO = {
 
   medidas: ["180 cm", "190 cm", "200 cm"],
 
-  // Colores del configurador: cada color muestra su propia foto del sofá.
+  // Foto del sofá para cada color, con los nombres que el color tiene HOY en
+  // el CMS. Antes esto estaba indexado por "mon" y "milan", los nombres viejos
+  // de las telas, así que al conectar la landing con el catálogo ninguna foto
+  // coincidía y el sofá se veía siempre igual. El círculo de color se deja
+  // vacío a propósito: así muestra el retazo real que trae la variación.
   configColors: {
-    mon: [
-      { name: "Marfil", img: `${U}/2026/07/01-Mon-Marfil.webp`, swatch: `${U}/2026/06/mon-tela-beige.webp` },
-      { name: "Avellana", img: `${U}/2026/07/02-Mon-Avellana.webp`, swatch: `${U}/2026/06/mon-tela-avellana.webp` },
-      { name: "Plata", img: `${U}/2026/07/03-Mon-Plata.webp`, swatch: `${U}/2026/06/mon-tela-plata.webp` },
-      { name: "Gris", img: `${U}/2026/07/04-Mon-Gris.webp`, swatch: `${U}/2026/06/mon-tela-gris.webp` },
+    microfibra: [
+      { name: "Pompeya Marfil", img: `${U}/2026/07/01-Mon-Marfil.webp`, swatch: "" },
+      { name: "Pompeya Almendra", img: `${U}/2026/07/02-Mon-Avellana.webp`, swatch: "" },
+      { name: "Pompeya Plata", img: `${U}/2026/07/03-Mon-Plata.webp`, swatch: "" },
     ],
-    milan: [
-      { name: "Marfil", img: `${U}/2026/07/Chenil-01-Marfil.webp`, swatch: `${U}/2026/06/milan-tela-marfil.webp` },
-      { name: "Beige", img: `${U}/2026/07/Chenil-02-Beige.webp`, swatch: `${U}/2026/06/milan-tela-beige.webp` },
-      { name: "Avellana", img: `${U}/2026/07/Chenil-03-Avellana.webp`, swatch: `${U}/2026/06/milan-tela-avellana.webp` },
-      { name: "Plata", img: `${U}/2026/07/01-Mon-Marfil.webp`, swatch: `${U}/2026/06/milan-tela-plata.webp` },
+    lino: [
+      { name: "Zajari Beige", img: `${U}/2026/07/Chenil-02-Beige.webp`, swatch: "" },
+      { name: "Zajari Sand", img: `${U}/2026/07/Chenil-03-Avellana.webp`, swatch: "" },
+      { name: "Zajari Gris Light", img: `${U}/2026/07/04-Mon-Gris.webp`, swatch: "" },
+    ],
+    // Del cuero no hay fotos por color: se muestra la foto del sofá en cuero
+    // del catálogo, que es honesta, en vez de una de tela que no corresponde.
+    cuero: [
+      { name: "Marfil", img: `${U}/2026/10/sofa-san-diego-lineal-a-la-medida-lafab-medellin.webp`, swatch: "" },
+      { name: "Gris Claro", img: `${U}/2026/10/sofa-san-diego-ambientado.webp`, swatch: "" },
+      { name: "Miel Claro", img: `${U}/2026/10/sofa-san-diego-ambientado-2.webp`, swatch: "" },
     ],
   } as Record<string, { name: string; img: string; swatch: string }[]>,
 
