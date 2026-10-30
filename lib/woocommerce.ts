@@ -278,21 +278,28 @@ export async function getVariations(product: WCProduct): Promise<WCVariation[]> 
   // Segunda pasada, de una en una, solo sobre las que no respondieron. El CMS
   // está en hosting compartido y bajo ráfaga devuelve 5xx; si una variación se
   // perdiera aquí, la ficha saldría sin uno de los colores o sin una medida.
-  const faltan = refs.filter((_, i) => resolved[i] === null);
-  if (faltan.length) {
+  for (let ronda = 1; ronda <= 2; ronda++) {
+    const faltan = refs.filter((_, i) => resolved[i] === null);
+    if (!faltan.length) break;
     console.error(
-      `[lafab] ${faltan.length} variaciones de ${product.slug} no respondieron; segundo intento en serie`
+      `[lafab] ${faltan.length} variaciones de ${product.slug} no respondieron; ronda ${ronda} en serie`
     );
+    // Se le da aire al CMS: si está ahogado, insistir de inmediato solo lo
+    // ahoga más. Dos rondas pausadas recuperan prácticamente siempre.
+    await dormir(1500 * ronda);
     for (const ref of faltan) {
-      await dormir(250);
       const v = await leer(ref);
       if (v) resolved[refs.indexOf(ref)] = v;
-      else
-        console.error(
-          `[lafab] la variación ${ref.id} de ${product.slug} quedó fuera de la ficha`
-        );
+      await dormir(600);
     }
   }
+  const perdidas = refs.filter((_, i) => resolved[i] === null);
+  if (perdidas.length)
+    console.error(
+      `[lafab] quedaron fuera de ${product.slug}: ${perdidas
+        .map((r) => r.id)
+        .join(", ")}`
+    );
 
   return resolved.filter((v): v is WCVariation => v !== null);
 }

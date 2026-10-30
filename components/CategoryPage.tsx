@@ -18,11 +18,16 @@ const BENEFITS = [
 
 export default function CategoryPage({
   cfg,
-  products,
+  products: entrada,
 }: {
   cfg: CategoryConfig;
   products: WCProduct[];
 }) {
+  // Mismo criterio que la tienda: de menor a mayor precio, para que quien
+  // llega mirando presupuesto vea primero lo accesible.
+  const products = [...entrada].sort(
+    (a, b) => (Number(a.prices.price) || 0) - (Number(b.prices.price) || 0)
+  );
   const breadcrumb = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",

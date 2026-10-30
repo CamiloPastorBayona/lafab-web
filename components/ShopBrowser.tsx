@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { WCProduct } from "@/lib/woocommerce";
 import ProductCard from "@/components/ProductCard";
 import { catLabel } from "@/lib/categories";
@@ -85,6 +85,12 @@ export default function ShopBrowser({ products }: { products: WCProduct[] }) {
   const [terms, setTerms] = useState<Record<string, Set<string>>>({});
   const [drawer, setDrawer] = useState(false);
 
+  // Los filtros viven también en la barra de direcciones. Sin esto, quien
+  // filtraba por "Alcobas", entraba a un producto y le daba atrás volvía a la
+  // tienda completa y tenía que filtrar de nuevo.
+  const hidratado = useRef(false);
+  const primeraEscritura = useRef(true);
+
   const categories = useMemo<Cat[]>(() => {
     const map = new Map<number, Cat>();
     for (const p of products) {
@@ -165,6 +171,56 @@ export default function ShopBrowser({ products }: { products: WCProduct[] }) {
     (activeCat !== null ? 1 : 0) +
     (priceIdx !== null ? 1 : 0) +
     Object.values(terms).reduce((s, set) => s + set.size, 0);
+
+  // Al montar, los filtros salen de la URL (así funciona el botón "atrás" y
+  // así se puede compartir un enlace ya filtrado).
+  useEffect(() => {
+    const sp = new URLSearchParams(window.location.search);
+    const cat = sp.get("cat");
+    if (cat) {
+      const c = categories.find((x) => x.slug === cat);
+      if (c) setActiveCat(c.id);
+    }
+    const q = sp.get("q");
+    if (q) setQuery(q);
+    const o = sp.get("orden");
+    if (o && SORTS.some((x) => x.key === o)) setSort(o);
+    const pr = sp.get("precio");
+    if (pr !== null && PRICE_BRACKETS[Number(pr)]) setPriceIdx(Number(pr));
+    const t: Record<string, Set<string>> = {};
+    for (const tax of FACET_TAXONOMIES) {
+      const v = sp.get(tax);
+      if (v) t[tax] = new Set(v.split(",").filter(Boolean));
+    }
+    if (Object.keys(t).length) setTerms(t);
+    hidratado.current = true;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Y cada cambio se refleja en la URL, sin ensuciar el historial.
+  useEffect(() => {
+    if (primeraEscritura.current) {
+      primeraEscritura.current = false;
+      return;
+    }
+    if (!hidratado.current) return;
+    const sp = new URLSearchParams();
+    if (activeCat !== null) {
+      const c = categories.find((x) => x.id === activeCat);
+      if (c) sp.set("cat", c.slug);
+    }
+    if (query.trim()) sp.set("q", query.trim());
+    if (sort !== SORTS[0].key) sp.set("orden", sort);
+    if (priceIdx !== null) sp.set("precio", String(priceIdx));
+    for (const [tax, set] of Object.entries(terms))
+      if (set.size) sp.set(tax, [...set].join(","));
+    const qs = sp.toString();
+    window.history.replaceState(
+      null,
+      "",
+      qs ? `${window.location.pathname}?${qs}` : window.location.pathname
+    );
+  }, [activeCat, query, sort, priceIdx, terms, categories]);
 
   const filtered = useMemo(() => {
     const q = sinTildes(query.trim());
