@@ -67,6 +67,57 @@ export function trackBeginCheckout(items: LineItem[], value: number) {
   });
 }
 
+// La compra es el único evento que de verdad importa para la pauta: sin él,
+// Meta no puede optimizar por ventas ni se puede medir el retorno. Se dispara
+// en /gracias con lo que el checkout dejó guardado antes de irse a Bold.
+export function trackPurchase(pedido: string, items: LineItem[], value: number) {
+  gtag("event", "purchase", {
+    transaction_id: pedido,
+    currency: CUR,
+    value,
+    items: items.map((i) => ({
+      item_id: String(i.id),
+      item_name: i.name,
+      price: i.price,
+      quantity: i.qty,
+    })),
+  });
+  fbq("track", "Purchase", {
+    content_ids: items.map((i) => String(i.id)),
+    content_type: "product",
+    num_items: items.reduce((s, i) => s + i.qty, 0),
+    value,
+    currency: CUR,
+  });
+}
+
+// Lo que el checkout guarda justo antes de mandar al cliente a pagar.
+export const CLAVE_COMPRA = "lafab_compra";
+export type CompraPendiente = { pedido: string; items: LineItem[]; total: number };
+
+export function guardaCompra(c: CompraPendiente) {
+  try {
+    sessionStorage.setItem(CLAVE_COMPRA, JSON.stringify(c));
+  } catch {
+    // Navegación privada o almacenamiento bloqueado: se pierde el evento,
+    // nunca la venta.
+  }
+}
+
+// Devuelve la compra guardada una sola vez: así recargar /gracias no cuenta
+// la venta dos veces.
+export function tomaCompra(): CompraPendiente | null {
+  try {
+    const crudo = sessionStorage.getItem(CLAVE_COMPRA);
+    if (!crudo) return null;
+    sessionStorage.removeItem(CLAVE_COMPRA);
+    const c = JSON.parse(crudo) as CompraPendiente;
+    return c && Array.isArray(c.items) ? c : null;
+  } catch {
+    return null;
+  }
+}
+
 export function trackContact(source = "whatsapp") {
   gtag("event", "generate_lead", { method: source });
   fbq("track", "Contact");

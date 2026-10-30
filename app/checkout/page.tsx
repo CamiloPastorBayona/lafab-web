@@ -12,7 +12,7 @@ import {
   type Address,
 } from "@/lib/headlessCheckout";
 import Ico from "@/components/LandingIcons";
-import { trackBeginCheckout } from "@/lib/analytics";
+import { trackBeginCheckout, guardaCompra } from "@/lib/analytics";
 import { SHIPPING_NOTE, SHIPPING_NATIONAL_COST, cop as copShip } from "@/lib/shipping";
 import { TOPE_BOLD, superaTopeBold, mensajeLimpio } from "@/lib/pagos";
 import { WHATSAPP } from "@/lib/content";
@@ -119,7 +119,18 @@ export default function CheckoutPage() {
           )
         );
 
-      // El pedido ya existe en WooCommerce; vaciamos el carrito local.
+      // El pedido ya existe en WooCommerce. Se guarda lo comprado antes de
+      // vaciar el carrito, para poder registrar la venta al volver de Bold.
+      guardaCompra({
+        pedido: String(order.data.order_id),
+        items: items.map((i) => ({
+          id: i.id,
+          name: i.name,
+          price: i.price,
+          qty: i.qty,
+        })),
+        total,
+      });
       clear();
       const redirect = order.data.payment_result?.redirect_url;
       if (redirect) {

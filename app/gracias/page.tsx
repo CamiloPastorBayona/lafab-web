@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCart } from "@/lib/cart";
 import Ico from "@/components/LandingIcons";
+import { tomaCompra, trackPurchase } from "@/lib/analytics";
 
 function Gracias() {
   const params = useSearchParams();
@@ -15,6 +16,13 @@ function Gracias() {
   useEffect(() => {
     clear();
   }, [clear]);
+
+  // Registra la venta en GA4 y en el pixel de Meta. tomaCompra() la entrega
+  // una sola vez, así recargar esta página no duplica la conversión.
+  useEffect(() => {
+    const compra = tomaCompra();
+    if (compra) trackPurchase(compra.pedido, compra.items, compra.total);
+  }, []);
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-24 text-center md:px-6">
