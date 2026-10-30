@@ -25,7 +25,14 @@ const SEALS = [
 ];
 
 export default async function HomePage() {
-  const products = await getProducts({ per_page: 8, orderby: "date" });
+  // Si el CMS tropieza durante el build, la portada se arma sin la banda de
+  // productos en vez de tumbar el despliegue; ISR la llena a los minutos.
+  const products = await getProducts({ per_page: 8, orderby: "date" }).catch(
+    (e) => {
+      console.error("[lafab] portada sin productos en el build:", e);
+      return [];
+    }
+  );
   const gallery = products.filter((p) => p.images?.[0]).slice(0, 6);
 
   return (

@@ -23,7 +23,12 @@ const HIGHLIGHTS = [
 ];
 
 export default async function ProyectosPage() {
-  const products = (await getProducts({ per_page: 12, orderby: "date" })).filter(
+  const products = (
+    await getProducts({ per_page: 12, orderby: "date" }).catch((e) => {
+      console.error("[lafab] proyectos sin productos en el build:", e);
+      return [];
+    })
+  ).filter(
     (p) => p.images?.[0]
   );
 

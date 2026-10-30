@@ -20,7 +20,12 @@ export default async function EspaciosPage() {
   const spaces = await Promise.all(
     SPACES.map(async (s) => ({
       ...s,
-      products: (await getProducts({ category: s.catId, per_page: 4 })).filter(
+      products: (
+        await getProducts({ category: s.catId, per_page: 4 }).catch((e) => {
+          console.error("[lafab] espacio sin productos en el build:", s.catId, e);
+          return [];
+        })
+      ).filter(
         (p) => p.images?.[0]
       ) as WCProduct[],
     }))
