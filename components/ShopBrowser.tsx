@@ -30,6 +30,15 @@ const SORTS = [
   { key: "name", label: "Nombre (A–Z)" },
 ];
 
+// Quien busca escribe "sofa", no "sofá". Sin esto, buscar sin tilde devolvía
+// cero resultados en una tienda donde casi todo empieza por "Sofá".
+const sinTildes = (s: string) =>
+  s
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+
 const PRICE_BRACKETS = [
   { label: "Hasta $2M", min: 0, max: 2_000_000 },
   { label: "$2M – $4M", min: 2_000_000, max: 4_000_000 },
@@ -158,13 +167,13 @@ export default function ShopBrowser({ products }: { products: WCProduct[] }) {
     Object.values(terms).reduce((s, set) => s + set.size, 0);
 
   const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const q = sinTildes(query.trim());
     const bracket = priceIdx !== null ? PRICE_BRACKETS[priceIdx] : null;
 
     const list = products.filter((p) => {
       const matchCat =
         activeCat === null || p.categories.some((c) => c.id === activeCat);
-      const matchQuery = !q || p.name.toLowerCase().includes(q);
+      const matchQuery = !q || sinTildes(p.name).includes(q);
       const pr = price(p);
       const matchPrice = !bracket || (pr >= bracket.min && pr < bracket.max);
       const matchAttrs = Object.entries(terms).every(([taxonomy, slugs]) => {

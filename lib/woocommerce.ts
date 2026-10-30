@@ -254,25 +254,46 @@ export async function getVariations(product: WCProduct): Promise<WCVariation[]> 
   // Se resuelven de a pocas y con reintentos. Antes iban las 27 de golpe y las
   // que fallaban se descartaban en silencio: la ficha quedaba con la mitad de
   // los colores o sin una de las medidas, de forma intermitente.
+  const leer = async (ref: WCVariationRef): Promise<WCVariation | null> => {
+    try {
+      const vp = await get<WCProduct>(`/products/${ref.id}`);
+      return {
+        id: ref.id,
+        prices: vp.prices,
+        on_sale: vp.on_sale,
+        is_in_stock: vp.is_in_stock,
+        image: vp.images?.[0]?.src,
+        attributes: ref.attributes,
+      } as WCVariation;
+    } catch {
+      return null;
+    }
+  };
+
   const resolved = await enTandas(
-    refs.map((ref) => async () => {
-      try {
-        const vp = await get<WCProduct>(`/products/${ref.id}`);
-        return {
-          id: ref.id,
-          prices: vp.prices,
-          on_sale: vp.on_sale,
-          is_in_stock: vp.is_in_stock,
-          image: vp.images?.[0]?.src,
-          attributes: ref.attributes,
-        } as WCVariation;
-      } catch (e) {
-        console.error(`[lafab] no se pudo leer la variación ${ref.id}`, e);
-        return null;
-      }
-    }),
+    refs.map((ref) => () => leer(ref)),
     5
   );
+
+  // Segunda pasada, de una en una, solo sobre las que no respondieron. El CMS
+  // está en hosting compartido y bajo ráfaga devuelve 5xx; si una variación se
+  // perdiera aquí, la ficha saldría sin uno de los colores o sin una medida.
+  const faltan = refs.filter((_, i) => resolved[i] === null);
+  if (faltan.length) {
+    console.error(
+      `[lafab] ${faltan.length} variaciones de ${product.slug} no respondieron; segundo intento en serie`
+    );
+    for (const ref of faltan) {
+      await dormir(250);
+      const v = await leer(ref);
+      if (v) resolved[refs.indexOf(ref)] = v;
+      else
+        console.error(
+          `[lafab] la variación ${ref.id} de ${product.slug} quedó fuera de la ficha`
+        );
+    }
+  }
+
   return resolved.filter((v): v is WCVariation => v !== null);
 }
 

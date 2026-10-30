@@ -21,6 +21,10 @@ const HOME_PATHS = new Set(["/", "/inicio"]);
 const LAMP_INTRO_DURATION_MS = 4540;
 const QUICK_INTRO_DURATION_MS = 900;
 const AUDIO_START_GUARD_MS = 1200;
+// Si nadie toca la pantalla, la intro sigue sola a los 3,5 s. Sin esto la
+// portada se queda en negro indefinidamente para quien no adivina que hay
+// que hacer clic: comprobado, a los 10 s la capa seguía ahí.
+const ESPERA_MAX_SIN_GESTO_MS = 3500;
 
 // ---- Audiologo ----------------------------------------------------------
 // Objetivo: el home empieza con una lámpara apagada. El primer tap/click del
@@ -281,6 +285,20 @@ export default function IntroLoader() {
     event.preventDefault();
     handleSoundGesture();
   };
+
+  // Nadie debería tener que descubrir que hay que tocar la pantalla para que
+  // el sitio aparezca. Si no hay gesto, la intro continúa sin sonido.
+  useEffect(() => {
+    if (!isWaitingForSound) return;
+    const t = setTimeout(() => {
+      const runId = runIdRef.current + 1;
+      runIdRef.current = runId;
+      markLampIntroSeen();
+      setShowLampIntro(false);
+      startVisualLoader(runId);
+    }, ESPERA_MAX_SIN_GESTO_MS);
+    return () => clearTimeout(t);
+  }, [isWaitingForSound, startVisualLoader]);
 
   useEffect(() => {
     const loader = loaderRef.current;

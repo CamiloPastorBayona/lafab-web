@@ -119,12 +119,15 @@ export default function CartPage() {
               </div>
             </div>
             <div className="mt-4 flex justify-between border-t border-ink/10 pt-4">
-              <span className="font-semibold text-ink">Total</span>
+              <span className="font-semibold text-ink">Total en Medellín</span>
               <span className="text-xl font-semibold text-ink">
                 {formatCOP(subtotal)}
               </span>
             </div>
-            <p className="mt-1 text-xs text-ink/40">IVA incluido</p>
+            <p className="mt-1 text-xs text-ink/40">
+              IVA incluido · A otra ciudad el total es{" "}
+              {formatCOP(subtotal + SHIPPING_NATIONAL_COST)}
+            </p>
             <Link
               href="/checkout"
               className="mt-5 block rounded-full bg-ink px-6 py-3.5 text-center font-semibold text-white transition-transform hover:scale-[1.02]"

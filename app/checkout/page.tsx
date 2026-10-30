@@ -53,9 +53,14 @@ export default function CheckoutPage() {
     ) =>
       setForm((f) => ({ ...f, [k]: e.target.value }));
 
+  // El envío sale del departamento elegido y coincide con las zonas de
+  // WooCommerce: Antioquia va incluido, el resto del país suma la tarifa plana.
+  const envio = form.departamento === "CO-ANT" ? 0 : SHIPPING_NATIONAL_COST;
+  const total = subtotal + envio;
+
   // Bold no acepta transacciones de más de diez millones, y una compra de ese
   // tamaño no se cierra por un formulario: se atiende por WhatsApp.
-  const sobreTope = superaTopeBold(subtotal);
+  const sobreTope = superaTopeBold(total);
 
   const canPay =
     !sobreTope &&
@@ -253,18 +258,30 @@ export default function CheckoutPage() {
                 </div>
                 <div className="flex justify-between text-ink/70">
                   <span>Envío</span>
-                  <span className="text-right">
-                    Incluido en Medellín
-                    <br />
-                    <span className="text-xs text-ink/45">
-                      +{copShip(SHIPPING_NATIONAL_COST)} otras ciudades
-                    </span>
+                  <span className="text-right font-medium text-ink">
+                    {envio === 0 ? (
+                      <>
+                        Incluido
+                        <br />
+                        <span className="text-xs font-normal text-ink/45">
+                          Medellín y área metropolitana
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        {formatCOP(envio)}
+                        <br />
+                        <span className="text-xs font-normal text-ink/45">
+                          Envío a tu ciudad
+                        </span>
+                      </>
+                    )}
                   </span>
                 </div>
               </div>
               <div className="mt-4 flex items-baseline justify-between border-t border-ink/10 pt-4">
                 <span className="font-medium text-ink">Total</span>
-                <span className="text-2xl font-semibold text-ink">{formatCOP(subtotal)}</span>
+                <span className="text-2xl font-semibold text-ink">{formatCOP(total)}</span>
               </div>
               <p className="mt-1 text-right text-xs text-ink/40">IVA incluido</p>
 

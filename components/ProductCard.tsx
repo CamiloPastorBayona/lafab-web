@@ -142,8 +142,12 @@ export default function ProductCard({ product }: { product: WCProduct }) {
         </div>
       </div>
 
-      {/* Información debajo de la foto: solo en móvil y tablet. */}
-      <div className="mt-3 flex flex-1 flex-col md:hidden">
+      {/* Información debajo de la foto, SIEMPRE. En escritorio estaba oculta
+          y solo aparecía al pasar el mouse: la tienda se veía como una
+          galería de fotos sin nombres ni precios, y encima abre ordenada
+          por precio. El cliente tenía que cazar cada tarjeta para saber
+          qué mueble era y cuánto valía. */}
+      <div className="mt-3 flex flex-1 flex-col">
         <Link href={href}>
           <h3 className="text-sm font-medium leading-snug text-ink">
             {product.name}
