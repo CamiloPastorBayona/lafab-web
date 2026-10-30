@@ -6,6 +6,7 @@ import { getProducts } from "@/lib/woocommerce";
 import { WHATSAPP } from "@/lib/content";
 import WpImage from "@/components/WpImage";
 import Ico from "@/components/LandingIcons";
+import GaleriaEntregas from "@/components/GaleriaEntregas";
 import { UPLOADS } from "@/lib/cms";
 
 export const revalidate = 300;
@@ -76,8 +77,41 @@ export default async function ProyectosPage() {
         </div>
       </section>
 
-      {/* Galería */}
+      {/* Entregas reales, fotografiadas en casa de los clientes */}
+      <section className="mx-auto max-w-site px-4 pt-14 md:px-6 md:pt-20">
+        <Reveal>
+          <div className="mb-8 max-w-2xl">
+            <p className="text-sm font-medium uppercase tracking-[0.25em] text-gold-dark">
+              Entregas reales
+            </p>
+            <h2 className="mt-2 text-3xl font-light text-ink md:text-4xl">
+              Así se ven en casa
+            </h2>
+            <p className="mt-3 text-ink/70">
+              Ninguna de estas fotos es un montaje: son muebles nuestros, ya
+              instalados, en las casas de quienes nos los encargaron.
+            </p>
+          </div>
+        </Reveal>
+        <GaleriaEntregas />
+      </section>
+
+      {/* Del catálogo */}
       <section className="mx-auto max-w-site px-4 py-14 md:px-6 md:py-20">
+        <Reveal>
+          <div className="mb-8 max-w-2xl">
+            <p className="text-sm font-medium uppercase tracking-[0.25em] text-gold-dark">
+              Del catálogo
+            </p>
+            <h2 className="mt-2 text-3xl font-light text-ink md:text-4xl">
+              Empieza por una pieza que ya existe
+            </h2>
+            <p className="mt-3 text-ink/70">
+              Cualquiera de estos muebles se adapta a tus medidas, tu tela y tu
+              color.
+            </p>
+          </div>
+        </Reveal>
         <div className="columns-2 gap-4 md:columns-3 md:gap-6 [&>div]:mb-4 md:[&>div]:mb-6">
           {products.map((p, i) => (
             <Reveal key={p.id} delay={(i % 3) * 80}>

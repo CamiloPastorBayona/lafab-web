@@ -35,7 +35,7 @@ const WHATSAPP =
 type NavItem = { label: string; href: string; children?: { label: string; href: string }[] };
 
 const NAV: NavItem[] = [
-  { label: "Inicio", href: "/inicio" },
+  { label: "Inicio", href: "/" },
   {
     label: "Tienda",
     href: "/shop",
@@ -76,7 +76,7 @@ export default function Header() {
       }`}
     >
       <div className="mx-auto flex max-w-site items-center justify-between px-4 py-3 md:px-6">
-        <Link href="/inicio" className="flex items-center">
+        <Link href="/" className="flex items-center">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={`${UPLOADS}/2022/12/lafab-blanco.png`}

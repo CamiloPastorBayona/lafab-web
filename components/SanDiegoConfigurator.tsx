@@ -310,7 +310,7 @@ export default function SanDiegoConfigurator() {
     add(
       {
         id: match?.id ?? L.productId,
-        name: `${L.name} · ${size} · ${fabric.name} · ${color.name} · Envío: ${ship.label}${ship.cost > 0 ? ` (+${cop(ship.cost)})` : " (incluido)"}`,
+        name: `${L.name} · ${size} · ${fabric.name} · ${color.name}`,
         slug: L.slug,
         image: color.foto,
         price: PRICE,

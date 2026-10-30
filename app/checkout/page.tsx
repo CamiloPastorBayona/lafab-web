@@ -26,7 +26,7 @@ export default function CheckoutPage() {
     apellidos: "",
     email: "",
     telefono: "",
-    departamento: "CO-ANT",
+    departamento: "",
     ciudad: "",
     direccion: "",
     postcode: "",
@@ -55,8 +55,16 @@ export default function CheckoutPage() {
 
   // El envío sale del departamento elegido y coincide con las zonas de
   // WooCommerce: Antioquia va incluido, el resto del país suma la tarifa plana.
-  const envio = form.departamento === "CO-ANT" ? 0 : SHIPPING_NATIONAL_COST;
-  const total = subtotal + envio;
+  // Sin departamento no se puede saber el envío. Antes el formulario venía con
+  // Antioquia puesto de entrada: quien no lo cambiaba se llevaba el envío
+  // gratis aunque despachara a Bogotá, y nadie lo advertía.
+  const envio =
+    form.departamento === ""
+      ? null
+      : form.departamento === "CO-ANT"
+        ? 0
+        : SHIPPING_NATIONAL_COST;
+  const total = subtotal + (envio ?? 0);
 
   // Bold no acepta transacciones de más de diez millones, y una compra de ese
   // tamaño no se cierra por un formulario: se atiende por WhatsApp.
@@ -214,6 +222,7 @@ export default function CheckoutPage() {
                     value={form.departamento}
                     onChange={set("departamento")}
                   >
+                    <option value="">Departamento *</option>
                     {CO_DEPARTMENTS.map((d) => (
                       <option key={d.code} value={d.code}>
                         {d.name}
@@ -270,7 +279,11 @@ export default function CheckoutPage() {
                 <div className="flex justify-between text-ink/70">
                   <span>Envío</span>
                   <span className="text-right font-medium text-ink">
-                    {envio === 0 ? (
+                    {envio === null ? (
+                      <span className="font-normal text-ink/45">
+                        Elige tu departamento
+                      </span>
+                    ) : envio === 0 ? (
                       <>
                         Incluido
                         <br />
@@ -294,7 +307,9 @@ export default function CheckoutPage() {
                 <span className="font-medium text-ink">Total</span>
                 <span className="text-2xl font-semibold text-ink">{formatCOP(total)}</span>
               </div>
-              <p className="mt-1 text-right text-xs text-ink/40">IVA incluido</p>
+              <p className="mt-1 text-right text-xs text-ink/40">
+                {envio === null ? "IVA incluido · falta sumar el envío" : "IVA incluido"}
+              </p>
 
               {error && (
                 <p className="mt-4 rounded-xl bg-sale/10 px-4 py-3 text-sm text-sale">

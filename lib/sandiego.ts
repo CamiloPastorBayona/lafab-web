@@ -134,7 +134,7 @@ export const SANDIEGO = {
   ],
 
   compra: [
-    { n: "01", title: "Elige la medida", text: "A tu espacio, de 1.70 a 2.00 m." },
+    { n: "01", title: "Elige la medida", text: "A tu espacio, de 1.80 a 2.00 m." },
     { n: "02", title: "Elige el material", text: "Microfibra Mon o Chenil Milan." },
     { n: "03", title: "Escoge el color", text: "Varias tonalidades disponibles." },
     { n: "04", title: "Indica tu ciudad", text: "Verás el costo del envío antes de pagar." },

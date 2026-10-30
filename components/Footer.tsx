@@ -98,6 +98,7 @@ export default function Footer() {
             </a>
             <Link href="/espacios" className={`block ${link}`}>Compra por espacios</Link>
             <Link href="/preguntas-frecuentes" className={`block ${link}`}>Preguntas frecuentes</Link>
+            <Link href="/contacto" className={`block ${link}`}>Contáctanos</Link>
             <Link href="/terminos-y-condiciones" className={`block ${link}`}>
               Póliza de garantía
             </Link>

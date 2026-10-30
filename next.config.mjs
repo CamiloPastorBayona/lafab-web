@@ -28,6 +28,9 @@ const nextConfig = {
     }));
 
     return [
+      // /inicio servía la misma portada que /: dos URLs con el mismo
+      // contenido compitiendo entre sí en Google.
+      { source: "/inicio", destination: "/", permanent: true },
       { source: "/camas", destination: "/alcobas", permanent: true },
 
       // Fichas de alcoba que antes se llamaban "cama".
