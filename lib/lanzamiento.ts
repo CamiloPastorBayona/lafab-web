@@ -1,7 +1,7 @@
 // Momento exacto del lanzamiento público de la tienda nueva:
-// viernes 30 de octubre de 2026, 8:00 a. m. hora de Colombia.
+// viernes 30 de octubre de 2026, 5:00 p. m. hora de Colombia.
 // Colombia no cambia de hora, así que el desfase es siempre -05:00.
-export const LANZAMIENTO_MS = Date.parse("2026-10-30T08:00:00-05:00");
+export const LANZAMIENTO_MS = Date.parse("2026-10-30T17:00:00-05:00");
 
 // La cuenta regresiva se muestra durante los 4 días previos.
 export const VENTANA_MS = 4 * 24 * 60 * 60 * 1000;
