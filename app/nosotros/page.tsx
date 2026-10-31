@@ -11,20 +11,16 @@ export const metadata: Metadata = {
     "En LaFab diseñamos y fabricamos muebles a la medida con fabricación propia en Itagüí. Conoce nuestra historia, nuestro taller y nuestra forma de trabajar.",
 };
 
-// Las caras del taller. Nueve fotos reales de los muchachos trabajando, las
-// mismas que sostienen la sección "Nuestro proceso" de la landing del San
-// Diego. Se muestran en mosaico: tres piezas altas marcan el ritmo y el resto
-// acompaña, para que la sección respire en vez de verse como una grilla.
+// Las caras del taller: solo fotos reales de los muchachos trabajando. Las
+// cuatro que venían del banco de imágenes se quitaron, porque una sección que
+// se llama "quiénes lo hacen" no puede mostrar manos que no son las nuestras.
+// Se muestran en mosaico: dos piezas altas marcan el ritmo y el resto acompaña.
 const EQUIPO = [
-  { src: "2026/06/taller1.webp", alt: "Corte de la madera en el taller de LaFab", alto: true },
-  { src: "2026/06/taller2.webp", alt: "Costura de un tapizado en el taller de LaFab" },
-  { src: "2026/06/taller3.webp", alt: "Ensamble de la esqueletería en madera" },
-  { src: "2026/06/taller4-1.webp", alt: "Revisión manual de cada unión", alto: true },
-  { src: "2026/06/taller5.webp", alt: "Acabado artesanal de la tapicería" },
-  { src: "2026/06/taller1-1.webp", alt: "Preparación de las piezas antes del ensamble" },
-  { src: "2026/06/taller2-1.webp", alt: "Detalle de una costura reforzada", alto: true },
-  { src: "2026/06/taller3-1.webp", alt: "Trabajo de carpintería en el taller" },
-  { src: "2026/06/taller4.webp", alt: "Control de calidad pieza por pieza" },
+  { src: "2026/06/taller4-1.webp", alt: "Grapando el tapizado de un espaldar en el taller de LaFab", alto: true },
+  { src: "2026/06/taller5.webp", alt: "Marcando el patrón de una tela antes de cortarla" },
+  { src: "2026/06/taller2-1.webp", alt: "Cosiendo un forro en la máquina plana del taller" },
+  { src: "2026/06/taller1-1.webp", alt: "Ensamblando la esqueletería en madera con pistola neumática", alto: true },
+  { src: "2026/06/taller3-1.webp", alt: "Tapizando a mano el respaldo de una poltrona" },
 ];
 
 const VALUES = [

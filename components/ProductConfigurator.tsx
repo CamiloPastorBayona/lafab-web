@@ -36,7 +36,10 @@ type Choice = { slug: string; name: string; image?: string };
 const norm = (s: string) => s.trim().toLowerCase();
 const prettify = (slug: string) =>
   slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+import { COLOR_INICIAL, tonoDe } from "@/lib/tonos";
+
 const esColor = (name: string) => /color/i.test(name);
+const esMaterial = (name: string) => /material|tapizado|tela/i.test(name);
 
 /** ¿La variación cumple con esta selección parcial? */
 function coincide(v: WCVariation, sel: Record<string, string>, salvo?: string) {
@@ -78,10 +81,27 @@ export default function ProductConfigurator({
     [product.attributes, variations]
   );
 
-  // Selección inicial: la primera variación con precio (o la primera que haya).
+  // Selección inicial. Lo esperable es que la ficha abra con el mueble que se
+  // ve en la foto: si la foto es de un sofá azul, el círculo marcado debe ser
+  // el azul. COLOR_INICIAL guarda, por producto, el material y el color que de
+  // verdad corresponden a esa foto. Si no hay dato, se cae en lo de siempre:
+  // la primera variación con precio.
   const [selected, setSelected] = useState<Record<string, string>>(() => {
+    const deseado = COLOR_INICIAL[product.slug];
+    const porFoto = deseado
+      ? variations.find(
+          (v) =>
+            Number(v.prices?.price) > 0 &&
+            v.attributes.some(
+              (a) => esMaterial(a.name) && norm(a.value) === norm(deseado.material)
+            ) &&
+            v.attributes.some(
+              (a) => esColor(a.name) && norm(a.value) === norm(deseado.color)
+            )
+        )
+      : undefined;
     const base =
-      variations.find((v) => Number(v.prices?.price) > 0) ?? variations[0];
+      porFoto ?? variations.find((v) => Number(v.prices?.price) > 0) ?? variations[0];
     const init: Record<string, string> = {};
     if (base) {
       for (const name of attrNames) {
@@ -116,7 +136,16 @@ export default function ProductConfigurator({
           image: v.image,
         });
       }
-      return { name, choices: [...vistos.values()] };
+      let choices = [...vistos.values()];
+      // Los colores se leen mejor de claro a oscuro, como una paleta.
+      if (esColor(name)) {
+        const mat =
+          Object.entries(selected).find(([n]) => esMaterial(n))?.[1] ?? "";
+        choices = choices.sort(
+          (a, b) => tonoDe(mat, b.slug) - tonoDe(mat, a.slug)
+        );
+      }
+      return { name, choices };
     });
   }, [attrNames, product.attributes, variations, selected]);
 

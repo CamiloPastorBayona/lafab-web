@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useLanding } from "@/components/LandingContext";
 import { useLandingCatalog } from "@/components/LandingCatalogContext";
 import { useCart } from "@/lib/cart";
+import { tonoDe } from "@/lib/tonos";
 import { SHIPPING_ZONES, cop } from "@/lib/shipping";
 import { UPLOADS } from "@/lib/cms";
 import { versionDe } from "@/lib/imagenes";
@@ -237,12 +238,15 @@ export default function SanDiegoConfigurator() {
         key,
         name: mat,
         tag: TAGS[key] ?? "Tapizado LaFab",
-        colors: [...porMaterial.get(mat)!.entries()].map(([nombre, swatch]) => ({
-          name: nombre,
-          hex: "#EDE8E0",
-          img: swatchDe(key, nombre, swatch),
-          foto: fotoDe(key, nombre),
-        })),
+        // De más claro a más oscuro, igual que en la ficha de producto.
+        colors: [...porMaterial.get(mat)!.entries()]
+          .sort((a, b) => tonoDe(mat, b[0]) - tonoDe(mat, a[0]))
+          .map(([nombre, swatch]) => ({
+            name: nombre,
+            hex: "#EDE8E0",
+            img: swatchDe(key, nombre, swatch),
+            foto: fotoDe(key, nombre),
+          })),
       };
     });
   }, [cat, L]);
