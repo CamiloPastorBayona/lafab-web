@@ -37,6 +37,16 @@ export default function Analytics() {
         {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;gtag('js',new Date());gtag('config','${GA}');`}
       </Script>
 
+      {/* Vercel Web Analytics.
+          El componente <VercelAnalytics /> del layout crea la cola window.vaq y
+          registra cada cambio de ruta, pero en producción no estaba inyectando
+          su cargador: la cola crecía y nunca se vaciaba, así que el panel de
+          Vercel seguía en cero. Se pide el script explícitamente, que es la
+          forma que la propia Vercel documenta para cualquier framework. La
+          librería no duplica: si alguna vez vuelve a inyectarlo, se detiene al
+          ver que ya está. */}
+      <Script src="/_vercel/insights/script.js" strategy="lazyOnload" />
+
       {/* Microsoft Clarity */}
       <Script id="clarity" strategy="lazyOnload">
         {`(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${CLARITY}");`}
