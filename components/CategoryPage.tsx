@@ -55,18 +55,9 @@ export default function CategoryPage({
           <span className="text-ink">{cfg.eyebrow}</span>
         </nav>
 
-        {/* Intro SEO */}
-        <Reveal>
-          <div className="max-w-3xl space-y-4 text-ink/75">
-            {cfg.intro.map((par, i) => (
-              <p key={i}>{par}</p>
-            ))}
-          </div>
-        </Reveal>
-
         {cfg.subcategories && cfg.subcategories.length > 0 && (
           <Reveal>
-            <div className="mt-6 flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="text-sm text-ink/50">Explora también:</span>
               {cfg.subcategories.map((sc) => (
                 <Link
@@ -81,22 +72,8 @@ export default function CategoryPage({
           </Reveal>
         )}
 
-        {/* Beneficios */}
-        <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4">
-          {BENEFITS.map((b, i) => (
-            <Reveal key={b.t} delay={(i % 4) * 80}>
-              <div className="flex items-center gap-3 rounded-2xl border border-ink/10 p-4">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-cream text-gold-dark">
-                  <Ico name={b.icon} className="h-5 w-5" />
-                </span>
-                <span className="text-sm font-medium text-ink">{b.t}</span>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-
         {/* Grid de productos */}
-        <div className="mt-14">
+        <div className="mt-10">
           <h2 className="mb-6 text-2xl font-light text-ink md:text-3xl">
             {cfg.eyebrow} disponibles
           </h2>
@@ -122,6 +99,36 @@ export default function CategoryPage({
             </div>
           )}
         </div>
+
+        {/* Beneficios */}
+        <div className="mt-14 grid grid-cols-2 gap-4 md:grid-cols-4">
+          {BENEFITS.map((b, i) => (
+            <Reveal key={b.t} delay={(i % 4) * 80}>
+              <div className="flex items-center gap-3 rounded-2xl border border-ink/10 p-4">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-cream text-gold-dark">
+                  <Ico name={b.icon} className="h-5 w-5" />
+                </span>
+                <span className="text-sm font-medium text-ink">{b.t}</span>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+
+        {/* El texto largo va después de los productos: quien llega a una
+            categoría quiere ver muebles, no leer. Google lo lee igual. */}
+        <Reveal>
+          <section className="mt-14 max-w-3xl">
+            <h2 className="mb-4 text-2xl font-light text-ink md:text-3xl">
+              Sobre nuestros {cfg.eyebrow.toLowerCase()}
+            </h2>
+            <div className="space-y-4 text-ink/75">
+              {cfg.intro.map((par, i) => (
+                <p key={i}>{par}</p>
+              ))}
+            </div>
+          </section>
+        </Reveal>
 
         {/* FAQ */}
         <section className="mt-16 max-w-3xl">
