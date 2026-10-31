@@ -9,9 +9,25 @@ export const metadata: Metadata = {
     "Resolvemos tus dudas sobre muebles a la medida, tiempos de fabricación, envíos, pagos, garantía y personalización en LaFab.",
 };
 
+// Mismo marcado que en las categorías: estas preguntas pueden salir
+// desplegables en el resultado de Google y ocupar más espacio en la página.
+const FAQ_JSONLD = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQS.map((item) => ({
+    "@type": "Question",
+    name: item.q,
+    acceptedAnswer: { "@type": "Answer", text: item.a },
+  })),
+};
+
 export default function FaqPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_JSONLD) }}
+      />
       <PageHeader
         eyebrow="Ayuda"
         title="Preguntas frecuentes"

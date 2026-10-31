@@ -38,10 +38,26 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
   // Canónica siempre al dominio propio: el alias *.vercel.app no compite.
   alternates: { canonical: "./" },
+  // Imagen por defecto al compartir. Sin esto, la portada, la tienda y las
+  // landings se compartían en WhatsApp y redes como una tarjeta gris sin foto:
+  // justo las páginas que más se pegan en un chat o en un anuncio. Las fichas
+  // y las categorías siguen poniendo la suya y pisan esta.
   openGraph: {
     type: "website",
     locale: "es_CO",
     siteName: "LaFab",
+    images: [
+      {
+        url: `${UPLOADS}/2026/10/lafab-muebles-a-la-medida-medellin-og.jpg`,
+        width: 1200,
+        height: 630,
+        alt: "LaFab · Muebles a la medida con fabricación propia en Medellín",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: [`${UPLOADS}/2026/10/lafab-muebles-a-la-medida-medellin-og.jpg`],
   },
 };
 

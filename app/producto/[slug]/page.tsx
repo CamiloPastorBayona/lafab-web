@@ -153,6 +153,7 @@ export default async function ProductPage({
       `${product.name} fabricado a la medida por LaFab en Medellín.`
     ).slice(0, 320),
     brand: { "@type": "Brand", name: "LaFab" },
+    ...(product.sku ? { sku: product.sku, mpn: product.sku } : {}),
     // Sin precio confirmado no se declara oferta: Google penaliza un precio 0.
     ...(!tienePrecio(p) ? {} : { offers: p.price_range
       ? {

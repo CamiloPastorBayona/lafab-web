@@ -38,12 +38,31 @@ export default function CategoryPage({
     ],
   };
 
+  // Las preguntas de la categoría ya están escritas en la página; con este
+  // marcado Google puede mostrarlas desplegables debajo del resultado, que
+  // ocupa más espacio en la búsqueda y se lleva más clics.
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: cfg.faq.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
       />
+      {cfg.faq.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
 
       <PageHeader eyebrow={cfg.eyebrow} title={cfg.h1} image={cfg.image} />
 
