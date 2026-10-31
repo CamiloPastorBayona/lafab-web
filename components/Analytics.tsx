@@ -4,8 +4,12 @@ import Script from "next/script";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
-// IDs de las cuentas de LaFab (mismas que en WordPress/staging).
-const GA = process.env.NEXT_PUBLIC_GA_ID || "G-EQDN3BWDSD";
+// IDs de las cuentas de LaFab.
+// El sitio estuvo enviando sus visitas a G-EQDN3BWDSD, una propiedad que no
+// está en ninguna de las dos cuentas de Analytics de LaFab: los datos salían
+// del navegador pero caían donde nadie de la empresa podía verlos. El flujo
+// correcto es "LaFab Web" (lafab.com.co) de la propiedad LaFab.
+const GA = process.env.NEXT_PUBLIC_GA_ID || "G-KWFSKXPJ30";
 const CLARITY = process.env.NEXT_PUBLIC_CLARITY_ID || "xq77h4k3lx";
 const PIXEL = process.env.NEXT_PUBLIC_FB_PIXEL_ID || "1531225141803025";
 
