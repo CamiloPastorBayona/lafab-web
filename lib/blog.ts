@@ -110,7 +110,7 @@ export const ARTICLES: Article[] = [
 <p><strong>Ninguna tela es a prueba de gatos.</strong> Si alguien te promete una, está exagerando. Pero sí hay una diferencia enorme entre una tela que la uña engancha y una que no, y esa diferencia no está en la marca ni en el precio: está en cómo está tejida.</p>
 
 <h2>Primero, por qué rasca tu gato</h2>
-<p>No lo hace por dañar ni por rabia. Rascar le sirve para tres cosas: retirar la capa vieja de la uña, estirar la espalda y las patas al despertar, y marcar territorio —tiene glándulas en las almohadillas que dejan olor—. Por eso rasca en lugares visibles y de paso, no escondido. Y por eso el brazo del sofá, que está a la entrada de la sala y a la altura perfecta, es el blanco número uno.</p>
+<p>No lo hace por dañar ni por rabia. Rascar le sirve para tres cosas: retirar la capa vieja de la uña, estirar la espalda y las patas al despertar, y marcar territorio, porque tiene glándulas en las almohadillas que dejan olor. Por eso rasca en lugares visibles y de paso, no escondido. Y por eso el brazo del sofá, que está a la entrada de la sala y a la altura perfecta, es el blanco número uno.</p>
 
 <p>Entender esto cambia la solución. No se trata de que deje de rascar: se trata de darle una superficie mejor y de que el sofá no sea una presa fácil.</p>
 
@@ -118,8 +118,8 @@ export const ARTICLES: Article[] = [
 <p>Una uña de gato no corta la tela como una cuchilla. Lo que hace es <strong>engancharse en un hilo y halarlo</strong>. Por eso el enemigo no es la dureza de la tela sino su relieve:</p>
 
 <ul>
-  <li><strong>Telas de bucle o trama abierta</strong> —bouclé, linos rústicos de hilo grueso, tejidos con textura muy marcada— tienen hilos que sobresalen formando pequeños arcos. La uña entra en el arco, el gato tira y saca el hilo. Un solo hilo corrido arruina más la apariencia de un sofá que cien arañazos superficiales, y no se puede devolver a su sitio.</li>
-  <li><strong>Telas de trama cerrada y pelo corto</strong> —la microfibra tipo soft velvet es el caso típico— no tienen dónde engancharse. La uña resbala. Puede alborotar el pelo de la tela, pero eso se cepilla con la mano y vuelve a su sitio.</li>
+  <li><strong>Telas de bucle o trama abierta</strong>, como el bouclé, los linos rústicos de hilo grueso y los tejidos con textura muy marcada. Tienen hilos que sobresalen formando pequeños arcos. La uña entra en el arco, el gato tira y saca el hilo. Un solo hilo corrido arruina más la apariencia de un sofá que cien arañazos superficiales, y no se puede devolver a su sitio.</li>
+  <li><strong>Telas de trama cerrada y pelo corto</strong>, de las que la microfibra tipo soft velvet es el caso típico. No tienen dónde engancharse. La uña resbala. Puede alborotar el pelo de la tela, pero eso se cepilla con la mano y vuelve a su sitio.</li>
 </ul>
 
 <p>Esa es la regla práctica: <em>si al pasar la mano sientes hilos que sobresalen, la uña también los va a encontrar.</em></p>
@@ -127,17 +127,17 @@ export const ARTICLES: Article[] = [
 <h2>Qué significa esto en nuestro catálogo</h2>
 <p>Trabajamos tres materiales, y con gato en casa no se comportan igual:</p>
 
-<h3>Microfibra — la mejor opción si hay gato</h3>
+<h3>Microfibra: la mejor opción si hay gato</h3>
 <p>Es una tela de trama cerrada y pelo corto, del tipo que no le da agarre a la uña. Además es antifluido, lo que ayuda con el otro clásico de tener gato: la bola de pelo del lunes por la mañana. Es la que recomendamos cuando alguien nos escribe diciendo "tengo dos gatos".</p>
 
-<h3>Lino — más bonito, más vulnerable</h3>
+<h3>Lino: más bonito, más vulnerable</h3>
 <p>El lino tiene una textura natural que a mucha gente le encanta, y precisamente esa textura es la que un gato puede enganchar. No está prohibido tener lino con gato, pero conviene saber en qué te metes: si tu gato ya tiene historial de rascar muebles, no es la decisión más tranquila.</p>
 
-<h3>Cuero — otro tipo de daño</h3>
+<h3>Cuero: otro tipo de daño</h3>
 <p>Aquí no hay hilos que sacar, así que el daño de "hilo corrido" desaparece. A cambio, una uña sí puede dejar una marca o una perforación, y en cuero esas marcas se quedan. La ventaja: se limpia pasando un paño y resiste muy bien el pelo. La desventaja, además del precio, es que un rayón es permanente.</p>
 
 <h2>El color también disimula (o delata)</h2>
-<p>En una microfibra, el roce de la uña altera la dirección del pelo y se nota como una zona más clara o más oscura. En tonos medios —arena, almendra, plata— eso casi no se ve y se corrige pasando la mano. En un liso muy oscuro se nota más, porque cualquier cambio de dirección de la fibra contrasta.</p>
+<p>En una microfibra, el roce de la uña altera la dirección del pelo y se nota como una zona más clara o más oscura. En tonos medios como arena, almendra o plata, eso casi no se ve y se corrige pasando la mano. En un liso muy oscuro se nota más, porque cualquier cambio de dirección de la fibra contrasta.</p>
 
 <h2>Lo que funciona además de la tela</h2>
 <p>Elegir bien la tela resuelve la mitad del problema. La otra mitad no es un material, es una costumbre:</p>

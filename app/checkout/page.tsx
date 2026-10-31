@@ -190,9 +190,9 @@ export default function CheckoutPage() {
           </h1>
           <div className="mt-4 flex items-center gap-2 text-xs text-ink/50">
             <span className="rounded-full bg-white px-3 py-1">1 · Datos</span>
-            <span className="text-ink/30">—</span>
+            <span className="text-ink/30">›</span>
             <span className="rounded-full bg-white px-3 py-1">2 · Envío</span>
-            <span className="text-ink/30">—</span>
+            <span className="text-ink/30">›</span>
             <span className="rounded-full bg-white px-3 py-1">3 · Pago seguro</span>
           </div>
         </div>

@@ -170,7 +170,7 @@ export const CIUDADES: Ciudad[] = [
     entrada:
       "Fabricamos cada pieza por encargo en Itagüí y la enviamos a Bucaramanga. Nada de catálogo cerrado: la medida, el material y el color los eliges tú.",
     cuerpo: [
-      "Los 30 días de fabricación no son una fórmula de cortesía: son el tiempo real que toma cortar la madera, armar la esqueletería, dejar curar, tapizar y revisar. Si pides un mueble pensando en una fecha —un trasteo, una entrega de apartamento, diciembre—, cuéntanoslo al encargar y te decimos de frente si llegamos o no. Preferimos perder una venta a prometer una fecha que no se cumple.",
+      "Los 30 días de fabricación no son una fórmula de cortesía: son el tiempo real que toma cortar la madera, armar la esqueletería, dejar curar, tapizar y revisar. Si pides un mueble pensando en una fecha, sea un trasteo, la entrega de un apartamento o diciembre, cuéntanoslo al encargar y te decimos de frente si llegamos o no. Preferimos perder una venta a prometer una fecha que no se cumple.",
       "Mientras tanto puedes ver cómo quedan nuestros muebles ya instalados: en la página de proyectos hay fotos reales de entregas, tomadas en casas de clientes, sin montaje ni render.",
       "El envío a Bucaramanga cuesta $200.000 sobre el precio publicado.",
     ],

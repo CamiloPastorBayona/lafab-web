@@ -79,7 +79,7 @@ export default function ShareButtons({ url, title, className = "" }: Props) {
     return () => clearTimeout(t);
   }, [copiado]);
 
-  const texto = `${title} — LaFab`;
+  const texto = `${title} · LaFab`;
   const u = encodeURIComponent(url);
   const t = encodeURIComponent(texto);
 
