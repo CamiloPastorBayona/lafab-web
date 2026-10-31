@@ -2,6 +2,7 @@ import { MetadataRoute } from "next";
 import { getProducts } from "@/lib/woocommerce";
 import { ARTICLES } from "@/lib/blog";
 import { LANDING_BY_SLUG } from "@/lib/landings";
+import { CIUDADES } from "@/lib/ciudades";
 
 const SITE = "https://lafab.com.co";
 
@@ -21,6 +22,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // vuelve a olvidar ninguna: /luton estuvo fuera del sitemap desde que se
     // publicó.
     ...Object.values(LANDING_BY_SLUG),
+    // Una página por ciudad: son las que compiten por "muebles a la medida
+    // en Bogotá" y demás, donde el resto del sitio no entra porque todo
+    // habla de Medellín.
+    ...CIUDADES.map((c) => `/muebles-a-la-medida/${c.slug}`),
     "/espacios",
     "/proyectos",
     "/nosotros",

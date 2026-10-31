@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Ico from "@/components/LandingIcons";
+import { CIUDADES } from "@/lib/ciudades";
 import { UPLOADS } from "@/lib/cms";
 
 const WHATSAPP =
@@ -117,6 +118,24 @@ export default function Footer() {
               <br />
               Itagüí, Antioquia
             </p>
+          </div>
+        </div>
+
+        {/* Enviamos a: enlaza las páginas de ciudad desde todo el sitio, que es
+            como Google las descubre y entiende que son parte del mismo negocio. */}
+        <div className="mt-12 border-t border-white/10 pt-8">
+          <h4 className={head}>Enviamos a todo el país</h4>
+          <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
+            <Link href="/showrooms" className={link}>Medellín</Link>
+            {CIUDADES.map((c) => (
+              <Link
+                key={c.slug}
+                href={`/muebles-a-la-medida/${c.slug}`}
+                className={link}
+              >
+                {c.nombre}
+              </Link>
+            ))}
           </div>
         </div>
 
