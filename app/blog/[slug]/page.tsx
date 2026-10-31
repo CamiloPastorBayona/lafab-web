@@ -101,7 +101,7 @@ export default function ArticlePage({
 
             <Reveal>
               <div
-                className="max-w-2xl text-[17px] leading-relaxed text-ink/75 [&_a]:text-gold-dark [&_a]:underline [&_h2]:mt-10 [&_h2]:text-2xl [&_h2]:font-light [&_h2]:text-ink [&_li]:mt-1 [&_p]:mt-4 [&_ul]:mt-4 [&_ul]:list-disc [&_ul]:pl-5"
+                className="max-w-2xl text-[17px] leading-relaxed text-ink/75 [&_a]:text-gold-dark [&_a]:underline [&_h2]:mt-10 [&_h2]:text-2xl [&_h2]:font-light [&_h2]:text-ink [&_h3]:mt-7 [&_h3]:text-lg [&_h3]:font-medium [&_h3]:text-ink [&_em]:italic [&_strong]:font-semibold [&_strong]:text-ink [&_li]:mt-1 [&_p]:mt-4 [&_ul]:mt-4 [&_ul]:list-disc [&_ul]:pl-5"
                 dangerouslySetInnerHTML={{ __html: a.bodyHtml }}
               />
             </Reveal>

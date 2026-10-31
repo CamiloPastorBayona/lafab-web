@@ -6,6 +6,10 @@ import Footer from "@/components/Footer";
 import { CartProvider } from "@/lib/cart";
 import CartDrawer from "@/components/CartDrawer";
 import Analytics from "@/components/Analytics";
+// Segunda fuente de medición, independiente de Google: cuenta en el borde de
+// Vercel, así que no la frenan los bloqueadores de anuncios ni depende de
+// cookies. Sirve para contrastar cifras, no para reemplazar a GA4.
+import { Analytics as VercelAnalytics } from "@vercel/analytics/next";
 import WhatsAppFab from "@/components/WhatsAppFab";
 import ImageGuard from "@/components/ImageGuard";
 import IntroLoader from "@/components/IntroLoader";
@@ -124,6 +128,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(BUSINESS_JSONLD) }}
         />
         <Analytics />
+        <VercelAnalytics />
         <IntroLoader />
         <CartProvider>
           <Header />
