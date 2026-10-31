@@ -101,7 +101,7 @@ export default function Footer() {
             <Link href="/preguntas-frecuentes" className={`block ${link}`}>Preguntas frecuentes</Link>
             <Link href="/contacto" className={`block ${link}`}>Contáctanos</Link>
             <Link href="/terminos-y-condiciones" className={`block ${link}`}>
-              Póliza de garantía
+              Garantía y devoluciones
             </Link>
           </div>
 

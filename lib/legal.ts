@@ -82,7 +82,7 @@ Las presentes condiciones regulan los derechos y obligaciones de las partes y lo
     body: `Los precios publicados incluyen IVA. El envío está incluido para Medellín y su área metropolitana; para los demás destinos el costo adicional se informa antes de confirmar la compra. Cualquier otro gravamen que llegue a generarse será informado previamente al Cliente. Al acceder al checkout con todos los datos ingresados (productos, contacto, dirección, método de envío y forma de pago), se le mostrará el valor exacto a pagar, que incluirá todos los conceptos anteriores.`,
   },
   {
-    title: "Derecho de retracto",
+    title: "Devoluciones y derecho de retracto",
     body: `En las ventas a distancia el consumidor tendrá un término máximo de cinco (5) días hábiles para ejercer el derecho de retracto, contados a partir de la entrega del bien. Para su efectividad, deberá devolver el producto por los mismos medios y en las mismas condiciones en que lo recibió; los costos de transporte de la devolución serán cubiertos por el consumidor.
 
 La devolución del dinero no excederá de quince (15) días calendario desde que ejerció el derecho. Se exceptúan del derecho de retracto los bienes confeccionados conforme a las especificaciones del consumidor o claramente personalizados.`,
@@ -104,7 +104,7 @@ El tiempo de entrega será de 35 días hábiles cuando se realice dentro del Ár
 Inversiones cubrirá únicamente el costo de transporte dentro del Área Metropolitana del Valle de Aburrá; el transporte a otros destinos será asumido por el cliente. La entrega se realizará en condiciones normales de acceso (escaleras, ascensores y puertas); cuando no existan estas condiciones, el cliente gestionará servicios de malacate asumiendo dichos costos. El cliente debe revisar la mercancía al recibirla e informar cualquier anomalía antes de firmar el comprobante de recibo.`,
   },
   {
-    title: "Cambios de productos",
+    title: "Cambios y devoluciones de productos",
     body: `El Cliente acepta que los productos adquiridos no tienen cambio, dado que son confeccionados conforme a las especificaciones del consumidor o claramente personalizados. Lo anterior no aplica en casos de garantía legal.`,
   },
   {

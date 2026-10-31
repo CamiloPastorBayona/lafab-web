@@ -184,7 +184,7 @@ export const FAQS = [
   },
   {
     q: "¿Los muebles tienen garantía?",
-    a: "Sí: 3 años en la estructura y 1 año por desajustes, además de atención postventa. Consulta los detalles en nuestra Póliza de garantía.",
+    a: "Sí: 3 años en la estructura y 1 año por desajustes, además de atención postventa. Consulta los detalles en Garantía y devoluciones.",
   },
   {
     q: "¿Puedo elegir la tela, el color y las medidas?",
