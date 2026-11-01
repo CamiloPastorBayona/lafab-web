@@ -110,7 +110,7 @@ export const CIUDADES: Ciudad[] = [
       },
       {
         q: "¿La garantía aplica fuera de Medellín?",
-        a: "Sí, es la misma en todo el país: un año en la estructura por desajuste, tres años en la madera interna y un año en costuras.",
+        a: "Sí, es la misma en todo el país: tres años en la estructura y un año por desajustes. Telas y espumas, según el tiempo del proveedor.",
       },
     ],
   },
@@ -154,7 +154,7 @@ export const CIUDADES: Ciudad[] = [
       },
       {
         q: "¿Qué cubre la garantía?",
-        a: "Un año en la estructura por desajuste, tres años en la madera interna y un año en costuras. Telas y espumas, según el tiempo del proveedor.",
+        a: "Tres años en la estructura y un año por desajustes. Telas y espumas, según el tiempo del proveedor.",
       },
     ],
   },
@@ -198,7 +198,7 @@ export const CIUDADES: Ciudad[] = [
       },
       {
         q: "¿Hay garantía?",
-        a: "Sí: un año en estructura por desajuste, tres años en la madera interna y un año en costuras.",
+        a: "Sí: tres años en la estructura y un año por desajustes, patas y costuras.",
       },
     ],
   },
@@ -242,7 +242,7 @@ export const CIUDADES: Ciudad[] = [
       },
       {
         q: "¿La garantía vale en Cartagena?",
-        a: "Sí, es nacional: un año en estructura por desajuste, tres años en la madera interna y un año en costuras.",
+        a: "Sí, es nacional: tres años en la estructura y un año por desajustes, patas y costuras.",
       },
     ],
   },
@@ -286,7 +286,7 @@ export const CIUDADES: Ciudad[] = [
       },
       {
         q: "¿Qué garantía tiene el mueble?",
-        a: "Un año en estructura por desajuste, tres años en la madera interna y un año en costuras.",
+        a: "Tres años en la estructura y un año por desajustes, patas y costuras.",
       },
     ],
   },
