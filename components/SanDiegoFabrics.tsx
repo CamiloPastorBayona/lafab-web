@@ -211,7 +211,7 @@ const FABRICS: Fabric[] = [
     name: ["Chenil ", "Milan"],
     desc: "Textura cálida y acogedora, con backing acolchado y tratamiento antifluido. Fácil de limpiar y amigable con las mascotas.",
     benefits: [
-      { icon: <IcDroplet />, text: "Antifluidos" },
+      { icon: <IcDroplet />, text: "Antifluido" },
       { icon: <IcSparkle />, text: "Fácil de limpiar" },
       { icon: <IcRefresh />, text: "Conserva su apariencia por más tiempo" },
       { icon: <IcLeaf />, text: "Textura cálida y agradable" },
@@ -225,7 +225,7 @@ const FABRICS: Fabric[] = [
     badgeIcon: <IcPaw />,
     badge: "Recomendada para hogares con mascotas",
     name: ["Microfibra ", "Mon"],
-    desc: "Tacto suave tipo soft velvet y aspecto elegante. Repele líquidos y resiste el uso diario, ideal para hogares con mascotas.",
+    desc: "Tacto suave tipo Soft Velvet y aspecto elegante. Repele líquidos y resiste el uso diario, ideal para hogares con mascotas.",
     benefits: [
       { icon: <IcPaw />, text: "Ideal para mascotas y niños" },
       { icon: <IcSparkle />, text: "Fácil de limpiar" },

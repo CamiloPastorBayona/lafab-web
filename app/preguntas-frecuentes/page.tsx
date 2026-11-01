@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import PageHeader from "@/components/PageHeader";
 import { FAQS, WHATSAPP } from "@/lib/content";
 import { UPLOADS } from "@/lib/cms";
+import { jsonLd } from "@/components/RatingJsonLd";
 
 export const metadata: Metadata = {
   title: "Preguntas frecuentes",
@@ -26,7 +27,7 @@ export default function FaqPage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_JSONLD) }}
+        dangerouslySetInnerHTML={{ __html: jsonLd(FAQ_JSONLD) }}
       />
       <PageHeader
         eyebrow="Ayuda"

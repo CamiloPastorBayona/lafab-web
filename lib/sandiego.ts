@@ -94,7 +94,7 @@ export const SANDIEGO = {
       name: "Microfibra Mon",
       short: "Pet Friendly · Soft Velvet",
       tag: "Más elegida",
-      desc: "Tacto suave tipo soft velvet y aspecto elegante. Repele líquidos y resiste el uso diario, ideal para hogares con mascotas.",
+      desc: "Tacto suave tipo Soft Velvet y aspecto elegante. Repele líquidos y resiste el uso diario, ideal para hogares con mascotas.",
       features: [
         { text: "Ideal para mascotas y niños", icon: "paw" },
         { text: "Fácil de limpiar", icon: "sparkles" },
@@ -117,7 +117,7 @@ export const SANDIEGO = {
       tag: "Antifluido",
       desc: "Textura cálida y acogedora, con backing acolchado y tratamiento antifluido. Fácil de limpiar y amigable con las mascotas.",
       features: [
-        { text: "Antifluidos", icon: "droplet" },
+        { text: "Antifluido", icon: "droplet" },
         { text: "Fácil de limpiar", icon: "sparkles" },
         { text: "Conserva su apariencia por más tiempo", icon: "refresh" },
         { text: "Textura cálida y agradable", icon: "leaf" },

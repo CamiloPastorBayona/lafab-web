@@ -20,8 +20,8 @@ export const metadata: Metadata = {
   },
 };
 
-// Si el CMS tropieza durante el build —pasa: es hosting compartido y Vercel le
-// dispara muchas peticiones a la vez—, la página se arma vacía en vez de tumbar
+// Si el CMS tropieza durante el build -pasa: es hosting compartido y Vercel le
+// dispara muchas peticiones a la vez-, la página se arma vacía en vez de tumbar
 // el despliegue entero. A los pocos minutos ISR la vuelve a pedir y se llena.
 export default async function Page() {
   let products = await getProducts({ category: cfg.catId, per_page: 100 }).catch(

@@ -1,6 +1,6 @@
 "use client";
 
-// Audiologo de LaFab — reproducción SOLO opt-in (el usuario decide darle play).
+// Audiologo de LaFab - reproducción SOLO opt-in (el usuario decide darle play).
 // Nunca autoplay al cargar el sitio (respeta UX, accesibilidad y a los navegadores).
 // En páginas puntuales (ej. /gracias) intenta reproducir tras la interacción previa;
 // si el navegador lo bloquea, queda el botón para reproducir manualmente.
@@ -21,7 +21,7 @@ export default function AudioBrand({
 
   useEffect(() => {
     const a = new Audio("/audiologo.mp3");
-    a.preload = "auto";
+    a.preload = "none";
     a.volume = 0.7;
     a.addEventListener("ended", () => setPlaying(false));
     ref.current = a;

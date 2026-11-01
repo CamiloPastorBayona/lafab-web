@@ -12,8 +12,8 @@ export const SHOWROOM = {
   address: "Cl. 64 #44-74, Barrio La Esmeralda",
   city: "Itagüí, Antioquia",
   hours: [
-    { day: "Lunes a sábado", time: "10:00 a.m. – 6:30 p.m." },
-    { day: "Domingos", time: "10:00 a.m. – 5:00 p.m." },
+    { day: "Lunes a sábado", time: "10:00 a.m. - 6:30 p.m." },
+    { day: "Domingos", time: "10:00 a.m. - 5:00 p.m." },
     { day: "Puentes festivos", time: "Cerrado domingo y lunes" },
   ],
   mapsQuery: "La+Fabrica+de+Muebles+Itagui+Calle+64+44-74",

@@ -106,7 +106,7 @@ export const CIUDADES: Ciudad[] = [
       },
       {
         q: "¿Cuánto se demora?",
-        a: "30 días calendario o menos de fabricación, más el despacho a Cali.",
+        a: "30 días calendario o menos de fabricación, más el envío a Cali.",
       },
       {
         q: "¿La garantía aplica fuera de Medellín?",
@@ -150,7 +150,7 @@ export const CIUDADES: Ciudad[] = [
       },
       {
         q: "¿Cuánto tarda?",
-        a: "30 días calendario o menos de fabricación, más el despacho.",
+        a: "30 días calendario o menos de fabricación, más el envío.",
       },
       {
         q: "¿Qué cubre la garantía?",
@@ -238,7 +238,7 @@ export const CIUDADES: Ciudad[] = [
       },
       {
         q: "¿Cuánto tarda la entrega?",
-        a: "30 días calendario o menos de fabricación, más el despacho desde Itagüí.",
+        a: "30 días calendario o menos de fabricación, más el envío desde Itagüí.",
       },
       {
         q: "¿La garantía vale en Cartagena?",
@@ -265,7 +265,7 @@ export const CIUDADES: Ciudad[] = [
     destacado: {
       titulo: "Estás cerca: ven al taller",
       texto:
-        "El showroom está en Itagüí y es también la fábrica. Si viajas a Medellín, agenda y pásate: sentarte en el sofá y ver cómo está armado por dentro resuelve más que cualquier foto.",
+        "El showroom está en Itagüí y es también el taller. Si viajas a Medellín, agenda y pásate: sentarte en el sofá y ver cómo está armado por dentro resuelve más que cualquier foto.",
     },
     faq: [
       {

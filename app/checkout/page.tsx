@@ -16,6 +16,7 @@ import { trackBeginCheckout, guardaCompra } from "@/lib/analytics";
 import { SHIPPING_NOTE, SHIPPING_NATIONAL_COST, cop as copShip } from "@/lib/shipping";
 import { TOPE_BOLD, superaTopeBold, mensajeLimpio } from "@/lib/pagos";
 import { WHATSAPP } from "@/lib/content";
+import Campo from "@/components/Campo";
 
 export default function CheckoutPage() {
   const { items, subtotal, count, clear } = useCart();
@@ -70,16 +71,22 @@ export default function CheckoutPage() {
   // tamaño no se cierra por un formulario: se atiende por WhatsApp.
   const sobreTope = superaTopeBold(total);
 
+  // No basta con que los campos no estén vacíos: con "no-es-un-correo" y "abc"
+  // el botón se habilitaba, el cliente ya decidido a pagar, y el pedido
+  // reventaba en el servidor.
+  const correoValido = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(form.email.trim());
+  const telefonoValido = form.telefono.replace(/\D/g, "").length >= 7;
+
   const canPay =
     !sobreTope &&
     items.length > 0 &&
-    form.nombre &&
-    form.apellidos &&
-    form.email &&
-    form.telefono &&
-    form.departamento &&
-    form.ciudad &&
-    form.direccion;
+    Boolean(form.nombre.trim()) &&
+    Boolean(form.apellidos.trim()) &&
+    correoValido &&
+    telefonoValido &&
+    Boolean(form.departamento) &&
+    Boolean(form.ciudad.trim()) &&
+    Boolean(form.direccion.trim());
 
   const handlePay = async () => {
     if (!canPay || loading) return;
@@ -204,10 +211,18 @@ export default function CheckoutPage() {
                 <span className={stepNum}>1</span> Datos de contacto
               </h2>
               <div className="grid gap-4 sm:grid-cols-2">
-                <input className={field} placeholder="Nombre *" value={form.nombre} onChange={set("nombre")} />
-                <input className={field} placeholder="Apellidos *" value={form.apellidos} onChange={set("apellidos")} />
-                <input className={field} type="email" placeholder="Correo electrónico *" value={form.email} onChange={set("email")} />
-                <input className={field} placeholder="Teléfono / WhatsApp *" value={form.telefono} onChange={set("telefono")} />
+                <Campo id="nombre" etiqueta="Nombre" requerido>
+                  <input id="nombre" name="given-name" autoComplete="given-name" className={field} placeholder="Nombre *" value={form.nombre} onChange={set("nombre")} />
+                </Campo>
+                <Campo id="apellidos" etiqueta="Apellidos" requerido>
+                  <input id="apellidos" name="family-name" autoComplete="family-name" className={field} placeholder="Apellidos *" value={form.apellidos} onChange={set("apellidos")} />
+                </Campo>
+                <Campo id="email" etiqueta="Correo electrónico" requerido>
+                  <input id="email" name="email" type="email" autoComplete="email" inputMode="email" aria-invalid={form.email.length > 0 && !correoValido} className={field} placeholder="Correo electrónico *" value={form.email} onChange={set("email")} />
+                </Campo>
+                <Campo id="telefono" etiqueta="Teléfono o WhatsApp" requerido>
+                  <input id="telefono" name="tel" type="tel" autoComplete="tel" inputMode="tel" aria-invalid={form.telefono.length > 0 && !telefonoValido} className={field} placeholder="Teléfono / WhatsApp *" value={form.telefono} onChange={set("telefono")} />
+                </Campo>
               </div>
             </div>
 
@@ -216,8 +231,11 @@ export default function CheckoutPage() {
                 <span className={stepNum}>2</span> Envío
               </h2>
               <div className="grid gap-4 sm:grid-cols-2">
-                <div className="relative">
+                <Campo id="departamento" etiqueta="Departamento" requerido className="relative">
                   <select
+                    id="departamento"
+                    name="address-level1"
+                    autoComplete="address-level1"
                     className={`${field} appearance-none pr-11`}
                     value={form.departamento}
                     onChange={set("departamento")}
@@ -229,16 +247,24 @@ export default function CheckoutPage() {
                       </option>
                     ))}
                   </select>
-                  <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-ink/40">
+                  <span className="pointer-events-none absolute right-4 top-[calc(50%+10px)] -translate-y-1/2 text-ink/40">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                       <path d="m6 9 6 6 6-6" />
                     </svg>
                   </span>
-                </div>
-                <input className={field} placeholder="Ciudad *" value={form.ciudad} onChange={set("ciudad")} />
-                <input className={`${field} sm:col-span-2`} placeholder="Dirección *" value={form.direccion} onChange={set("direccion")} />
-                <input className={field} placeholder="Código postal (opcional)" value={form.postcode} onChange={set("postcode")} />
-                <textarea className={`${field} sm:col-span-2`} rows={3} placeholder="Notas del pedido (opcional)" value={form.notas} onChange={set("notas")} />
+                </Campo>
+                <Campo id="ciudad" etiqueta="Ciudad" requerido>
+                  <input id="ciudad" name="address-level2" autoComplete="address-level2" className={field} placeholder="Ciudad *" value={form.ciudad} onChange={set("ciudad")} />
+                </Campo>
+                <Campo id="direccion" etiqueta="Dirección" requerido className="sm:col-span-2">
+                  <input id="direccion" name="street-address" autoComplete="street-address" className={field} placeholder="Dirección *" value={form.direccion} onChange={set("direccion")} />
+                </Campo>
+                <Campo id="postcode" etiqueta="Código postal (opcional)">
+                  <input id="postcode" name="postal-code" autoComplete="postal-code" inputMode="numeric" className={field} placeholder="Código postal (opcional)" value={form.postcode} onChange={set("postcode")} />
+                </Campo>
+                <Campo id="notas" etiqueta="Notas del pedido (opcional)" className="sm:col-span-2">
+                  <textarea id="notas" name="notas" className={field} rows={3} placeholder="Notas del pedido (opcional)" value={form.notas} onChange={set("notas")} />
+                </Campo>
               </div>
               <p className="mt-3 text-sm text-gold-dark">
                 {SHIPPING_NOTE}

@@ -7,3 +7,9 @@ export const CMS = (
 ).replace(/\/$/, "");
 
 export const UPLOADS = `${CMS}/wp-content/uploads`;
+
+// Imagen que se usa al compartir cuando la página no tiene una propia. Vive
+// aquí para que las rutas que declaran su propio openGraph puedan reponerla:
+// en Next un openGraph propio REEMPLAZA al del layout, no se fusiona, así que
+// declarar solo el título deja la página sin foto al pegarla en un chat.
+export const OG_IMAGE = `${UPLOADS}/2026/10/lafab-muebles-a-la-medida-medellin-og.jpg`;

@@ -27,7 +27,7 @@ const SORTS = [
   { key: "price-asc", label: "Precio: menor a mayor" },
   { key: "price-desc", label: "Precio: mayor a menor" },
   { key: "date", label: "Novedades" },
-  { key: "name", label: "Nombre (A–Z)" },
+  { key: "name", label: "Nombre (A-Z)" },
 ];
 
 // Quien busca escribe "sofa", no "sofá". Sin esto, buscar sin tilde devolvía
@@ -41,8 +41,8 @@ const sinTildes = (s: string) =>
 
 const PRICE_BRACKETS = [
   { label: "Hasta $2M", min: 0, max: 2_000_000 },
-  { label: "$2M – $4M", min: 2_000_000, max: 4_000_000 },
-  { label: "$4M – $6M", min: 4_000_000, max: 6_000_000 },
+  { label: "$2M - $4M", min: 2_000_000, max: 4_000_000 },
+  { label: "$4M - $6M", min: 4_000_000, max: 6_000_000 },
   { label: "Más de $6M", min: 6_000_000, max: Infinity },
 ];
 
@@ -375,7 +375,8 @@ export default function ShopBrowser({ products }: { products: WCProduct[] }) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Buscar muebles…"
-            className="w-full bg-transparent text-ink outline-none placeholder:text-ink/40"
+            aria-label="Buscar muebles"
+            className="w-full rounded-full bg-transparent text-ink outline-none ring-offset-2 placeholder:text-ink/40 focus-visible:ring-2 focus-visible:ring-gold"
           />
           {query && (
             <button onClick={() => setQuery("")} aria-label="Limpiar búsqueda" className="text-ink/40 hover:text-ink">
@@ -405,7 +406,8 @@ export default function ShopBrowser({ products }: { products: WCProduct[] }) {
             <select
               value={sort}
               onChange={(e) => setSort(e.target.value)}
-              className="w-full appearance-none rounded-full border border-ink/15 bg-white py-2.5 pl-4 pr-10 text-sm text-ink outline-none transition-colors hover:border-ink/40 focus:border-gold"
+              aria-label="Ordenar los productos"
+              className="w-full appearance-none rounded-full border border-ink/15 bg-white py-2.5 pl-4 pr-10 text-sm text-ink outline-none transition-colors hover:border-ink/40 focus:border-gold focus-visible:ring-2 focus-visible:ring-gold"
             >
               {SORTS.map((s) => (
                 <option key={s.key} value={s.key}>

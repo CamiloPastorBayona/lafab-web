@@ -78,7 +78,7 @@ export default function SanDiegoWhy() {
       <section id="lf-why" ref={ref}>
         <style dangerouslySetInnerHTML={{ __html: CSS }} />
         <div className="lfw-wrap">
-          <span className="lfw-eyebrow">Fábrica propia</span>
+          <span className="lfw-eyebrow">Taller propio</span>
           <h2 className="lfw-title">¿Por qué elegir LaFab?</h2>
           <p className="lfw-sub">
             Más de una década creando muebles que se ven bien y duran.

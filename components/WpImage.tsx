@@ -1,6 +1,6 @@
 /* Imagen responsiva servida directamente desde WordPress.
    Usa el srcset que ya genera WP (tamaños -700, -1024, etc.), así el navegador
-   descarga solo el tamaño que necesita — rápido y sin pasar por el optimizador
+   descarga solo el tamaño que necesita - rápido y sin pasar por el optimizador
    de Next (que el host corta con ECONNRESET).
 
    Si no se le pasa srcSet, lo busca en lib/imagenes.ts, el mapa que sacamos del

@@ -12,8 +12,8 @@ export const metadata: Metadata = {
     "Explora sofás, comedores, alcobas y poltronas fabricados a la medida por LaFab en Medellín. Filtra por categoría y encuentra tu mueble ideal.",
 };
 
-// Si el CMS tropieza durante el build —pasa: es hosting compartido y Vercel le
-// dispara muchas peticiones a la vez—, la página se arma vacía en vez de tumbar
+// Si el CMS tropieza durante el build -pasa: es hosting compartido y Vercel le
+// dispara muchas peticiones a la vez-, la página se arma vacía en vez de tumbar
 // el despliegue entero. A los pocos minutos ISR la vuelve a pedir y se llena.
 export default async function ShopPage() {
   const products = await getProducts({ per_page: 100, orderby: "date" }).catch(

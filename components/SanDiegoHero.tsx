@@ -191,7 +191,7 @@ export default function SanDiegoHero() {
         </a>
       </div>
 
-      {/* Indicador de scroll (Lottie + fallback CSS) — al fondo */}
+      {/* Indicador de scroll (Lottie + fallback CSS) - al fondo */}
       <a
         href="#diseno"
         aria-label="Desliza para ver más"

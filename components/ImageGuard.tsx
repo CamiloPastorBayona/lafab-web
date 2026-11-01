@@ -1,7 +1,7 @@
 "use client";
 
-// Disuasión de descarga de imágenes (frontend). No es infalible —el navegador
-// siempre descarga la imagen para mostrarla— pero frena a la gran mayoría:
+// Disuasión de descarga de imágenes (frontend). No es infalible -el navegador
+// siempre descarga la imagen para mostrarla- pero frena a la gran mayoría:
 // bloquea el clic derecho ("Guardar imagen como…") y el arrastre sobre <img>.
 // La capa transparente sobre las fotos de producto se aplica en ProductGallery.
 

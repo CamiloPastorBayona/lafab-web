@@ -13,9 +13,9 @@ import { Analytics as VercelAnalytics } from "@vercel/analytics/next";
 import WhatsAppFab from "@/components/WhatsAppFab";
 import ImageGuard from "@/components/ImageGuard";
 import IntroLoader from "@/components/IntroLoader";
-import { REVIEWS_SUMMARY } from "@/lib/content";
 import { STORE_URL } from "@/lib/woocommerce";
 import { UPLOADS } from "@/lib/cms";
+import { jsonLd } from "@/components/RatingJsonLd";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -83,13 +83,9 @@ const BUSINESS_JSONLD = {
     addressCountry: "CO",
   },
   areaServed: "Medellín y Colombia",
-  aggregateRating: {
-    "@type": "AggregateRating",
-    ratingValue: String(REVIEWS_SUMMARY.rating),
-    reviewCount: String(REVIEWS_SUMMARY.count),
-    bestRating: "5",
-    worstRating: "1",
-  },
+  // La calificación agregada NO va aquí: este bloque sale en las 86 páginas y
+  // Google exige que las reseñas estén visibles en la misma página donde se
+  // declaran. La emite components/RatingJsonLd.tsx desde los bloques de reseñas.
   sameAs: [
     "https://www.instagram.com/lafabricamed/",
     "https://www.facebook.com/LaFabricaMed",
@@ -125,7 +121,7 @@ export default function RootLayout({
       <body className="font-sans">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(BUSINESS_JSONLD) }}
+          dangerouslySetInnerHTML={{ __html: jsonLd(BUSINESS_JSONLD) }}
         />
         <Analytics />
         <VercelAnalytics />

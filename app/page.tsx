@@ -39,7 +39,7 @@ export default async function HomePage() {
     <>
       <Hero />
 
-      {/* Espacios — mosaico */}
+      {/* Espacios - mosaico */}
       <section className="mx-auto max-w-site px-4 py-16 md:px-6 md:py-24">
         <Reveal>
           <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
@@ -71,6 +71,7 @@ export default async function HomePage() {
                 <WpImage
                   src={s.image}
                   alt={s.name}
+                  sizes="(min-width: 768px) 50vw, 100vw"
                   className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/10 to-transparent" />
@@ -96,6 +97,7 @@ export default async function HomePage() {
                 <WpImage
                   src={`${UPLOADS}/2026/06/taller3-1.webp`}
                   alt="Taller LaFab"
+                  sizes="(min-width: 768px) 50vw, 100vw"
                   className="absolute inset-0 h-full w-full object-cover"
                 />
               </div>
@@ -131,6 +133,7 @@ export default async function HomePage() {
                     <WpImage
                       src={t.img}
                       alt={t.title}
+                      sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
                       className="absolute inset-0 h-full w-full object-cover"
                     />
                     <span className="absolute left-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-sm text-ink">

@@ -8,10 +8,16 @@ import ShareButtons from "@/components/ShareButtons";
 import { ARTICLES, getArticle } from "@/lib/blog";
 import { WHATSAPP } from "@/lib/content";
 import { UPLOADS } from "@/lib/cms";
+import { jsonLd } from "@/components/RatingJsonLd";
 
 export function generateStaticParams() {
   return ARTICLES.map((a) => ({ slug: a.slug }));
 }
+
+// Los artículos están en el repo: no hay nada que descubrir en caliente. Sin
+// esto, /blog/loquesea devolvía 200 con la página de "no encontrado", y eso
+// Google lo trata como soft 404 y deja la URL en el índice.
+export const dynamicParams = false;
 
 export async function generateMetadata({
   params,
@@ -19,7 +25,11 @@ export async function generateMetadata({
   params: { slug: string };
 }): Promise<Metadata> {
   const a = getArticle(params.slug);
-  if (!a) return { title: "Artículo no encontrado" };
+  if (!a)
+    return {
+      title: "Artículo no encontrado",
+      robots: { index: false, follow: false },
+    };
   return {
     title: a.metaTitle,
     description: a.metaDescription,
@@ -54,7 +64,7 @@ export default function ArticlePage({
   const url = `https://lafab.com.co/blog/${a.slug}`;
   const related = ARTICLES.filter((x) => x.slug !== a.slug).slice(0, 2);
 
-  const jsonLd = {
+  const articuloJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: a.title,
@@ -80,7 +90,7 @@ export default function ArticlePage({
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLd(articuloJsonLd) }}
       />
 
       <PageHeader eyebrow="Blog" title={a.title} image={a.image} />

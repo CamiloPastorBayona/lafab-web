@@ -8,6 +8,7 @@ import { WHATSAPP } from "@/lib/content";
 import type { CategoryConfig } from "@/lib/categories";
 import type { WCProduct } from "@/lib/woocommerce";
 import { SHIPPING_BADGE } from "@/lib/shipping";
+import { jsonLd } from "@/components/RatingJsonLd";
 
 const BENEFITS = [
   { icon: "factory", t: "Fabricación propia" },
@@ -55,12 +56,12 @@ export default function CategoryPage({
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
+        dangerouslySetInnerHTML={{ __html: jsonLd(breadcrumb) }}
       />
       {cfg.faq.length > 0 && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd) }}
         />
       )}
 

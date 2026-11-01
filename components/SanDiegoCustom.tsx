@@ -7,8 +7,16 @@
 import { useEffect, useRef } from "react";
 import { useLanding } from "@/components/LandingContext";
 
-const WHATSAPP =
-  "https://api.whatsapp.com/send/?phone=573054602395&text=Hola+%2ALaFab%2A.+Necesito+m%C3%A1s+informaci%C3%B3n+sobre+Sof%C3%A1+San+Diego+https%3A%2F%2Flafab.com.co%2Fsofa-san-diego%2F&type=phone_number&app_absent=0";
+// El enlace se arma con la landing que esté activa. Estaba escrito a mano con
+// el nombre del San Diego y una URL (/sofa-san-diego/) que devuelve 404, así
+// que desde Latina, Luton o Vittorio el cliente escribía preguntando por otro
+// sofá y con un enlace roto pegado en el mensaje.
+const whatsappDe = (nombre: string, slug: string) =>
+  "https://api.whatsapp.com/send/?phone=573054602395&text=" +
+  encodeURIComponent(
+    `Hola *LaFab*. Necesito más información sobre ${nombre} https://lafab.com.co/producto/${slug}`
+  ) +
+  "&type=phone_number&app_absent=0";
 
 const CSS = `
 #lf-custom,#lf-custom *{box-sizing:border-box;margin:0;padding:0;}
@@ -112,7 +120,7 @@ export default function SanDiegoCustom() {
             </a>
             <a
               className="lfc-btn lfc-btn--ghost"
-              href={WHATSAPP}
+              href={whatsappDe(L.name, L.slug)}
               target="_blank"
               rel="noopener noreferrer"
             >

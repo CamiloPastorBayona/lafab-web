@@ -5,6 +5,7 @@ import {
   reviewDateLabel,
 } from "@/lib/content";
 import Reveal from "@/components/Reveal";
+import RatingJsonLd from "@/components/RatingJsonLd";
 
 function Stars({ n = 5 }: { n?: number }) {
   return (
@@ -28,6 +29,7 @@ function GoogleG({ className = "" }: { className?: string }) {
 export default function Reviews() {
   return (
     <section className="bg-cream">
+      <RatingJsonLd />
       <div className="mx-auto max-w-site px-4 py-16 md:px-6 md:py-24">
         <Reveal>
           <div className="mb-12 text-center">

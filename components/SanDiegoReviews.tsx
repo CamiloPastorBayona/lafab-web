@@ -7,6 +7,7 @@ import {
   REVIEWS_SUMMARY,
   reviewDateLabel,
 } from "@/lib/content";
+import RatingJsonLd from "@/components/RatingJsonLd";
 
 const CSS = `
 #lf-reviews,#lf-reviews *{box-sizing:border-box;margin:0;padding:0;}
@@ -65,6 +66,7 @@ function Stars({ sm }: { sm?: boolean }) {
 export default function SanDiegoReviews() {
   return (
     <div id="opiniones" style={{ scrollMarginTop: "80px" }}>
+      <RatingJsonLd />
       <section id="lf-reviews">
         <style dangerouslySetInnerHTML={{ __html: CSS }} />
         <div className="lfr2-wrap">

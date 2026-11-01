@@ -36,7 +36,7 @@ export const ARTICLES: Article[] = [
 <p>El sofá es el mueble que marca el ritmo de tu sala: define la comodidad, el estilo y hasta cómo te reúnes con los tuyos. Elegir bien no es cuestión de suerte, sino de tener en cuenta cuatro factores clave. En <strong>LaFab</strong> fabricamos sofás a la medida en Medellín, así que estos son los consejos que le damos a cada cliente.</p>
 
 <h2>1. Empieza por las medidas de tu espacio</h2>
-<p>Antes de enamorarte de un modelo, mide el espacio disponible: largo de la pared, ancho libre y las rutas de circulación. Un sofá demasiado grande ahoga la sala; uno pequeño se ve perdido. Deja al menos 40–50 cm de paso alrededor. La ventaja de un mueble a la medida es que se ajusta al centímetro a tu espacio, no al revés.</p>
+<p>Antes de enamorarte de un modelo, mide el espacio disponible: largo de la pared, ancho libre y las rutas de circulación. Un sofá demasiado grande ahoga la sala; uno pequeño se ve perdido. Deja al menos 40-50 cm de paso alrededor. La ventaja de un mueble a la medida es que se ajusta al centímetro a tu espacio, no al revés.</p>
 
 <h2>2. ¿Sofá lineal o sofá en L?</h2>
 <p>El <strong>sofá lineal</strong> es versátil y funciona en casi cualquier sala. El <strong>sofá en L</strong> aprovecha mejor las esquinas y suma puestos, ideal para familias o para quienes ven películas en casa. Si tu sala es cuadrada o pequeña, un sofá lineal mantiene la amplitud; si es amplia o en L, un sofá en L la define muy bien.</p>
@@ -75,7 +75,7 @@ export const ARTICLES: Article[] = [
 <p>Las telas con tratamiento antifluido (como la tecnología AquaFobiak®) hacen que líquidos como el café, el jugo o el agua resbalen y se queden en la superficie unos segundos. Eso te da tiempo de limpiarlos antes de que se absorban, algo muy útil cuando hay niños o mascotas en casa.</p>
 
 <h2>Microfibra, lino o cuero</h2>
-<p>La <strong>microfibra tipo soft velvet</strong> es la más agradecida con mascotas: suave, de trama cerrada, fácil de limpiar y con menos enganche de pelo. El <strong>lino</strong> tiene una textura natural preciosa, pero esa misma textura engancha más pelo y más uña. El <strong>cuero</strong> se limpia pasando un paño y no suelta hilos, aunque una uña puede dejarle una marca permanente. Si en tu casa hay un gato, lee también <a href="/blog/que-tela-no-raya-el-gato">qué tela no raya el gato</a>: ahí explicamos por qué el tipo de tejido importa más que la marca.</p>
+<p>La <strong>microfibra tipo Soft Velvet</strong> es la más agradecida con mascotas: suave, de trama cerrada, fácil de limpiar y con menos enganche de pelo. El <strong>lino</strong> tiene una textura natural preciosa, pero esa misma textura engancha más pelo y más uña. El <strong>cuero</strong> se limpia pasando un paño y no suelta hilos, aunque una uña puede dejarle una marca permanente. Si en tu casa hay un gato, lee también <a href="/blog/que-tela-no-raya-el-gato">qué tela no raya el gato</a>: ahí explicamos por qué el tipo de tejido importa más que la marca.</p>
 
 <h2>Cómo cuidar la tela</h2>
 <p>Limpia los derrames de inmediato con un paño apenas húmedo, aspira con frecuencia para retirar pelos, y evita productos abrasivos que dañen el tratamiento protector. Con un cuidado sencillo, la tela conserva su apariencia por mucho más tiempo.</p>
@@ -119,7 +119,7 @@ export const ARTICLES: Article[] = [
 
 <ul>
   <li><strong>Telas de bucle o trama abierta</strong>, como el bouclé, los linos rústicos de hilo grueso y los tejidos con textura muy marcada. Tienen hilos que sobresalen formando pequeños arcos. La uña entra en el arco, el gato tira y saca el hilo. Un solo hilo corrido arruina más la apariencia de un sofá que cien arañazos superficiales, y no se puede devolver a su sitio.</li>
-  <li><strong>Telas de trama cerrada y pelo corto</strong>, de las que la microfibra tipo soft velvet es el caso típico. No tienen dónde engancharse. La uña resbala. Puede alborotar el pelo de la tela, pero eso se cepilla con la mano y vuelve a su sitio.</li>
+  <li><strong>Telas de trama cerrada y pelo corto</strong>, de las que la microfibra tipo Soft Velvet es el caso típico. No tienen dónde engancharse. La uña resbala. Puede alborotar el pelo de la tela, pero eso se cepilla con la mano y vuelve a su sitio.</li>
 </ul>
 
 <p>Esa es la regla práctica: <em>si al pasar la mano sientes hilos que sobresalen, la uña también los va a encontrar.</em></p>
@@ -174,16 +174,16 @@ export const ARTICLES: Article[] = [
     excerpt:
       "Antes de comprar tu comedor, revisa cuánto espacio necesitas por puesto y para circular cómodamente. Aquí la guía por número de puestos.",
     bodyHtml: `
-<p>Elegir el comedor correcto empieza por las medidas: ni tan grande que estorbe, ni tan pequeño que incomode. Como referencia, cada comensal necesita unos <strong>60 cm de ancho</strong> para estar cómodo, y conviene dejar <strong>70–90 cm</strong> alrededor de la mesa para pasar y correr las sillas. En <strong>LaFab</strong> fabricamos comedores a la medida; estas son las dimensiones típicas.</p>
+<p>Elegir el comedor correcto empieza por las medidas: ni tan grande que estorbe, ni tan pequeño que incomode. Como referencia, cada comensal necesita unos <strong>60 cm de ancho</strong> para estar cómodo, y conviene dejar <strong>70-90 cm</strong> alrededor de la mesa para pasar y correr las sillas. En <strong>LaFab</strong> fabricamos comedores a la medida; estas son las dimensiones típicas.</p>
 
 <h2>Comedor de 4 puestos</h2>
-<p>Ideal para apartamentos y espacios compactos. Una mesa de aproximadamente <strong>1.20–1.30 m de largo por 80–90 cm de ancho</strong> acomoda cómodamente a cuatro personas. Perfecto para el día a día en parejas o familias pequeñas.</p>
+<p>Ideal para apartamentos y espacios compactos. Una mesa de aproximadamente <strong>1.20-1.30 m de largo por 80-90 cm de ancho</strong> acomoda cómodamente a cuatro personas. Perfecto para el día a día en parejas o familias pequeñas.</p>
 
 <h2>Comedor de 6 puestos</h2>
-<p>El más popular. Con cerca de <strong>1.50–1.80 m de largo por 90–100 cm de ancho</strong> caben seis comensales con holgura. Es la opción equilibrada para familias y para recibir visitas de vez en cuando.</p>
+<p>El más popular. Con cerca de <strong>1.50-1.80 m de largo por 90-100 cm de ancho</strong> caben seis comensales con holgura. Es la opción equilibrada para familias y para recibir visitas de vez en cuando.</p>
 
 <h2>Comedor de 8 puestos</h2>
-<p>Para quienes reciben seguido o tienen familia grande. Una mesa de <strong>2.00–2.40 m de largo</strong> permite sentar a ocho personas. Requiere una zona amplia: asegúrate de tener espacio de circulación suficiente alrededor.</p>
+<p>Para quienes reciben seguido o tienen familia grande. Una mesa de <strong>2.00-2.40 m de largo</strong> permite sentar a ocho personas. Requiere una zona amplia: asegúrate de tener espacio de circulación suficiente alrededor.</p>
 
 <h2>No olvides la circulación</h2>
 <p>Más importante que el tamaño de la mesa es el espacio libre alrededor. Si tras poner la mesa no quedan al menos 70 cm para pasar, conviene bajar de puestos o fabricar la mesa a la medida de tu espacio.</p>

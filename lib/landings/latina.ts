@@ -1,7 +1,7 @@
 // Landing del Sofá Latina (id 10318). Parte de la del San Diego, que es la de
 // referencia, y cambia solo lo propio del modelo: fotos, precios, medidas,
-// ficha técnica y preguntas. Lo de marca —telas, taller, pasos de compra,
-// sellos— se hereda para que las cuatro landings no se desincronicen.
+// ficha técnica y preguntas. Lo de marca -telas, taller, pasos de compra,
+// sellos- se hereda para que las cuatro landings no se desincronicen.
 import { SANDIEGO_LANDING, type Landing } from "@/lib/sandiego";
 import { STORE_URL } from "@/lib/woocommerce";
 

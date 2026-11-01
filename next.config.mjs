@@ -59,11 +59,34 @@ const nextConfig = {
   async headers() {
     return [
       {
+        // Lo único que llegaba era Permissions-Policy. Sin frame-ancestors
+        // cualquier sitio podía meter el checkout en un iframe y cosechar el
+        // nombre, la dirección y el teléfono que el cliente escribe ahí.
         source: "/:path*",
         headers: [
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "Content-Security-Policy", value: "frame-ancestors 'self'" },
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          {
+            key: "Strict-Transport-Security",
+            value: "max-age=63072000; includeSubDomains; preload",
+          },
           {
             key: "Permissions-Policy",
-            value: "autoplay=(self)",
+            value:
+              "autoplay=(self), camera=(), microphone=(), geolocation=(), payment=()",
+          },
+        ],
+      },
+      {
+        // El audiologo son 237 KB y el bloque de abajo solo cubría /fonts, así
+        // que salía con max-age=0 y el navegador lo revalidaba en cada visita.
+        source: "/audiologo.mp3",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
           },
         ],
       },

@@ -19,10 +19,15 @@ export default function CartDrawer() {
 
       {/* Panel */}
       <aside
+        // Cerrado solo se desplazaba fuera de pantalla: sus botones seguían
+        // siendo enfocables, así que al tabular por cualquier página el foco
+        // desaparecía dentro de un panel invisible. Y aria-hidden con hijos
+        // enfocables es una violación explícita de ARIA.
         className={`fixed right-0 top-0 z-[70] flex h-full w-full max-w-md flex-col bg-white shadow-2xl transition-transform duration-300 ${
-          isOpen ? "translate-x-0" : "translate-x-full"
+          isOpen ? "translate-x-0" : "invisible translate-x-full"
         }`}
         aria-hidden={!isOpen}
+        {...(!isOpen ? { inert: "" as unknown as undefined } : {})}
       >
         <div className="flex items-center justify-between border-b border-ink/10 px-5 py-4">
           <h2 className="text-lg font-semibold text-ink">

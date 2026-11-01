@@ -16,8 +16,40 @@ const STORE_URL = (
 const BASIC_AUTH = process.env.WC_STORE_BASIC_AUTH;
 const TOKEN_COOKIE = "lafab_cart_token";
 
+// Rutas que el checkout usa de verdad, con los métodos que necesita de cada
+// una. Antes el proxy reenviaba GET, POST, PUT y DELETE a CUALQUIER ruta bajo
+// /wp-json/wc/store/v1/, sin autenticación y sin límite: con el nonce check
+// desactivado en WordPress, cualquiera podía crear pedidos reales en bucle,
+// llenar la base de pedidos basura, disparar correos y tumbar el CMS.
+const PERMITIDO: Record<string, string[]> = {
+  products: ["GET"],
+  cart: ["GET"],
+  "cart/items": ["GET", "DELETE"],
+  "cart/add-item": ["POST"],
+  "cart/remove-item": ["POST"],
+  "cart/update-item": ["POST"],
+  "cart/update-customer": ["POST"],
+  "cart/select-shipping-rate": ["POST"],
+  "cart/apply-coupon": ["POST"],
+  "cart/remove-coupon": ["POST"],
+  checkout: ["GET", "POST"],
+};
+
+/** La ruta pedida, o null si no está en la lista. */
+function rutaPermitida(path: string[], metodo: string): string | null {
+  const ruta = path.join("/");
+  // /order/123 lleva un id variable, así que se comprueba aparte.
+  if (/^order\/\d+$/.test(ruta)) return metodo === "GET" ? ruta : null;
+  const metodos = PERMITIDO[ruta];
+  return metodos && metodos.includes(metodo) ? ruta : null;
+}
+
 async function proxy(req: NextRequest, path: string[]) {
-  const target = `${STORE_URL}/wp-json/wc/store/v1/${path.join("/")}${req.nextUrl.search}`;
+  const ruta = rutaPermitida(path, req.method);
+  if (!ruta) {
+    return NextResponse.json({ code: "lafab_no_route" }, { status: 404 });
+  }
+  const target = `${STORE_URL}/wp-json/wc/store/v1/${ruta}${req.nextUrl.search}`;
   const token = req.cookies.get(TOKEN_COOKIE)?.value;
 
   const headers: Record<string, string> = { Accept: "application/json" };

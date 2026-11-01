@@ -232,3 +232,34 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
     ],
   },
 };
+
+/**
+ * Ruta de categoría a la que pertenece un producto, para las migas de pan.
+ *
+ * Se elige la categoría más específica que tenga: un sofá en L debe llevar a
+ * /sofas-en-l y no a /sofas, que es su categoría padre y la que WooCommerce
+ * devuelve de primera. Sin esto, desde cualquier ficha solo se podía volver a
+ * la tienda entera.
+ */
+export function rutaDeCategoria(
+  cats?: { id: number; name?: string }[] | null
+): { label: string; href: string } | null {
+  if (!cats?.length) return null;
+  const ids = new Set(cats.map((c) => c.id));
+  // De la más específica a la más general.
+  const orden = [
+    "sofas-en-l",
+    "sofas-lineales",
+    "comedores",
+    "alcobas",
+    "poltronas",
+    "sofas",
+  ] as const;
+  for (const clave of orden) {
+    const cfg = CATEGORIES[clave];
+    if (cfg && ids.has(cfg.catId)) {
+      return { label: cfg.eyebrow, href: `/${cfg.slug}` };
+    }
+  }
+  return null;
+}

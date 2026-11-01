@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 import Link from "next/link";
 import PageHeader from "@/components/PageHeader";
 import Reveal from "@/components/Reveal";
@@ -10,9 +11,12 @@ import { CATEGORIES } from "@/lib/categories";
 import { getProducts } from "@/lib/woocommerce";
 import { SHIPPING_NATIONAL_COST, cop } from "@/lib/shipping";
 import { WHATSAPP } from "@/lib/content";
-import { UPLOADS } from "@/lib/cms";
+import { UPLOADS, OG_IMAGE } from "@/lib/cms";
+import { jsonLd } from "@/components/RatingJsonLd";
 
 export const revalidate = 3600;
+// Solo existen las ciudades de CIUDADES; cualquier otra es 404.
+export const dynamicParams = false;
 
 export function generateStaticParams() {
   return CIUDADES.map((c) => ({ ciudad: c.slug }));
@@ -29,11 +33,15 @@ export async function generateMetadata({
     title: c.metaTitle,
     description: c.metaDescription,
     alternates: { canonical: `/muebles-a-la-medida/${c.slug}` },
+    // Un openGraph propio REEMPLAZA al del layout, no se fusiona: al declararlo
+    // aquí estas páginas se quedaban sin og:image y se compartían en gris.
     openGraph: {
       title: c.metaTitle,
       description: c.metaDescription,
       type: "website",
       locale: "es_CO",
+      url: `/muebles-a-la-medida/${c.slug}`,
+      images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: c.metaTitle }],
     },
   };
 }
@@ -53,7 +61,9 @@ export default async function CiudadPage({
   params: { ciudad: string };
 }) {
   const c = CIUDAD_POR_SLUG[params.ciudad];
-  if (!c) return null;
+  // Antes era `return null`: cualquier invento devolvía 200 con la página en
+  // blanco, y eso son URLs vacías infinitas pidiéndole a Google que las indexe.
+  if (!c) notFound();
 
   // Los precios salen del catálogo, no de un número escrito a mano: si mañana
   // cambia una tarifa, esta página cambia sola y no queda mintiendo.
@@ -128,9 +138,9 @@ export default async function CiudadPage({
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(migas) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(servicioJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(migas) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(servicioJsonLd) }} />
 
       <PageHeader
         eyebrow={`Envíos a ${c.nombre}`}

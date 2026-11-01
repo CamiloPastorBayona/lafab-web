@@ -19,10 +19,10 @@ import { STORE_URL } from "@/lib/woocommerce";
 
 const U = `${STORE_URL}/wp-content/uploads/2026/10`;
 
-// 16:9 — portada a pantalla completa
+// 16:9 - portada a pantalla completa
 const PORTADA = `${U}/sofa-luton-minimalista-con-sofa-de-cuero-caramelo-lafab-medellin.webp`;
 
-// 4:5 — el producto solo, mismo fondo y misma luz
+// 4:5 - el producto solo, mismo fondo y misma luz
 const VISTA = {
   frontal: `${U}/sofa-luton-de-cuero-caramelo-en-interior-clasico-moderno-lafab-medellin.webp`,
   diagonal: `${U}/sofa-luton-de-cuero-caramelo-en-sala-luminosa-lafab-medellin.webp`,
@@ -31,7 +31,7 @@ const VISTA = {
   ficha: `${U}/sofa-luton-calido-con-sofa-de-cuero-caramelo-lafab-medellin.webp`,
 };
 
-// 4:3 — el sofá en uso en un espacio real
+// 4:3 - el sofá en uso en un espacio real
 const AMBIENTE = {
   peliculas: `${U}/sofa-luton-moderno-banado-por-el-sol-lafab-medellin.webp`,
   familia: `${U}/sofa-luton-de-cuero-en-sala-luminosa-lafab-medellin.webp`,
@@ -40,7 +40,7 @@ const AMBIENTE = {
   config: `${U}/sofa-luton-de-cuero-bajo-luz-dorada-2-lafab-medellin.webp`,
 };
 
-// 3:2 — detalle
+// 3:2 - detalle
 const DETALLE = {
   diseno: `${U}/sofa-luton-de-cuero-bajo-luz-calida-lafab-medellin.webp`,
   confort: `${U}/sofa-luton-de-cuero-marron-en-primer-plano-lafab-medellin.webp`,

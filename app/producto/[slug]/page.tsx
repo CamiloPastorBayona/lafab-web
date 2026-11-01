@@ -26,13 +26,14 @@ import TrackView from "@/components/TrackView";
 import ReviewsBadge from "@/components/ReviewsBadge";
 import Reviews from "@/components/Reviews";
 import { WHATSAPP } from "@/lib/content";
-import { catLabel } from "@/lib/categories";
+import { catLabel, rutaDeCategoria } from "@/lib/categories";
 import ShippingPrice from "@/components/ShippingPrice";
 import ShareButtons from "@/components/ShareButtons";
 import { SHIPPING_INLINE } from "@/lib/shipping";
 import { landingFor } from "@/lib/landings";
 import ProductTabs from "@/components/ProductTabs";
 import { splitDescription } from "@/lib/productContent";
+import { jsonLd } from "@/components/RatingJsonLd";
 
 export const revalidate = 300;
 
@@ -64,7 +65,15 @@ export async function generateMetadata({
   params: { slug: string };
 }): Promise<Metadata> {
   const product = await getProductBySlug(params.slug);
-  if (!product) return { title: "Producto no encontrado" };
+  // Next 14.2 sirve el notFound() de una ruta dinámica con ISR como 200, así
+  // que un slug inventado quedaba como soft 404 indexable. Prerenderizar las
+  // 53 fichas en el build no es opción (el CMS no aguanta la ráfaga), pero sí
+  // se le puede decir a Google que no la quiera.
+  if (!product)
+    return {
+      title: "Producto no encontrado",
+      robots: { index: false, follow: false },
+    };
 
   // Mismo título/meta que dejamos optimizados en Rank Math (coherencia total).
   const title = `${product.name} a la medida en Medellín`;
@@ -141,8 +150,12 @@ export default async function ProductPage({
   // técnica · Garantía · Envío) en vez de ir todo seguido en un solo bloque.
   const doc = splitDescription(product.description);
 
+  // Categoría a la que vuelve la miga de pan. La más específica que tenga: de
+  // un sofá en L se vuelve a /sofas-en-l, no a /sofas.
+  const rutaCat = rutaDeCategoria(product.categories);
+
   // Datos estructurados (Product schema) para resultados enriquecidos en Google.
-  const jsonLd = {
+  const productoJsonLd = {
     "@context": "https://schema.org/",
     "@type": "Product",
     name: product.name,
@@ -181,12 +194,43 @@ export default async function ProductPage({
         } }),
   };
 
+  // La miga de pan se veía en la página pero no se declaraba, así que Google
+  // no podía mostrar la ruta en el resultado de búsqueda de ninguna ficha.
+  const migasJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Inicio", item: "https://lafab.com.co" },
+      { "@type": "ListItem", position: 2, name: "Tienda", item: "https://lafab.com.co/shop" },
+      ...(rutaCat
+        ? [
+            {
+              "@type": "ListItem",
+              position: 3,
+              name: rutaCat.label,
+              item: `https://lafab.com.co${rutaCat.href}`,
+            },
+          ]
+        : []),
+      {
+        "@type": "ListItem",
+        position: rutaCat ? 4 : 3,
+        name: product.name,
+        item: `https://lafab.com.co/producto/${product.slug}`,
+      },
+    ],
+  };
+
   return (
     <>
       <div className="mx-auto max-w-site px-4 py-10 md:px-6">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLd(productoJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLd(migasJsonLd) }}
       />
       <TrackView
         id={product.id}
@@ -202,6 +246,14 @@ export default async function ProductPage({
         <Link href="/shop" className="hover:text-ink">
           Tienda
         </Link>{" "}
+        {rutaCat && (
+          <>
+            /{" "}
+            <Link href={rutaCat.href} className="hover:text-ink">
+              {rutaCat.label}
+            </Link>{" "}
+          </>
+        )}
         / <span className="text-ink">{product.name}</span>
       </nav>
 

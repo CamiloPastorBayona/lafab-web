@@ -4,6 +4,7 @@ import { useState } from "react";
 import { SHOWROOM } from "@/lib/content";
 import PageHeader from "@/components/PageHeader";
 import { UPLOADS } from "@/lib/cms";
+import Campo from "@/components/Campo";
 
 const PHONE = "573054602395";
 
@@ -103,22 +104,33 @@ export default function ContactoPage() {
         <div className="rounded-2xl bg-cream p-6 md:p-8">
           <h2 className="text-xl font-semibold text-ink">Envíanos un mensaje</h2>
           <div className="mt-5 space-y-4">
-            <input
-              className={field}
-              placeholder="Tu nombre"
-              value={form.nombre}
-              onChange={set("nombre")}
-            />
-            <textarea
-              className={field}
-              rows={5}
-              placeholder="¿En qué te podemos ayudar?"
-              value={form.mensaje}
-              onChange={set("mensaje")}
-            />
+            <Campo id="contacto-nombre" etiqueta="Tu nombre" requerido>
+              <input
+                id="contacto-nombre"
+                name="name"
+                autoComplete="name"
+                className={field}
+                placeholder="Tu nombre *"
+                value={form.nombre}
+                onChange={set("nombre")}
+              />
+            </Campo>
+            <Campo id="contacto-mensaje" etiqueta="¿En qué te podemos ayudar?" requerido>
+              <textarea
+                id="contacto-mensaje"
+                name="mensaje"
+                className={field}
+                rows={5}
+                placeholder="¿En qué te podemos ayudar? *"
+                value={form.mensaje}
+                onChange={set("mensaje")}
+              />
+            </Campo>
+            {/* Sin esto el botón abría WhatsApp con el mensaje en blanco. */}
             <button
               onClick={sendWhatsApp}
-              className="w-full rounded-full bg-ink px-6 py-3.5 font-semibold text-white transition-transform hover:scale-[1.02]"
+              disabled={!form.mensaje.trim()}
+              className="w-full rounded-full bg-ink px-6 py-3.5 font-semibold text-white transition-transform hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100"
             >
               Enviar por WhatsApp
             </button>

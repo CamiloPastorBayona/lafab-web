@@ -1,3 +1,5 @@
+import WpImage from "@/components/WpImage";
+
 export default function PageHeader({
   eyebrow,
   title,
@@ -13,12 +15,19 @@ export default function PageHeader({
     <section className="relative overflow-hidden bg-ink pb-14 pt-28 text-white">
       {image && (
         <>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          {/* Esta foto es el elemento LCP de /shop y de las landings de ciudad.
+              Iba como <img> pelado, sin srcSet ni sizes, así que bajaba el
+              original del CMS (670 KB, 2062x2560) para pintarlo en una franja
+              de 390 px de ancho: nueve segundos de LCP en móvil. El srcset ya
+              existía en lib/imagenes.ts y nadie lo estaba usando.
+              El sizes va deliberadamente corto: encima hay un degradado al 90%
+              de opacidad, así que un candidato pequeño no se nota. */}
+          <WpImage
             src={image}
             alt=""
+            sizes="(min-width: 1024px) 60vw, 70vw"
             className="absolute inset-0 h-full w-full object-cover"
-            loading="eager"
+            priority
           />
           <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/60 to-ink/45" />
         </>

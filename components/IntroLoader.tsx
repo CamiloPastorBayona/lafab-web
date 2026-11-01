@@ -18,13 +18,17 @@ import { UPLOADS } from "@/lib/cms";
 const LOGO = `${UPLOADS}/2022/12/lafab-blanco.png`;
 const AUDIO_SRC = "/audiologo.mp3";
 const HOME_PATHS = new Set(["/", "/inicio"]);
-const LAMP_INTRO_DURATION_MS = 4540;
+// Era 4540. La capa es opaca y a pantalla completa, así que Google medía el
+// texto del propio loader como el LCP de la portada: 3,7 s en móvil, con el
+// hero ya pintado debajo sin que nadie lo viera.
+const LAMP_INTRO_DURATION_MS = 2200;
 const QUICK_INTRO_DURATION_MS = 900;
 const AUDIO_START_GUARD_MS = 1200;
-// Si nadie toca la pantalla, la intro sigue sola a los 3,5 s. Sin esto la
-// portada se queda en negro indefinidamente para quien no adivina que hay
-// que hacer clic: comprobado, a los 10 s la capa seguía ahí.
-const ESPERA_MAX_SIN_GESTO_MS = 3500;
+// Si nadie toca la pantalla, la intro sigue sola. Sin esto la portada se queda
+// en negro indefinidamente para quien no adivina que hay que hacer clic:
+// comprobado, a los 10 s la capa seguía ahí. Eran 3500 ms, que sumados a la
+// animación dejaban la portada tapada 5,3 s medidos.
+const ESPERA_MAX_SIN_GESTO_MS = 900;
 
 // ---- Audiologo ----------------------------------------------------------
 // Objetivo: el home empieza con una lámpara apagada. El primer tap/click del
@@ -38,7 +42,10 @@ type LoaderState = "ready" | "playing" | "waiting-for-sound";
 
 function prepareAudio(audio: HTMLAudioElement) {
   audio.volume = 1;
-  audio.preload = "auto";
+  // "auto" se bajaba los 237 KB del audiologo durante la carga inicial,
+  // compitiendo con el hero, para un sonido que solo suena si el visitante
+  // toca la pantalla. Se carga dentro de ese gesto, que es donde se reproduce.
+  audio.preload = "none";
 }
 
 function getAudio() {

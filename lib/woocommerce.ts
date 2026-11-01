@@ -1,4 +1,4 @@
-// WooCommerce Store API client (public, read-only — no auth needed for catalog).
+// WooCommerce Store API client (public, read-only - no auth needed for catalog).
 // Docs: https://developer.woocommerce.com/docs/apis/store-api/
 
 // Origen del WordPress que sirve el catálogo. lafab.com.co ya no sirve de
@@ -189,23 +189,6 @@ async function get<T>(path: string, intentos = 4): Promise<T> {
   throw ultimo instanceof Error ? ultimo : new Error(`Store API falló: ${path}`);
 }
 
-/** Ejecuta las tareas de a `limite` a la vez, en vez de todas de golpe. */
-async function enTandas<T>(
-  tareas: (() => Promise<T>)[],
-  limite = 5
-): Promise<T[]> {
-  const out: T[] = new Array(tareas.length);
-  let i = 0;
-  const obrero = async () => {
-    while (i < tareas.length) {
-      const n = i++;
-      out[n] = await tareas[n]();
-    }
-  };
-  await Promise.all(Array.from({ length: Math.min(limite, tareas.length) }, obrero));
-  return out;
-}
-
 export async function getProducts(params: {
   per_page?: number;
   page?: number;
@@ -246,62 +229,74 @@ export async function getCategories(): Promise<WCCategory[]> {
 }
 
 // Resuelve las variaciones (con precio) de un producto variable. El padre trae
-// solo id + atributos por variación; el precio se obtiene consultando cada
-// variación como producto. Se cachea en el servidor (ISR).
+// solo id + atributos por variación; los precios llegan en UNA sola petición.
+//
+// Antes se pedía cada variación por separado: hasta 33 peticiones por ficha
+// contra un hosting compartido. Las que no respondían se descartaban en
+// silencio y la ficha se guardaba en caché sin la medida o el material más
+// barato, así que anunciaba un precio más alto que la tarjeta de la tienda y
+// que el feed de Google. Seis fichas llegaron a estar hasta un 30% por encima.
 export async function getVariations(product: WCProduct): Promise<WCVariation[]> {
   if (product.type !== "variable") return [];
   const refs = (product.variations as WCVariationRef[]) ?? [];
-  // Se resuelven de a pocas y con reintentos. Antes iban las 27 de golpe y las
-  // que fallaban se descartaban en silencio: la ficha quedaba con la mitad de
-  // los colores o sin una de las medidas, de forma intermitente.
-  const leer = async (ref: WCVariationRef): Promise<WCVariation | null> => {
-    try {
-      const vp = await get<WCProduct>(`/products/${ref.id}`);
-      return {
-        id: ref.id,
-        prices: vp.prices,
-        on_sale: vp.on_sale,
-        is_in_stock: vp.is_in_stock,
-        image: vp.images?.[0]?.src,
-        attributes: ref.attributes,
-      } as WCVariation;
-    } catch {
-      return null;
-    }
-  };
+  if (!refs.length) return [];
 
-  const resolved = await enTandas(
-    refs.map((ref) => () => leer(ref)),
-    5
-  );
+  const arma = (ref: WCVariationRef, vp: WCProduct): WCVariation =>
+    ({
+      id: ref.id,
+      prices: vp.prices,
+      on_sale: vp.on_sale,
+      is_in_stock: vp.is_in_stock,
+      image: vp.images?.[0]?.src,
+      attributes: ref.attributes,
+    }) as WCVariation;
 
-  // Segunda pasada, de una en una, solo sobre las que no respondieron. El CMS
-  // está en hosting compartido y bajo ráfaga devuelve 5xx; si una variación se
-  // perdiera aquí, la ficha saldría sin uno de los colores o sin una medida.
-  for (let ronda = 1; ronda <= 2; ronda++) {
-    const faltan = refs.filter((_, i) => resolved[i] === null);
-    if (!faltan.length) break;
-    console.error(
-      `[lafab] ${faltan.length} variaciones de ${product.slug} no respondieron; ronda ${ronda} en serie`
+  const porId = new Map<number, WCProduct>();
+  try {
+    const lote = await get<WCProduct[]>(
+      `/products?type=variation&parent=${product.id}&per_page=100`
     );
-    // Se le da aire al CMS: si está ahogado, insistir de inmediato solo lo
-    // ahoga más. Dos rondas pausadas recuperan prácticamente siempre.
-    await dormir(1500 * ronda);
+    for (const vp of lote) porId.set(vp.id, vp);
+  } catch {
+    // Si el lote falla, abajo se intenta de a una.
+  }
+
+  const resuelto: (WCVariation | null)[] = refs.map((ref) => {
+    const vp = porId.get(ref.id);
+    return vp ? arma(ref, vp) : null;
+  });
+
+  // Rescate de a una, solo para lo que el lote no trajo (una variación recién
+  // creada, o el lote entero si el CMS devolvió 5xx). Pausado, porque si el
+  // CMS está ahogado insistir de inmediato solo lo ahoga más.
+  const faltan = refs.filter((_, i) => resuelto[i] === null);
+  if (faltan.length) {
+    console.error(
+      `[lafab] el lote de ${product.slug} no trajo ${faltan.length} variaciones; se piden de a una`
+    );
     for (const ref of faltan) {
-      const v = await leer(ref);
-      if (v) resolved[refs.indexOf(ref)] = v;
-      await dormir(600);
+      try {
+        resuelto[refs.indexOf(ref)] = arma(ref, await get<WCProduct>(`/products/${ref.id}`));
+      } catch {
+        // Se reporta abajo.
+      }
+      await dormir(400);
     }
   }
-  const perdidas = refs.filter((_, i) => resolved[i] === null);
-  if (perdidas.length)
-    console.error(
-      `[lafab] quedaron fuera de ${product.slug}: ${perdidas
-        .map((r) => r.id)
-        .join(", ")}`
-    );
 
-  return resolved.filter((v): v is WCVariation => v !== null);
+  // Si aun así falta alguna, se rompe a propósito. Una ficha a medias es peor
+  // que una ficha que no se regenera: al fallar, Next conserva la última
+  // versión buena en vez de cachear un precio que no existe.
+  const perdidas = refs.filter((_, i) => resuelto[i] === null);
+  if (perdidas.length) {
+    throw new Error(
+      `[lafab] ${product.slug}: faltaron ${perdidas.length} de ${refs.length} variaciones (${perdidas
+        .map((r) => r.id)
+        .join(", ")}); no se cachea la ficha incompleta`
+    );
+  }
+
+  return resuelto as WCVariation[];
 }
 
 // ---- Ficha de producto (ACF, endpoint propio /wp-json/lafab/v1) ----

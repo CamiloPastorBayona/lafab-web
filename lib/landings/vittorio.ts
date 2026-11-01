@@ -2,7 +2,7 @@
 // de marca del San Diego y cambia lo del modelo. Los textos vienen del Excel
 // de producto del 19/10/2026.
 //
-// OJO — FOTOS PENDIENTES: igual que el Luton, hoy solo hay una imagen en la
+// OJO - FOTOS PENDIENTES: igual que el Luton, hoy solo hay una imagen en la
 // tienda y es el arte del post de Instagram. Hasta que lleguen las fotos
 // reales la página no debe promocionarse.
 import { SANDIEGO_LANDING, type Landing } from "@/lib/sandiego";
