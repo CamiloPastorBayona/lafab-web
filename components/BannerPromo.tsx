@@ -30,7 +30,7 @@ export default function BannerPromo({
 }: {
   /**
    * "principal" ocupa la portada entera en lugar del carrusel de siempre.
-   * "alto" es la cabecera de /black-friday. "normal" es una franja.
+   * "alto" y "normal" quedan para cualquier otro sitio donde haga falta.
    */
   alto?: "normal" | "alto" | "principal";
   children?: React.ReactNode;

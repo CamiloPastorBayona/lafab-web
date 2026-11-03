@@ -16,8 +16,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/sofas-lineales",
     "/sofas-en-l",
     "/comedores",
-    // La campaña vigente. Se saca de aquí cuando termine.
-    "/black-friday",
     "/alcobas",
     "/poltronas",
     // Las landings salen del mismo mapa que usa la ficha de producto, así no se

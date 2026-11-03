@@ -24,22 +24,13 @@ export type Pieza = {
 };
 
 /**
- * Pieza panorámica de la franja de la portada y la cabecera de /black-friday.
- *
- * PROVISIONAL: es la franja central de la pieza del Vittorio, recortada sin el
- * titular ni el pie. Lo correcto es una composición panorámica propia, con el
- * tercio izquierdo despejado para que el texto y la cuenta regresiva no caigan
- * sobre el mueble. Cuando exista se cambia esta URL y nada más.
- */
-/**
  * Banners panorámicos de la campaña.
  *
  * Vienen limpios, sin texto quemado: el titular y el botón los pone la web
  * encima. Por eso están compuestos con el lado izquierdo en penumbra y el
  * mueble a la derecha, que es justo donde no estorba.
  *
- * Son los que rotan en la franja de la portada y en la cabecera de
- * /black-friday.
+ * Son los que rotan en el banner principal de la portada.
  */
 export const BANNERS = [
   {
@@ -120,11 +111,11 @@ export const PIEZAS: Pieza[] = [
 export const BF_FAQ = [
   {
     q: "¿Hasta cuándo va el Black Friday de LaFab?",
-    a: `Hasta el ${PROMO_FIN_TEXTO}. Nos adelantamos al viernes negro a propósito: fabricar un mueble a la medida toma entre 20 y 40 días, así que lo que se encargue después de esa fecha ya no alcanza a entregarse este año.`,
+    a: `Hasta el ${PROMO_FIN_TEXTO}. Queremos que lo estrenes este año, así que lo que encargues dentro de la campaña lo entregamos antes de que termine el año, sin que esperes más.`,
   },
   {
     q: "¿Qué productos entran en la campaña?",
-    a: "Trece sofás y tres alcobas: Varsovia, Luau y Kenia. Son los que ves en esta página; cada uno muestra su precio de campaña en su ficha.",
+    a: "Trece sofás y cuatro alcobas: Varsovia, Luau, Kenia y Gales. Son los que ves en esta selección, y cada uno muestra su precio de campaña en su ficha.",
   },
   {
     q: "¿Los muebles de la campaña también se hacen a la medida?",

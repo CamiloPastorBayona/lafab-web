@@ -1,5 +1,5 @@
-// Campaña de Black Friday: barra superior, sello en los productos y la página
-// /black-friday.
+// Campaña de Black Friday: barra superior, sello en los productos y la
+// sección de la portada.
 //
 // Todo lo que cambia entre una campaña y la siguiente vive aquí.
 //
@@ -17,7 +17,8 @@ export const PROMO = {
   etiqueta: "Black Friday",
   gancho: "Nos adelantamos, para que lo estrenes este año",
   cta: "Ver la selección",
-  href: "/black-friday",
+  // La campaña vive en la portada, no en una página aparte.
+  href: "/#seleccion",
 
   inicio: "2026-11-03T00:00:00-05:00",
   fin: "2026-11-14T23:59:59-05:00",

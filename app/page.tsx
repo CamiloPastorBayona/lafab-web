@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getProducts } from "@/lib/woocommerce";
+import { getProducts, money, descuento } from "@/lib/woocommerce";
 import { SPACES, SHOWROOM, WHATSAPP } from "@/lib/content";
 import { SANDIEGO } from "@/lib/sandiego";
 import ProductCard from "@/components/ProductCard";
@@ -9,7 +9,8 @@ import WpImage from "@/components/WpImage";
 import Reveal from "@/components/Reveal";
 import Ico from "@/components/LandingIcons";
 import BloquePromo from "@/components/BloquePromo";
-import { promoVigente } from "@/lib/promo";
+import { promoVigente, PROMO } from "@/lib/promo";
+import SeccionCampana from "@/components/SeccionCampana";
 import { UPLOADS } from "@/lib/cms";
 
 export const revalidate = 300;
@@ -29,14 +30,27 @@ const SEALS = [
 export default async function HomePage() {
   // Si el CMS tropieza durante el build, la portada se arma sin la banda de
   // productos en vez de tumbar el despliegue; ISR la llena a los minutos.
-  const products = await getProducts({ per_page: 8, orderby: "date" }).catch(
+  // Se piden todos y se reparten aquí: la banda de novedades necesita ocho y
+  // la campaña necesita los suyos por slug. Dos peticiones al CMS por una
+  // portada serían dos oportunidades de que tropiece.
+  const todos = await getProducts({ per_page: 100, orderby: "date" }).catch(
     (e) => {
       console.error("[lafab] portada sin productos en el build:", e);
       return [];
     }
   );
+  const products = todos.slice(0, 8);
   const gallery = products.filter((p) => p.images?.[0]).slice(0, 6);
+
   const campana = promoVigente();
+  const enCampana = PROMO.productos
+    .map((slug) => todos.find((p) => p.slug === slug))
+    .filter((p): p is NonNullable<typeof p> => Boolean(p));
+  const precios = enCampana.map((p) => Number(p.prices.price) || 0).filter(Boolean);
+  const desde = precios.length
+    ? money(String(Math.min(...precios)), enCampana[0].prices)
+    : undefined;
+  const maxPct = Math.max(0, ...enCampana.map((p) => descuento(p.prices) ?? 0));
 
   return (
     <>
@@ -45,7 +59,11 @@ export default async function HomePage() {
           no en el cliente: así no se ve primero un hero y luego el otro.
           La portada se revalida cada 300 s, así que cuando la campaña termine
           el carrusel vuelve solo, con cinco minutos de margen como mucho. */}
-      {campana ? <BloquePromo /> : <Hero />}
+      {campana ? <BloquePromo desde={desde} maxPct={maxPct} /> : <Hero />}
+
+      {/* La campaña entera: las piezas, la selección, el compromiso de
+          entrega y las preguntas. El botón del banner ancla a #seleccion. */}
+      {campana && <SeccionCampana productos={todos} />}
 
       {/* Espacios - mosaico */}
       <section className="mx-auto max-w-site px-4 py-16 md:px-6 md:py-24">
