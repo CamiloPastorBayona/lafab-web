@@ -9,7 +9,7 @@ import CuentaRegresiva from "@/components/CuentaRegresiva";
 import { jsonLd } from "@/components/RatingJsonLd";
 import { getProducts, money, descuento } from "@/lib/woocommerce";
 import { PROMO, PROMO_FIN_TEXTO, enPromo } from "@/lib/promo";
-import { PIEZAS, BF_FAQ } from "@/lib/blackfriday";
+import { PORTADA, PIEZAS, BF_FAQ } from "@/lib/blackfriday";
 import { WHATSAPP } from "@/lib/content";
 import { OG_IMAGE } from "@/lib/cms";
 import { SHIPPING_NOTE } from "@/lib/shipping";
@@ -60,9 +60,6 @@ export default async function BlackFridayPage() {
     .filter(Boolean);
   const desde = precios.length ? Math.min(...precios) : 0;
   const maxPct = Math.max(0, ...seleccion.map((p) => descuento(p.prices) ?? 0));
-
-  const principal = PIEZAS[0];
-  const restantes = PIEZAS.slice(1);
 
   const faqJsonLd = {
     "@context": "https://schema.org",
@@ -124,8 +121,8 @@ export default async function BlackFridayPage() {
       {/* Portada de la campaña */}
       <section className="relative overflow-hidden bg-[#0D0D0D] text-white">
         <WpImage
-          src={principal.imagen}
-          alt={principal.alt}
+          src={PORTADA.imagen}
+          alt={PORTADA.alt}
           sizes="100vw"
           priority
           className="absolute inset-0 h-full w-full object-cover opacity-45"
@@ -187,7 +184,7 @@ export default async function BlackFridayPage() {
       <section className="bg-cream py-16 md:py-20">
         <div className="mx-auto max-w-site px-4 md:px-6">
           <div className="grid gap-5 md:grid-cols-3">
-            {restantes.map((pieza, i) => {
+            {PIEZAS.map((pieza, i) => {
               const prod = pieza.slug
                 ? seleccion.find((p) => p.slug === pieza.slug)
                 : null;

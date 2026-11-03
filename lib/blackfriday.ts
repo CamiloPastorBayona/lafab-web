@@ -20,11 +20,31 @@ export type Pieza = {
   titular: string;
   bajada: string;
   imagen: string;
-  /** Producto al que lleva la pieza, o null si es de marca. */
+  /** Producto al que lleva la pieza, o null si lleva a WhatsApp. */
   slug: string | null;
   alt: string;
 };
 
+/**
+ * Pieza panorámica de la campaña: la franja de la portada y la cabecera de
+ * /black-friday usan la misma.
+ *
+ * Tiene que ser propia y no una de las verticales recortada. La franja es muy
+ * ancha y baja, el texto y la cuenta regresiva van encima por la izquierda, y
+ * una vertical recortada a ese alto pierde el sofá o pierde el cielo. Además
+ * se sirve detrás de un degradado oscuro, así que el interés visual debe estar
+ * a la derecha y el tercio izquierdo despejado.
+ */
+export const PORTADA = {
+  imagen: `${UPLOADS}/2026/07/3.webp`,
+  alt: "Sala amoblada por LaFab con luz cálida de noche",
+};
+
+/**
+ * Las tres tarjetas de la sección, en el formato vertical en que Mauricio las
+ * entregó. Las dos primeras llevan a su ficha; la tercera no tiene producto,
+ * así que lleva a WhatsApp, que es lo que él pidió.
+ */
 export const PIEZAS: Pieza[] = [
   {
     id: "latina",
@@ -49,14 +69,6 @@ export const PIEZAS: Pieza[] = [
     imagen: `${UPLOADS}/2026/07/4.webp`,
     slug: null,
     alt: "Sala amoblada por LaFab",
-  },
-  {
-    id: "adelantamos",
-    titular: "Nos adelantamos",
-    bajada: "para que lo estrenes este año",
-    imagen: `${UPLOADS}/2026/07/2.webp`,
-    slug: null,
-    alt: "Sofá LaFab en una sala de noche",
   },
 ];
 

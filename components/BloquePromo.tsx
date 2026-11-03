@@ -11,19 +11,17 @@ import { useEffect, useState } from "react";
 import WpImage from "@/components/WpImage";
 import CuentaRegresiva from "@/components/CuentaRegresiva";
 import { PROMO, PROMO_FIN_TEXTO, promoVigente } from "@/lib/promo";
-import { PIEZAS } from "@/lib/blackfriday";
+import { PORTADA } from "@/lib/blackfriday";
 
 export default function BloquePromo() {
   const [vigente, setVigente] = useState(false);
   useEffect(() => setVigente(promoVigente()), []);
   if (!vigente) return null;
 
-  const fondo = PIEZAS[0];
-
   return (
     <section className="relative overflow-hidden bg-[#0D0D0D] text-white">
       <WpImage
-        src={fondo.imagen}
+        src={PORTADA.imagen}
         alt=""
         sizes="100vw"
         className="absolute inset-0 h-full w-full object-cover opacity-40"

@@ -9,6 +9,8 @@ import type { CategoryConfig } from "@/lib/categories";
 import type { WCProduct } from "@/lib/woocommerce";
 import { SHIPPING_BADGE } from "@/lib/shipping";
 import { jsonLd } from "@/components/RatingJsonLd";
+import FranjaPromo from "@/components/FranjaPromo";
+import { enPromo } from "@/lib/promo";
 
 const BENEFITS = [
   { icon: "factory", t: "Fabricación propia" },
@@ -97,6 +99,9 @@ export default function CategoryPage({
           <h2 className="mb-6 text-2xl font-light text-ink md:text-3xl">
             {cfg.eyebrow} disponibles
           </h2>
+          <FranjaPromo
+            cuantos={products.filter((p) => enPromo(p.slug)).length}
+          />
           {products.length > 0 ? (
             <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
               {products.map((p, i) => (
