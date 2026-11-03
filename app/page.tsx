@@ -9,6 +9,7 @@ import WpImage from "@/components/WpImage";
 import Reveal from "@/components/Reveal";
 import Ico from "@/components/LandingIcons";
 import BloquePromo from "@/components/BloquePromo";
+import { promoVigente } from "@/lib/promo";
 import { UPLOADS } from "@/lib/cms";
 
 export const revalidate = 300;
@@ -35,14 +36,16 @@ export default async function HomePage() {
     }
   );
   const gallery = products.filter((p) => p.images?.[0]).slice(0, 6);
+  const campana = promoVigente();
 
   return (
     <>
-      <Hero />
-
-      {/* Campaña vigente. Va justo bajo la portada, antes de los espacios:
-          es lo primero que debe ver quien entra durante el Black Friday. */}
-      <BloquePromo />
+      {/* Mientras dure la campaña, el banner de Black Friday ES la portada y
+          el carrusel de siempre se retira. Se decide aquí, en el servidor, y
+          no en el cliente: así no se ve primero un hero y luego el otro.
+          La portada se revalida cada 300 s, así que cuando la campaña termine
+          el carrusel vuelve solo, con cinco minutos de margen como mucho. */}
+      {campana ? <BloquePromo /> : <Hero />}
 
       {/* Espacios - mosaico */}
       <section className="mx-auto max-w-site px-4 py-16 md:px-6 md:py-24">

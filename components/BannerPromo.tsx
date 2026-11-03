@@ -28,8 +28,11 @@ export default function BannerPromo({
   alto = "normal",
   children,
 }: {
-  /** "alto" en la cabecera de la sección, "normal" en la franja de la portada. */
-  alto?: "normal" | "alto";
+  /**
+   * "principal" ocupa la portada entera en lugar del carrusel de siempre.
+   * "alto" es la cabecera de /black-friday. "normal" es una franja.
+   */
+  alto?: "normal" | "alto" | "principal";
   children?: React.ReactNode;
 }) {
   const [activo, setActivo] = useState(0);
@@ -43,10 +46,16 @@ export default function BannerPromo({
     return () => clearInterval(id);
   }, []);
 
+  // En "principal" se mete bajo el header transparente, igual que el hero al
+  // que sustituye. No va a pantalla completa en móvil: estas fotos son
+  // panorámicas (2,3 a 1) y a 390 de ancho el recorte se comería la sala
+  // entera para dejar una franja. Pantalla completa solo desde tableta.
   const clases =
-    alto === "alto"
-      ? "min-h-[clamp(520px,70vh,720px)]"
-      : "min-h-[clamp(380px,48vh,520px)]";
+    alto === "principal"
+      ? "-mt-[64px] min-h-[600px] md:min-h-screen"
+      : alto === "alto"
+        ? "min-h-[clamp(520px,70vh,720px)]"
+        : "min-h-[clamp(380px,48vh,520px)]";
 
   return (
     <section
@@ -77,7 +86,11 @@ export default function BannerPromo({
       <div className="absolute inset-0 bg-gradient-to-r from-[#0D0D0D]/95 via-[#0D0D0D]/70 to-transparent" />
       <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#0D0D0D]/80 to-transparent" />
 
-      <div className="relative z-10 mx-auto flex h-full max-w-site flex-col justify-center px-4 py-14 md:px-6 md:py-20">
+      <div
+        className={`relative z-10 mx-auto flex h-full max-w-site flex-col justify-center px-4 md:px-6 ${
+          alto === "principal" ? "py-24 pt-32 md:py-28" : "py-14 md:py-20"
+        }`}
+      >
         {children}
 
         {/* Qué mueble se está viendo. Cambia con el carrusel. */}
