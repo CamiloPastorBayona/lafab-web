@@ -179,67 +179,78 @@ export default async function BlackFridayPage() {
 
       <TrustStrip />
 
-      {/* Las piezas de la campaña. Cada una lleva a su producto, y la que no
-          tiene producto lleva a WhatsApp, que es lo que pidió Mauricio. */}
+      {/* Las piezas de la campaña, una por producto.
+          Van limpias, sin texto sobrepuesto: cada pieza ya trae quemados el
+          titular, el logo y el nombre del mueble. Lo único que se añade es lo
+          que la imagen no dice, que es el precio, y va debajo. */}
       <section className="bg-cream py-16 md:py-20">
         <div className="mx-auto max-w-site px-4 md:px-6">
-          <div className="grid gap-5 md:grid-cols-3">
-            {PIEZAS.map((pieza, i) => {
-              const prod = pieza.slug
-                ? seleccion.find((p) => p.slug === pieza.slug)
-                : null;
-              const destino = prod
-                ? `/producto/${prod.slug}`
-                : waPieza("los muebles del Black Friday");
-              const externo = !prod;
+          <Reveal>
+            <p className="text-xs font-medium uppercase tracking-[0.25em] text-gold-dark">
+              La campaña
+            </p>
+            <h2 className="mt-3 font-morality text-3xl font-light text-ink md:text-4xl">
+              Seis piezas para estrenar este año
+            </h2>
+          </Reveal>
 
-              const Contenido = (
-                <>
-                  <WpImage
-                    src={pieza.imagen}
-                    alt={pieza.alt}
-                    sizes="(min-width: 768px) 33vw, 100vw"
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/35 to-ink/10" />
-                  <div className="relative z-10 flex h-full flex-col justify-end p-6">
-                    <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-gold-light">
-                      Black Friday
-                    </p>
-                    <h2 className="mt-2 font-morality text-2xl font-light leading-tight text-white">
-                      {pieza.titular}
-                    </h2>
-                    <p className="mt-1 text-sm text-white/70">{pieza.bajada}</p>
-                    <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-white">
-                      {prod ? `Ver el ${prod.name}` : "Preguntar por WhatsApp"}
-                      <span aria-hidden>→</span>
-                    </span>
-                  </div>
-                </>
-              );
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {PIEZAS.map((pieza, i) => {
+              const prod = seleccion.find((p) => p.slug === pieza.slug);
+              if (!prod) return null;
+              const pct = descuento(prod.prices);
 
               return (
-                <Reveal key={pieza.id} delay={i * 110}>
-                  {externo ? (
-                    <a
-                      href={destino}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group relative flex aspect-[4/5] overflow-hidden rounded-2xl bg-ink"
-                    >
-                      {Contenido}
-                    </a>
-                  ) : (
-                    <Link
-                      href={destino}
-                      className="group relative flex aspect-[4/5] overflow-hidden rounded-2xl bg-ink"
-                    >
-                      {Contenido}
-                    </Link>
-                  )}
+                <Reveal key={pieza.slug} delay={(i % 3) * 110}>
+                  <Link
+                    href={`/producto/${prod.slug}`}
+                    className="group block overflow-hidden rounded-2xl bg-ink"
+                  >
+                    <div className="relative aspect-[4/5] overflow-hidden">
+                      <WpImage
+                        src={pieza.imagen}
+                        alt={pieza.alt}
+                        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                      />
+                    </div>
+                    <div className="flex items-center justify-between gap-3 px-5 py-4">
+                      <div>
+                        <p className="text-sm font-medium text-white">
+                          {prod.name}
+                        </p>
+                        <p className="mt-0.5 text-sm text-white/55">
+                          Desde{" "}
+                          {money(
+                            prod.prices.price_range?.min_amount ??
+                              prod.prices.price,
+                            prod.prices
+                          )}
+                          {pct ? ` · ${pct}% menos` : ""}
+                        </p>
+                      </div>
+                      <span
+                        aria-hidden
+                        className="shrink-0 text-gold-light transition-transform group-hover:translate-x-0.5"
+                      >
+                        →
+                      </span>
+                    </div>
+                  </Link>
                 </Reveal>
               );
             })}
+          </div>
+
+          <div className="mt-8 text-center">
+            <a
+              href={waPieza("el Black Friday")}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-medium text-ink/70 underline underline-offset-4 hover:text-ink"
+            >
+              ¿Dudas con medidas o telas? Escríbenos por WhatsApp
+            </a>
           </div>
         </div>
       </section>

@@ -16,59 +16,76 @@ import { PROMO_FIN_TEXTO } from "@/lib/promo";
  * reemplaza la URL y listo: ni el componente ni la página se tocan.
  */
 export type Pieza = {
-  id: string;
   titular: string;
   bajada: string;
   imagen: string;
-  /** Producto al que lleva la pieza, o null si lleva a WhatsApp. */
-  slug: string | null;
+  slug: string;
   alt: string;
 };
 
 /**
- * Pieza panorámica de la campaña: la franja de la portada y la cabecera de
- * /black-friday usan la misma.
+ * Pieza panorámica de la franja de la portada y la cabecera de /black-friday.
  *
- * Tiene que ser propia y no una de las verticales recortada. La franja es muy
- * ancha y baja, el texto y la cuenta regresiva van encima por la izquierda, y
- * una vertical recortada a ese alto pierde el sofá o pierde el cielo. Además
- * se sirve detrás de un degradado oscuro, así que el interés visual debe estar
- * a la derecha y el tercio izquierdo despejado.
+ * PROVISIONAL: es la franja central de la pieza del Vittorio, recortada sin el
+ * titular ni el pie. Lo correcto es una composición panorámica propia, con el
+ * tercio izquierdo despejado para que el texto y la cuenta regresiva no caigan
+ * sobre el mueble. Cuando exista se cambia esta URL y nada más.
  */
 export const PORTADA = {
-  imagen: `${UPLOADS}/2026/07/3.webp`,
-  alt: "Sala amoblada por LaFab con luz cálida de noche",
+  imagen: `${UPLOADS}/2026/11/bf-portada-2160x1296-1.webp`,
+  alt: "Sala con el Sofá Vittorio al atardecer",
 };
 
 /**
- * Las tres tarjetas de la sección, en el formato vertical en que Mauricio las
- * entregó. Las dos primeras llevan a su ficha; la tercera no tiene producto,
- * así que lleva a WhatsApp, que es lo que él pidió.
+ * Las piezas que hizo Mauricio, una por producto.
+ *
+ * Solo van las seis que llevan nombre de producto al pie y no tienen versión
+ * duplicada. Del Luton y del San Diego hay varias variantes de trabajo y
+ * ninguna está confirmada, así que quedan fuera hasta que él diga cuál.
+ * Del Vittorio va la de cuero, que es la que mandó.
  */
 export const PIEZAS: Pieza[] = [
   {
-    id: "latina",
     titular: "Grandes momentos",
     bajada: "comienzan en casa",
-    imagen: `${UPLOADS}/2026/07/3.webp`,
+    imagen: `${UPLOADS}/2026/11/bf-sofa-latina-1080x1350-1.webp`,
     slug: "sofa-latina",
-    alt: "Sofá Latina en una sala con luz cálida",
+    alt: "Sofá Latina en una sala con luz de atardecer",
   },
   {
-    id: "vittorio",
     titular: "Grandes momentos",
     bajada: "comienzan en casa",
-    imagen: `${UPLOADS}/2026/07/6.webp`,
+    imagen: `${UPLOADS}/2026/11/bf-sofa-vittorio-1080x1350-1.webp`,
     slug: "sofa-vittorio",
-    alt: "Sofá Vittorio en cuero, en una sala con vista a la ciudad",
+    alt: "Sofá Vittorio en cuero, en una sala con vista a la montaña",
   },
   {
-    id: "estrena",
-    titular: "Para que lo estrenes este año",
-    bajada: "Diseño, confort y estilo para tu hogar",
-    imagen: `${UPLOADS}/2026/07/4.webp`,
-    slug: null,
-    alt: "Sala amoblada por LaFab",
+    titular: "Grandes momentos",
+    bajada: "comienzan en casa",
+    imagen: `${UPLOADS}/2026/11/bf-alcoba-kenia-1080x1350-1.webp`,
+    slug: "alcoba-kenia",
+    alt: "Alcoba Kenia con cabecero en madera y luz indirecta",
+  },
+  {
+    titular: "Grandes momentos",
+    bajada: "comienzan en casa",
+    imagen: `${UPLOADS}/2026/11/bf-alcoba-varsovia-1080x1350-1.webp`,
+    slug: "alcoba-varsovia",
+    alt: "Alcoba Varsovia con pared de listones de madera",
+  },
+  {
+    titular: "Grandes momentos",
+    bajada: "comienzan en casa",
+    imagen: `${UPLOADS}/2026/11/bf-alcoba-luau-1080x1350-1.webp`,
+    slug: "alcoba-luau",
+    alt: "Alcoba Luau en madera natural",
+  },
+  {
+    titular: "Grandes momentos",
+    bajada: "comienzan en casa",
+    imagen: `${UPLOADS}/2026/11/bf-alcoba-gales-1080x1350-1.webp`,
+    slug: "alcoba-gales",
+    alt: "Alcoba Gales con cabecero tapizado y vista al exterior",
   },
 ];
 

@@ -48,6 +48,9 @@ export const PROMO = {
     "alcoba-varsovia",
     "alcoba-luau",
     "alcoba-kenia",
+    // Gales no estaba en la lista que dio Mauricio por WhatsApp, pero sí hizo
+    // pieza para ella, y es la séptima ficha más vista del sitio.
+    "alcoba-gales",
   ] as string[],
 } as const;
 
