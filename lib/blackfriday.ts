@@ -31,10 +31,38 @@ export type Pieza = {
  * tercio izquierdo despejado para que el texto y la cuenta regresiva no caigan
  * sobre el mueble. Cuando exista se cambia esta URL y nada más.
  */
-export const PORTADA = {
-  imagen: `${UPLOADS}/2026/11/bf-portada-2160x1296-1.webp`,
-  alt: "Sala con el Sofá Vittorio al atardecer",
-};
+/**
+ * Banners panorámicos de la campaña.
+ *
+ * Vienen limpios, sin texto quemado: el titular y el botón los pone la web
+ * encima. Por eso están compuestos con el lado izquierdo en penumbra y el
+ * mueble a la derecha, que es justo donde no estorba.
+ *
+ * Son los que rotan en la franja de la portada y en la cabecera de
+ * /black-friday.
+ */
+export const BANNERS = [
+  {
+    slug: "sofa-vittorio",
+    imagen: `${UPLOADS}/2026/11/ban-sofa-vittorio-1920x839-1.webp`,
+    alt: "Sofá Vittorio en cuero, en una sala de noche",
+  },
+  {
+    slug: "alcoba-kenia",
+    imagen: `${UPLOADS}/2026/11/ban-alcoba-kenia-1920x798-1.webp`,
+    alt: "Alcoba Kenia con luz indirecta sobre el cabecero",
+  },
+  {
+    slug: "sofa-latina",
+    imagen: `${UPLOADS}/2026/11/ban-sofa-latina-1920x839-1.webp`,
+    alt: "Sofá Latina en lino claro, en una sala de noche",
+  },
+  {
+    slug: "sofa-luton",
+    imagen: `${UPLOADS}/2026/11/ban-sofa-luton-1920x841-1.webp`,
+    alt: "Sofá Luton en cuero coñac, en una sala de noche",
+  },
+];
 
 /**
  * Las piezas que hizo Mauricio, una por producto.

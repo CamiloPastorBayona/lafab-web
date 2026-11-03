@@ -6,10 +6,11 @@ import Reviews from "@/components/Reviews";
 import TrustStrip from "@/components/TrustStrip";
 import WpImage from "@/components/WpImage";
 import CuentaRegresiva from "@/components/CuentaRegresiva";
+import BannerPromo from "@/components/BannerPromo";
 import { jsonLd } from "@/components/RatingJsonLd";
 import { getProducts, money, descuento } from "@/lib/woocommerce";
 import { PROMO, PROMO_FIN_TEXTO, enPromo } from "@/lib/promo";
-import { PORTADA, PIEZAS, BF_FAQ } from "@/lib/blackfriday";
+import { PIEZAS, BF_FAQ } from "@/lib/blackfriday";
 import { WHATSAPP } from "@/lib/content";
 import { OG_IMAGE } from "@/lib/cms";
 import { SHIPPING_NOTE } from "@/lib/shipping";
@@ -118,64 +119,54 @@ export default async function BlackFridayPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(migasJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(ofertaJsonLd) }} />
 
-      {/* Portada de la campaña */}
-      <section className="relative overflow-hidden bg-[#0D0D0D] text-white">
-        <WpImage
-          src={PORTADA.imagen}
-          alt={PORTADA.alt}
-          sizes="100vw"
-          priority
-          className="absolute inset-0 h-full w-full object-cover opacity-45"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D0D] via-[#0D0D0D]/70 to-[#0D0D0D]/40" />
+      {/* Portada de la campaña: el mismo carrusel de banners de la home,
+          más alto y con la cuenta regresiva y los dos botones. */}
+      <BannerPromo alto="alto">
+        <nav className="mb-7 text-sm text-white/45">
+          <Link href="/" className="relative z-20 hover:text-white">
+            Inicio
+          </Link>{" "}
+          / <span className="text-white/80">Black Friday</span>
+        </nav>
 
-        <div className="relative z-10 mx-auto max-w-site px-4 py-20 md:px-6 md:py-28">
-          <nav className="mb-8 text-sm text-white/45">
-            <Link href="/" className="hover:text-white">
-              Inicio
-            </Link>{" "}
-            / <span className="text-white/80">Black Friday</span>
-          </nav>
+        <p className="text-xs font-medium uppercase tracking-[0.35em] text-gold-light">
+          Nos adelantamos
+        </p>
+        <h1 className="mt-4 font-morality text-5xl font-light leading-[1.05] md:text-7xl">
+          Black Friday
+        </h1>
+        <p className="mt-5 max-w-xl text-lg font-light text-white/75">
+          Para que lo estrenes este año. {maxPct > 0 ? `Hasta ${maxPct}% ` : ""}
+          en una selección de sofás y alcobas, con la misma fabricación a la
+          medida de siempre.
+        </p>
 
-          <p className="text-xs font-medium uppercase tracking-[0.35em] text-gold-light">
-            Nos adelantamos
-          </p>
-          <h1 className="mt-4 font-morality text-5xl font-light leading-[1.05] md:text-7xl">
-            Black Friday
-          </h1>
-          <p className="mt-5 max-w-xl text-lg font-light text-white/75">
-            Para que lo estrenes este año. {maxPct > 0 ? `Hasta ${maxPct}% ` : ""}
-            en una selección de sofás y alcobas, con la misma fabricación a la
-            medida de siempre.
-          </p>
+        <CuentaRegresiva className="mt-8" />
 
-          <CuentaRegresiva className="mt-8" />
-
-          <div className="mt-9 flex flex-wrap gap-3">
-            <a
-              href="#seleccion"
-              className="rounded-full bg-gold px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.12em] text-ink transition-transform hover:scale-[1.02]"
-            >
-              Ver la selección
-            </a>
-            <a
-              href={waPieza("el Black Friday")}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full border border-white/25 px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.12em] text-white transition-colors hover:border-white/60"
-            >
-              Preguntar por WhatsApp
-            </a>
-          </div>
-
-          {desde > 0 && (
-            <p className="mt-6 text-sm text-white/55">
-              Desde {money(String(desde), seleccion[0].prices)} · IVA incluido ·
-              Entrega entre 20 y 40 días
-            </p>
-          )}
+        <div className="relative z-20 mt-9 flex w-fit flex-wrap gap-3">
+          <a
+            href="#seleccion"
+            className="rounded-full bg-gold px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.12em] text-ink transition-transform hover:scale-[1.02]"
+          >
+            Ver la selección
+          </a>
+          <a
+            href={waPieza("el Black Friday")}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-full border border-white/25 px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.12em] text-white transition-colors hover:border-white/60"
+          >
+            Preguntar por WhatsApp
+          </a>
         </div>
-      </section>
+
+        {desde > 0 && (
+          <p className="mt-6 text-sm text-white/55">
+            Desde {money(String(desde), seleccion[0].prices)} · IVA incluido ·
+            Entrega entre 20 y 40 días
+          </p>
+        )}
+      </BannerPromo>
 
       <TrustStrip />
 

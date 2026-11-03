@@ -10,6 +10,11 @@
 // antes de entrar: una ruta mal puesta rompe la imagen en silencio.
 
 export const SRCSET: Record<string, string> = {
+  // Banners panorámicos de la campaña.
+  "2026/11/ban-alcoba-kenia-1920x798-1.webp": "https://cms.lafab.com.co/wp-content/uploads/2026/11/ban-alcoba-kenia-760x316-1.webp 760w, https://cms.lafab.com.co/wp-content/uploads/2026/11/ban-alcoba-kenia-1280x532-1.webp 1280w, https://cms.lafab.com.co/wp-content/uploads/2026/11/ban-alcoba-kenia-1920x798-1.webp 1920w",
+  "2026/11/ban-sofa-latina-1920x839-1.webp": "https://cms.lafab.com.co/wp-content/uploads/2026/11/ban-sofa-latina-760x332-1.webp 760w, https://cms.lafab.com.co/wp-content/uploads/2026/11/ban-sofa-latina-1280x560-1.webp 1280w, https://cms.lafab.com.co/wp-content/uploads/2026/11/ban-sofa-latina-1920x839-1.webp 1920w",
+  "2026/11/ban-sofa-luton-1920x841-1.webp": "https://cms.lafab.com.co/wp-content/uploads/2026/11/ban-sofa-luton-760x333-1.webp 760w, https://cms.lafab.com.co/wp-content/uploads/2026/11/ban-sofa-luton-1280x560-1.webp 1280w, https://cms.lafab.com.co/wp-content/uploads/2026/11/ban-sofa-luton-1920x841-1.webp 1920w",
+  "2026/11/ban-sofa-vittorio-1920x839-1.webp": "https://cms.lafab.com.co/wp-content/uploads/2026/11/ban-sofa-vittorio-760x332-1.webp 760w, https://cms.lafab.com.co/wp-content/uploads/2026/11/ban-sofa-vittorio-1280x560-1.webp 1280w, https://cms.lafab.com.co/wp-content/uploads/2026/11/ban-sofa-vittorio-1920x839-1.webp 1920w",
   // Piezas de la campaña de Black Friday.
   "2026/11/bf-sofa-latina-1080x1350-1.webp": "https://cms.lafab.com.co/wp-content/uploads/2026/11/bf-sofa-latina-400x500-1.webp 400w, https://cms.lafab.com.co/wp-content/uploads/2026/11/bf-sofa-latina-700x875-1.webp 700w, https://cms.lafab.com.co/wp-content/uploads/2026/11/bf-sofa-latina-1080x1350-1.webp 1080w",
   "2026/11/bf-sofa-vittorio-1080x1350-1.webp": "https://cms.lafab.com.co/wp-content/uploads/2026/11/bf-sofa-vittorio-400x500-1.webp 400w, https://cms.lafab.com.co/wp-content/uploads/2026/11/bf-sofa-vittorio-700x875-1.webp 700w, https://cms.lafab.com.co/wp-content/uploads/2026/11/bf-sofa-vittorio-1080x1350-1.webp 1080w",
