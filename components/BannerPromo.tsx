@@ -47,12 +47,13 @@ export default function BannerPromo({
   }, []);
 
   // En "principal" se mete bajo el header transparente, igual que el hero al
-  // que sustituye. No va a pantalla completa en móvil: estas fotos son
-  // panorámicas (2,3 a 1) y a 390 de ancho el recorte se comería la sala
-  // entera para dejar una franja. Pantalla completa solo desde tableta.
+  // que sustituye, pero no va a pantalla completa: a 60vh se ve el banner y se
+  // asoma la selección que viene debajo, que es a donde queremos que bajen. En
+  // móvil tampoco: estas fotos son panorámicas (2,3 a 1) y a 390 de ancho el
+  // recorte se comería la sala entera para dejar una franja.
   const clases =
     alto === "principal"
-      ? "-mt-[64px] min-h-[600px] md:min-h-screen"
+      ? "-mt-[64px] min-h-[clamp(540px,60vh,660px)]"
       : alto === "alto"
         ? "min-h-[clamp(520px,70vh,720px)]"
         : "min-h-[clamp(380px,48vh,520px)]";
@@ -91,7 +92,9 @@ export default function BannerPromo({
 
       <div
         className={`relative z-10 mx-auto flex h-full max-w-site flex-col justify-center px-4 md:px-6 ${
-          alto === "principal" ? "py-24 pt-32 md:py-28" : "py-14 md:py-20"
+          alto === "principal"
+            ? "py-14 pt-28 md:py-14 md:pt-20"
+            : "py-14 md:py-20"
         }`}
       >
         {children}
