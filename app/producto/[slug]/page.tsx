@@ -318,7 +318,7 @@ export default async function ProductPage({
             </>
           )}
 
-          <AvisoPromo pct={descuento(p)} />
+          <AvisoPromo slug={product.slug} pct={descuento(p)} />
 
           {landing && (
             <Link

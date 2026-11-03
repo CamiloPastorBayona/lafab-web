@@ -8,6 +8,7 @@ import Hero from "@/components/Hero";
 import WpImage from "@/components/WpImage";
 import Reveal from "@/components/Reveal";
 import Ico from "@/components/LandingIcons";
+import BloquePromo from "@/components/BloquePromo";
 import { UPLOADS } from "@/lib/cms";
 
 export const revalidate = 300;
@@ -38,6 +39,10 @@ export default async function HomePage() {
   return (
     <>
       <Hero />
+
+      {/* Campaña vigente. Va justo bajo la portada, antes de los espacios:
+          es lo primero que debe ver quien entra durante el Black Friday. */}
+      <BloquePromo />
 
       {/* Espacios - mosaico */}
       <section className="mx-auto max-w-site px-4 py-16 md:px-6 md:py-24">

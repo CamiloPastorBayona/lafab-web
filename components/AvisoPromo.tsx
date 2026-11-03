@@ -7,20 +7,21 @@
 // promoción ya terminada hasta la siguiente revalidación.
 
 import { useEffect, useState } from "react";
-import { PROMO, PROMO_FIN_MS, enPromo, promoVigente } from "@/lib/promo";
+import Link from "next/link";
+import { PROMO, PROMO_FIN_TEXTO, enPromo, promoVigente } from "@/lib/promo";
 
-const fin = new Date(PROMO_FIN_MS).toLocaleDateString("es-CO", {
-  day: "numeric",
-  month: "long",
-  timeZone: "America/Bogota",
-});
-
-export default function AvisoPromo({ pct }: { pct: number | null }) {
+export default function AvisoPromo({
+  slug,
+  pct,
+}: {
+  slug: string;
+  pct: number | null;
+}) {
   const [mostrar, setMostrar] = useState(false);
 
   useEffect(() => {
-    setMostrar(promoVigente() && enPromo(pct));
-  }, [pct]);
+    setMostrar(promoVigente() && enPromo(slug));
+  }, [slug]);
 
   if (!mostrar) return null;
 
@@ -32,8 +33,15 @@ export default function AvisoPromo({ pct }: { pct: number | null }) {
         {PROMO.etiqueta}
       </span>
       <span className="text-ink/60">
-        {pct}% de descuento hasta el {fin}
+        {pct ? `${pct}% de descuento` : "Precio de campaña"} hasta el{" "}
+        {PROMO_FIN_TEXTO}
       </span>
+      <Link
+        href={PROMO.href}
+        className="text-ink/45 underline underline-offset-4 hover:text-ink"
+      >
+        Ver toda la selección
+      </Link>
     </p>
   );
 }

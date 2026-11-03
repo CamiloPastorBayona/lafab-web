@@ -31,7 +31,7 @@ export default function ProductCard({ product }: { product: WCProduct }) {
   // siguiente revalidación, incluso un día después de haber terminado.
   const [vigente, setVigente] = useState(false);
   useEffect(() => setVigente(promoVigente()), []);
-  const destacado = vigente && enPromo(pct);
+  const destacado = vigente && enPromo(product.slug);
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
