@@ -10,6 +10,9 @@ import {
 } from "@/lib/woocommerce";
 import { useCart } from "@/lib/cart";
 import WpImage from "@/components/WpImage";
+import SelloPromo from "@/components/SelloPromo";
+import { enPromo, promoVigente } from "@/lib/promo";
+import { useEffect, useState } from "react";
 
 export default function ProductCard({ product }: { product: WCProduct }) {
   const img = product.images?.[0];
@@ -23,6 +26,12 @@ export default function ProductCard({ product }: { product: WCProduct }) {
   const isVariable = product.type === "variable" || product.has_options;
   const sinPrecio = !tienePrecio(p);
   const pct = descuento(p);
+  // `vigente` se resuelve en el cliente: si se evaluara al renderizar en el
+  // servidor, la campaña seguiría "viva" en las páginas ya cacheadas hasta la
+  // siguiente revalidación, incluso un día después de haber terminado.
+  const [vigente, setVigente] = useState(false);
+  useEffect(() => setVigente(promoVigente()), []);
+  const destacado = vigente && enPromo(pct);
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -116,12 +125,18 @@ export default function ProductCard({ product }: { product: WCProduct }) {
         </Link>
 
         {/* Cuánto se ahorra, no la palabra "Oferta": el número vende más y
-            sale del propio precio, así que nunca miente. */}
-        {product.on_sale && pct !== null && (
-          <span className="absolute left-3 top-3 z-10 rounded-full bg-sale px-2.5 py-1 text-xs font-bold leading-none text-white shadow-[0_2px_10px_rgba(0,0,0,0.18)]">
-            -{pct}%
-          </span>
-        )}
+            sale del propio precio, así que nunca miente.
+            Durante una campaña, los productos que entran en ella llevan el
+            sello de marca en lugar del rojo. El resto sigue con el rojo: así
+            se nota cuáles son de verdad la promoción. */}
+        {product.on_sale && pct !== null &&
+          (destacado ? (
+            <SelloPromo pct={pct} className="absolute left-3 top-3" />
+          ) : (
+            <span className="absolute left-3 top-3 z-10 rounded-full bg-sale px-2.5 py-1 text-xs font-bold leading-none text-white shadow-[0_2px_10px_rgba(0,0,0,0.18)]">
+              -{pct}%
+            </span>
+          ))}
 
         {/* Capa con la información encima de la foto: solo en escritorio y al
             pasar el mouse. En móvil tapaba la foto de forma permanente y el

@@ -16,6 +16,7 @@ import IntroLoader from "@/components/IntroLoader";
 import { STORE_URL } from "@/lib/woocommerce";
 import { UPLOADS } from "@/lib/cms";
 import { jsonLd } from "@/components/RatingJsonLd";
+import BarraPromo from "@/components/BarraPromo";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -127,6 +128,9 @@ export default function RootLayout({
         <VercelAnalytics />
         <IntroLoader />
         <CartProvider>
+          {/* Va antes del header y NO es sticky: se ve al entrar y se va con
+              el scroll, dejando el header pegado arriba como siempre. */}
+          <BarraPromo />
           <Header />
           <CartDrawer />
           <main className="min-h-screen">{children}</main>

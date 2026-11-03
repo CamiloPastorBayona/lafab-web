@@ -34,6 +34,7 @@ import { landingFor } from "@/lib/landings";
 import ProductTabs from "@/components/ProductTabs";
 import { splitDescription } from "@/lib/productContent";
 import { jsonLd } from "@/components/RatingJsonLd";
+import AvisoPromo from "@/components/AvisoPromo";
 
 export const revalidate = 300;
 
@@ -316,6 +317,8 @@ export default async function ProductPage({
               )}
             </>
           )}
+
+          <AvisoPromo pct={descuento(p)} />
 
           {landing && (
             <Link
