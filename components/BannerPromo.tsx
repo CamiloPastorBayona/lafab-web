@@ -65,7 +65,10 @@ export default function BannerPromo({
       {BANNERS.map((b, i) => (
         <div
           key={b.slug}
-          className="absolute inset-0 transition-opacity duration-[1200ms]"
+          // 1200 ms era demasiado: durante el cruce se veían las dos fotos
+          // mezcladas mientras la etiqueta de abajo ya había cambiado, así que
+          // parecía que el nombre no correspondía al mueble.
+          className="absolute inset-0 transition-opacity duration-500"
           style={{ opacity: i === activo ? 1 : 0 }}
           aria-hidden={i !== activo}
         >
