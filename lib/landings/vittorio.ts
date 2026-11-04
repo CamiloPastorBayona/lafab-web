@@ -66,10 +66,13 @@ export const VITTORIO: Landing = {
     { img: FOTO.luz, title: "Ver películas", text: "El plan perfecto para quedarse en casa." },
   ],
 
+  // Tres, no cuatro: del Vittorio no hay un perfil puro. La que estaba en
+  // "Lateral" es otra toma por detrás, y poner esa etiqueta sobre una foto que
+  // enseña el respaldo es justo lo que queremos evitar. Cuando llegue el
+  // perfil se añade la cuarta tarjeta.
   vistas: [
     { img: FOTO.frontal, label: "Frontal" },
     { img: FOTO.diagonal, label: "Diagonal" },
-    { img: FOTO.perfil, label: "Lateral" },
     { img: FOTO.posterior, label: "Posterior" },
   ],
 

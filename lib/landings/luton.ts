@@ -23,11 +23,14 @@ const U = `${STORE_URL}/wp-content/uploads/2026/10`;
 const PORTADA = `${U}/sofa-luton-minimalista-con-sofa-de-cuero-caramelo-lafab-medellin.webp`;
 
 // 4:5 - el producto solo, mismo fondo y misma luz
+// Las etiquetas iban corridas: la que decía "Lateral" era otra diagonal y la
+// que decía "Posterior" era la lateral. Cada foto está ahora donde lo que se
+// ve es lo que dice la etiqueta.
 const VISTA = {
   frontal: `${U}/sofa-luton-de-cuero-caramelo-en-interior-clasico-moderno-lafab-medellin.webp`,
   diagonal: `${U}/sofa-luton-de-cuero-caramelo-en-sala-luminosa-lafab-medellin.webp`,
-  lateral: `${U}/sofa-luton-de-cuero-bajo-el-sol-lafab-medellin.webp`,
-  posterior: `${U}/sofa-luton-de-cuero-bajo-luz-dorada-lafab-medellin.webp`,
+  lateral: `${U}/sofa-luton-de-cuero-bajo-luz-dorada-lafab-medellin.webp`,
+  posterior: `${U}/sofa-luton-de-cuero-caramelo-al-sol-lafab-medellin.webp`,
   ficha: `${U}/sofa-luton-calido-con-sofa-de-cuero-caramelo-lafab-medellin.webp`,
 };
 
@@ -44,7 +47,7 @@ const AMBIENTE = {
 const DETALLE = {
   diseno: `${U}/sofa-luton-de-cuero-bajo-luz-calida-lafab-medellin.webp`,
   confort: `${U}/sofa-luton-de-cuero-marron-en-primer-plano-lafab-medellin.webp`,
-  calidad: `${U}/sofa-luton-de-cuero-caramelo-al-sol-lafab-medellin.webp`, // 4:3 provisional
+  calidad: `${U}/sofa-luton-de-cuero-bajo-el-sol-lafab-medellin.webp`, // 4:5 provisional
 };
 
 export const LUTON: Landing = {
