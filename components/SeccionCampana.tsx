@@ -8,6 +8,7 @@
 import Reveal from "@/components/Reveal";
 import ProductCard from "@/components/ProductCard";
 import PiezasCampana from "@/components/PiezasCampana";
+import TrustStrip from "@/components/TrustStrip";
 import { jsonLd } from "@/components/RatingJsonLd";
 import { type WCProduct } from "@/lib/woocommerce";
 import { PROMO, PROMO_FIN_TEXTO } from "@/lib/promo";
@@ -67,10 +68,17 @@ export default function SeccionCampana({
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(faqJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(ofertaJsonLd) }} />
 
+      {/* Lo que cubre la compra, en seco y justo debajo del banner. Va dentro
+          del ancho del resto de la portada: suelta, la tarjeta se estiraba de
+          borde a borde y no casaba con ninguna otra sección. */}
+      <div className="mx-auto max-w-site px-4 pt-10 md:px-6 md:pt-14">
+        <TrustStrip />
+      </div>
+
       {/* Las piezas, una por producto. Van limpias: cada una ya trae quemados
           el titular, el logo y el nombre del mueble. Lo único que se añade es
           lo que la imagen no dice, que es el precio. */}
-      <section id="seleccion" className="scroll-mt-24 bg-cream py-16 md:py-20">
+      <section id="seleccion" className="mt-14 scroll-mt-24 bg-cream py-16 md:mt-16 md:py-20">
         <div className="mx-auto max-w-site px-4 md:px-6">
           <Reveal>
             <p className="text-xs font-medium uppercase tracking-[0.25em] text-gold-dark">

@@ -26,8 +26,15 @@ const NOMBRES: Record<string, string> = {
 
 export default function BannerPromo({
   alto = "normal",
+  precios,
   children,
 }: {
+  /**
+   * Precio de entrada de cada mueble del carrusel, ya formateado, por slug.
+   * Si viene, la línea de precio cambia con la foto en lugar de quedarse
+   * clavada en el más barato de toda la campaña.
+   */
+  precios?: Record<string, string>;
   /**
    * "principal" ocupa la portada entera en lugar del carrusel de siempre.
    * "alto" y "normal" quedan para cualquier otro sitio donde haga falta.
@@ -47,20 +54,24 @@ export default function BannerPromo({
   }, []);
 
   // En "principal" se mete bajo el header transparente, igual que el hero al
-  // que sustituye, pero no va a pantalla completa: a 60vh se ve el banner y se
-  // asoma la selección que viene debajo, que es a donde queremos que bajen. En
-  // móvil tampoco: estas fotos son panorámicas (2,3 a 1) y a 390 de ancho el
-  // recorte se comería la sala entera para dejar una franja.
+  // que sustituye, pero no va a pantalla completa: así se asoma la franja de
+  // confianza y la selección que vienen debajo, que es a donde queremos que
+  // bajen. En móvil tampoco: estas fotos son panorámicas (2,3 a 1) y a 390 de
+  // ancho el recorte se comería la sala entera para dejar una franja.
   const clases =
     alto === "principal"
-      ? "-mt-[64px] min-h-[clamp(540px,60vh,660px)]"
+      ? "-mt-[64px] min-h-[clamp(620px,73vh,760px)]"
       : alto === "alto"
         ? "min-h-[clamp(520px,70vh,720px)]"
         : "min-h-[clamp(380px,48vh,520px)]";
 
   return (
     <section
-      className={`relative overflow-hidden bg-[#0D0D0D] text-white ${clases}`}
+      // flex en la sección para que el bloque de texto se estire hasta el
+      // alto mínimo y quede centrado de verdad. Con h-full sobre un padre de
+      // alto automático no resolvía, y en tableta el texto se iba arriba
+      // dejando un palmo de foto vacía debajo.
+      className={`relative flex overflow-hidden bg-[#0D0D0D] text-white ${clases}`}
       aria-label={PROMO.etiqueta}
     >
       {BANNERS.map((b, i) => (
@@ -88,10 +99,15 @@ export default function BannerPromo({
       {/* El texto cae sobre el lado izquierdo, que es el que las fotos dejan
           en penumbra a propósito. */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#0D0D0D]/95 via-[#0D0D0D]/70 to-transparent" />
+      {/* En móvil el degradado lateral no sirve: la foto panorámica se recorta
+          al centro y el mueble iluminado queda justo debajo del texto. Este
+          velo vertical solo aparece ahí, para que el precio y los botones se
+          lean sobre la parte clara. */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D0D]/95 via-[#0D0D0D]/78 to-[#0D0D0D]/45 md:hidden" />
       <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#0D0D0D]/80 to-transparent" />
 
       <div
-        className={`relative z-10 mx-auto flex h-full max-w-site flex-col justify-center px-4 md:px-6 ${
+        className={`relative z-10 mx-auto flex w-full max-w-site flex-col justify-center px-4 md:px-6 ${
           alto === "principal"
             ? "py-14 pt-28 md:py-14 md:pt-20"
             : "py-14 md:py-20"
@@ -99,9 +115,18 @@ export default function BannerPromo({
       >
         {children}
 
+        {/* El precio del mueble que se está viendo, no el de la campaña
+            entera: si la foto cambia y la cifra no, parece que todos
+            cuestan lo mismo. */}
+        {precios?.[BANNERS[activo].slug] && (
+          <p className="mt-6 text-sm text-white/70 md:text-white/55">
+            Desde {precios[BANNERS[activo].slug]} · IVA incluido · Entrega antes
+            de que acabe el año
+          </p>
+        )}
+
         {/* Qué mueble se está viendo. Cambia con el carrusel. */}
-        <p className="mt-7 flex items-center gap-2.5 text-[11px] uppercase tracking-[0.22em] text-white/65">
-          <span aria-hidden className="h-px w-7 bg-gold-light/60" />
+        <p className="mt-6 text-[11px] uppercase tracking-[0.22em] text-white/65">
           {NOMBRES[BANNERS[activo].slug] ?? ""}
         </p>
 

@@ -46,10 +46,14 @@ export default async function HomePage() {
   const enCampana = PROMO.productos
     .map((slug) => todos.find((p) => p.slug === slug))
     .filter((p): p is NonNullable<typeof p> => Boolean(p));
-  const precios = enCampana.map((p) => Number(p.prices.price) || 0).filter(Boolean);
-  const desde = precios.length
-    ? money(String(Math.min(...precios)), enCampana[0].prices)
-    : undefined;
+  // Precio de entrada por mueble: el carrusel del banner lo necesita para que
+  // la cifra cambie con la foto.
+  const precios = Object.fromEntries(
+    enCampana.map((p) => [
+      p.slug,
+      money(p.prices.price_range?.min_amount ?? p.prices.price, p.prices),
+    ])
+  );
   const maxPct = Math.max(0, ...enCampana.map((p) => descuento(p.prices) ?? 0));
 
   return (
@@ -59,7 +63,7 @@ export default async function HomePage() {
           no en el cliente: así no se ve primero un hero y luego el otro.
           La portada se revalida cada 300 s, así que cuando la campaña termine
           el carrusel vuelve solo, con cinco minutos de margen como mucho. */}
-      {campana ? <BloquePromo desde={desde} maxPct={maxPct} /> : <Hero />}
+      {campana ? <BloquePromo precios={precios} maxPct={maxPct} /> : <Hero />}
 
       {/* La campaña entera: las piezas, la selección, el compromiso de
           entrega y las preguntas. El botón del banner ancla a #seleccion. */}

@@ -15,15 +15,15 @@ import { waCampana } from "@/components/SeccionCampana";
 import { PROMO_FIN_TEXTO } from "@/lib/promo";
 
 export default function BloquePromo({
-  desde,
+  precios,
   maxPct,
 }: {
-  /** Precio de entrada de la campaña, ya formateado. */
-  desde?: string;
+  /** Precio de entrada de cada mueble del carrusel, ya formateado, por slug. */
+  precios?: Record<string, string>;
   maxPct?: number;
 }) {
   return (
-    <BannerPromo alto="principal">
+    <BannerPromo alto="principal" precios={precios}>
       <p className="text-xs font-medium uppercase tracking-[0.35em] text-gold-light">
         Nos adelantamos
       </p>
@@ -55,11 +55,6 @@ export default function BloquePromo({
         </a>
       </div>
 
-      {desde && (
-        <p className="mt-5 text-sm text-white/55">
-          Desde {desde} · IVA incluido · Entrega antes de que acabe el año
-        </p>
-      )}
       <p className="sr-only">La campaña va hasta el {PROMO_FIN_TEXTO}.</p>
     </BannerPromo>
   );

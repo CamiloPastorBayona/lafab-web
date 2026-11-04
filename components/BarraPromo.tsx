@@ -11,7 +11,6 @@
 //    sticky, se queda arriba como siempre.
 //  - Se puede cerrar y no vuelve a aparecer en esa campaña.
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { isLandingPath } from "@/lib/landings";
@@ -37,8 +36,10 @@ function Cuenta() {
 
   const dd = (n: number) => String(n).padStart(2, "0");
   return (
-    <span className="hidden items-center gap-1.5 text-white/55 sm:inline-flex">
-      <span aria-hidden>·</span>
+    <span className="inline-flex items-center gap-1.5 text-white/55">
+      <span className="hidden sm:inline" aria-hidden>
+        ·
+      </span>
       <span className="tabular-nums">
         Termina en {t.dias > 0 && `${t.dias} d `}
         {dd(t.horas)}:{dd(t.minutos)}:{dd(t.segundos)}
@@ -79,34 +80,17 @@ export default function BarraPromo() {
       aria-label={PROMO.etiqueta}
       className="relative z-[55] border-b border-gold/25 bg-[#0D0D0D]"
     >
-      <div className="mx-auto flex max-w-site items-center justify-center gap-3 px-10 py-2.5 md:px-6">
-        <Link
-          href={PROMO.href}
-          className="group flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center text-[11px] tracking-[0.14em] md:text-xs"
-        >
+      <div className="mx-auto flex max-w-site items-center justify-center px-10 py-2.5 md:px-6">
+        {/* Solo información. El botón salió: la campaña ya es la portada
+            entera, así que mandar a "ver la selección" desde aquí era
+            repetir el mismo destino dos veces en la misma pantalla. */}
+        <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-0.5 text-center text-[11px] tracking-[0.14em] md:text-xs">
           <span className="font-medium uppercase text-gold-light">
             {PROMO.etiqueta}
           </span>
-          <span className="text-white/85">{PROMO.gancho}</span>
+          <span className="hidden text-white/85 sm:inline">{PROMO.gancho}</span>
           <Cuenta />
-          <span className="inline-flex items-center gap-1 whitespace-nowrap font-medium text-white underline-offset-4 group-hover:underline">
-            {PROMO.cta}
-            <svg
-              width="11"
-              height="11"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="transition-transform group-hover:translate-x-0.5"
-              aria-hidden
-            >
-              <path d="M5 12h14M13 6l6 6-6 6" />
-            </svg>
-          </span>
-        </Link>
+        </p>
 
         <button
           onClick={cerrar}
