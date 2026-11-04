@@ -50,7 +50,7 @@ export default function LandingHeader({
           <Link href="/" aria-label="LaFab · Inicio" className="flex items-center">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={`${UPLOADS}/2022/12/lafab-blanco.png`}
+              src={`${UPLOADS}/2026/11/lafab-blanco-600.webp`}
               alt="LaFab"
               className="h-5 w-auto md:h-6"
             />

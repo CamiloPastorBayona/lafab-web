@@ -15,7 +15,7 @@ import {
 import { usePathname } from "next/navigation";
 import { UPLOADS } from "@/lib/cms";
 
-const LOGO = `${UPLOADS}/2022/12/lafab-blanco.png`;
+const LOGO = `${UPLOADS}/2026/11/lafab-blanco-600.webp`;
 const AUDIO_SRC = "/audiologo.mp3";
 const HOME_PATHS = new Set(["/", "/inicio"]);
 // Era 4540. La capa es opaca y a pantalla completa, así que Google medía el

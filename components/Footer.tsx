@@ -51,7 +51,7 @@ export default function Footer() {
           <div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={`${UPLOADS}/2022/12/lafab-blanco.png`}
+              src={`${UPLOADS}/2026/11/lafab-blanco-600.webp`}
               alt="LaFab"
               className="mb-5 h-9 w-auto"
             />

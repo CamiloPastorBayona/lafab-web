@@ -38,7 +38,7 @@ export default function ProximamentePage() {
       <div className="relative z-10 flex w-full max-w-2xl flex-col items-center text-center">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={`${CMS}/2022/12/lafab-blanco.png`}
+          src={`${CMS}/2026/11/lafab-blanco-600.webp`}
           alt="LaFab · La Fábrica de Muebles"
           width={150}
           height={48}
