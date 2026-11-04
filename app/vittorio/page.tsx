@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { VITTORIO } from "@/lib/landings/vittorio";
 import LandingPage from "@/components/LandingPage";
 import { getLandingCatalog } from "@/lib/landingCatalog";
+import { conPortal } from "@/lib/landingPortal";
 
 export const metadata: Metadata = {
   title: "Sofá Vittorio",
@@ -13,5 +14,5 @@ export const revalidate = 300;
 
 export default async function VittorioLanding() {
   const catalog = await getLandingCatalog("sofa-vittorio");
-  return <LandingPage data={VITTORIO} catalog={catalog} />;
+  return <LandingPage data={await conPortal(VITTORIO, "sofa-vittorio")} catalog={catalog} />;
 }

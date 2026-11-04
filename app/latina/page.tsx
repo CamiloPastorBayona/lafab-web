@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { LATINA } from "@/lib/landings/latina";
 import LandingPage from "@/components/LandingPage";
 import { getLandingCatalog } from "@/lib/landingCatalog";
+import { conPortal } from "@/lib/landingPortal";
 
 export const metadata: Metadata = {
   title: "Sofá Latina",
@@ -13,5 +14,5 @@ export const revalidate = 300;
 
 export default async function LatinaLanding() {
   const catalog = await getLandingCatalog("sofa-latina");
-  return <LandingPage data={LATINA} catalog={catalog} />;
+  return <LandingPage data={await conPortal(LATINA, "sofa-latina")} catalog={catalog} />;
 }

@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { SANDIEGO_LANDING } from "@/lib/sandiego";
 import LandingPage from "@/components/LandingPage";
 import { getLandingCatalog } from "@/lib/landingCatalog";
+import { conPortal } from "@/lib/landingPortal";
 
 export const metadata: Metadata = {
   title: "Sofá San Diego",
@@ -16,5 +17,5 @@ export const revalidate = 300;
 // responde, el configurador se muestra con su contenido estático.
 export default async function SanDiegoLanding() {
   const catalog = await getLandingCatalog("sofa-san-diego");
-  return <LandingPage data={SANDIEGO_LANDING} catalog={catalog} />;
+  return <LandingPage data={await conPortal(SANDIEGO_LANDING, "sofa-san-diego")} catalog={catalog} />;
 }
