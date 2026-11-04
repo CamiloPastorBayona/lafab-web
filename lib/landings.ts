@@ -14,12 +14,7 @@ export const LANDING_BY_SLUG: Record<string, string> = {
   "sofa-san-diego": "/san-diego",
   "sofa-latina": "/latina",
   "sofa-luton": "/luton",
-  // Vittorio queda fuera a propósito: su landing ya existe y los datos son
-  // reales, pero todavía apunta a una sola foto en las 14 posiciones. Este mapa
-  // es el que pone en la ficha de producto el banner "Vive la experiencia
-  // completa", así que mandar tráfico allá antes de tener fotos sería un mal
-  // negocio. Cuando lleguen, se descomenta la línea y listo.
-  // "sofa-vittorio": "/vittorio",
+  "sofa-vittorio": "/vittorio",
 };
 
 export const landingFor = (slug: string): string | null =>
