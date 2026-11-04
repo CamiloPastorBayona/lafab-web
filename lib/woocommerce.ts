@@ -143,6 +143,10 @@ export function money(amount: string | number, prices: WCPrices): string {
 // ---- Fetch helpers ----
 // Cache on the server and revalidate periodically (ISR). Adjust as needed.
 const REVALIDATE = 300; // seconds
+// Todo lo que viene de la tienda lleva esta etiqueta. Cuando el Portal avisa
+// que un producto cambió, /api/revalidar la borra y la web se pone al día de
+// una vez, sin esperar los 5 minutos.
+export const ETIQUETA_TIENDA = "tienda";
 
 // Basic Auth opcional (solo servidor). Úsalo para leer un staging protegido con
 // usuario/contraseña sin exponerlo al público: define WC_STORE_BASIC_AUTH="user:pass"
@@ -171,7 +175,7 @@ async function get<T>(path: string, intentos = 4): Promise<T> {
   for (let i = 0; i < intentos; i++) {
     try {
       const res = await fetch(`${API}${path}`, {
-        next: { revalidate: REVALIDATE },
+        next: { revalidate: REVALIDATE, tags: [ETIQUETA_TIENDA] },
         headers: authHeaders(),
       });
       if (res.ok) return (await res.json()) as T;
@@ -319,7 +323,7 @@ export async function getProductExtra(
   try {
     const res = await fetch(
       `${STORE_URL}/wp-json/lafab/v1/product-extra?id=${id}`,
-      { next: { revalidate: REVALIDATE }, headers: authHeaders() }
+      { next: { revalidate: REVALIDATE, tags: [ETIQUETA_TIENDA] }, headers: authHeaders() }
     );
     if (!res.ok) return null;
     return (await res.json()) as WCProductExtra;
