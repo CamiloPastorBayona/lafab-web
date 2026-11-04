@@ -75,8 +75,11 @@ export default function Header() {
         scrolled ? "bg-ink/95 shadow-lg backdrop-blur-md" : "bg-ink/80 backdrop-blur-sm"
       }`}
     >
-      <div className="mx-auto flex max-w-site items-center justify-between px-4 py-3 md:px-6">
-        <Link href="/" className="flex items-center">
+      {/* gap y shrink-0: entre 768 y 840 px el nav de escritorio ya estaba
+          dentro pero no cabía, así que flex encogía el enlace del logo y la
+          imagen salía un 33 % más estrecha, pegada a "Inicio". */}
+      <div className="mx-auto flex max-w-site items-center justify-between gap-4 px-4 py-3 md:px-6">
+        <Link href="/" className="flex shrink-0 items-center">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={`${UPLOADS}/2026/11/lafab-blanco-600.webp`}
@@ -85,7 +88,7 @@ export default function Header() {
           />
         </Link>
 
-        <nav className="hidden items-center gap-6 md:flex">
+        <nav className="hidden items-center gap-4 md:flex lg:gap-6">
           {NAV.map((item) =>
             item.children ? (
               <div key={item.label} className="group relative">

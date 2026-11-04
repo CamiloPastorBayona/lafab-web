@@ -17,22 +17,23 @@ const U10 = `${STORE_URL}/wp-content/uploads/2026/10`;
 const U11 = `${STORE_URL}/wp-content/uploads/2026/11`;
 
 const FOTO = {
-  // Frontal sobre tapete, con el sofá entero y aire alrededor.
+  // De frente, con la luz entrando en diagonal. Esta es la frontal de verdad:
+  // la que estaba aquí antes era una toma del RESPALDO vista de frente, así que
+  // el carrusel de vistas enseñaba dos traseras y ninguna delantera.
+  frontal: `${U11}/sofa-vittorio-en-cuero-marron-con-luz-diagonal-lafab-medellin.webp`,
+  // De frente también, sobre tapete y con más aire alrededor.
   tapete: `${U10}/sofa-vittorio-de-cuero-en-sala-minimalista-lafab-medellin.webp`,
-  // Frontal limpia, sin nada más en el encuadre.
-  frontal: `${U10}/sofa-vittorio-modular-marron-en-sala-minimalista-lafab-medellin.webp`,
   // Tres cuartos.
   diagonal: `${U10}/sofa-vittorio-de-cuero-marron-en-sala-minimalista-lafab-medellin.webp`,
-  // De perfil: se ve la silueta baja y las costuras del brazo.
-  perfil: `${U10}/sofa-vittorio-de-cuero-taupe-en-perfil-lafab-medellin.webp`,
-  // Tres cuartos desde atrás.
+  // El respaldo de frente. Se ve bien la base de roble que recorre el mueble.
+  trasera: `${U10}/sofa-vittorio-modular-marron-en-sala-minimalista-lafab-medellin.webp`,
+  // El respaldo en tres cuartos.
   posterior: `${U10}/sofa-vittorio-modular-marron-en-espacio-minimalista-lafab-medellin.webp`,
+  // Esquina trasera en primer plano: se ven las costuras del acolchado.
+  perfil: `${U10}/sofa-vittorio-de-cuero-taupe-en-perfil-lafab-medellin.webp`,
+  esquina: `${U11}/sofa-vittorio-en-vista-lateral-sobre-piso-beige-lafab-medellin.webp`,
   // La única con la sala montada: cuadro, lámpara y mesa de centro.
   ambiente: `${U11}/sofa-vittorio-en-cuero-chocolate-en-una-sala-beige-lafab-medellin.webp`,
-  // Frontal con la luz entrando en diagonal.
-  luz: `${U11}/sofa-vittorio-en-cuero-marron-con-luz-diagonal-lafab-medellin.webp`,
-  // Esquina en primer plano, buena para detalle.
-  esquina: `${U11}/sofa-vittorio-en-vista-lateral-sobre-piso-beige-lafab-medellin.webp`,
 };
 
 export const VITTORIO: Landing = {
@@ -45,7 +46,7 @@ export const VITTORIO: Landing = {
   price: 5240000,
   regularPrice: 6550000,
   hero: FOTO.ambiente,
-  configImage: FOTO.tapete,
+  configImage: FOTO.frontal,
 
   medidas: ["190 cm", "210 cm", "240 cm"],
 
@@ -63,7 +64,7 @@ export const VITTORIO: Landing = {
     { img: FOTO.esquina, title: "Recibir visitas", text: "Una pieza que marca el espacio." },
     { img: FOTO.ambiente, title: "Compartir en familia", text: "El punto de encuentro de todos." },
     { img: FOTO.tapete, title: "Descansar", text: "Amplitud suficiente para estirarse." },
-    { img: FOTO.luz, title: "Ver películas", text: "El plan perfecto para quedarse en casa." },
+    { img: FOTO.diagonal, title: "Ver películas", text: "El plan perfecto para quedarse en casa." },
   ],
 
   // Tres, no cuatro: del Vittorio no hay un perfil puro. La que estaba en
@@ -79,10 +80,10 @@ export const VITTORIO: Landing = {
   bondades: [
     { img: FOTO.esquina, n: "01", title: "Silueta baja", sub: "de inspiración italiana." },
     { img: FOTO.perfil, n: "02", title: "Confección", sub: "con costuras a la vista." },
-    { img: FOTO.frontal, n: "03", title: "Roble", sub: "en la base completa." },
+    { img: FOTO.trasera, n: "03", title: "Roble", sub: "en la base completa." },
   ],
 
-  specsImage: FOTO.luz,
+  specsImage: FOTO.tapete,
 
   specsTop: [
     { key: "Largo", val: "Disponible en 190 cm · 210 cm · 240 cm" },

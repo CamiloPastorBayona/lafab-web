@@ -47,7 +47,7 @@ export default function LandingHeader({
       <div className="mx-auto flex h-full max-w-site items-center justify-between px-4 md:px-6">
         {/* Izquierda: logo + producto */}
         <div className="flex items-center gap-3">
-          <Link href="/" aria-label="LaFab · Inicio" className="flex items-center">
+          <Link href="/" aria-label="LaFab · Inicio" className="flex shrink-0 items-center">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={`${UPLOADS}/2026/11/lafab-blanco-600.webp`}
