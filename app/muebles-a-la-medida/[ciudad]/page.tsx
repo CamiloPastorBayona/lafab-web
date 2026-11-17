@@ -149,7 +149,7 @@ export default async function CiudadPage({
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(servicioJsonLd) }} />
 
       <PageHeader
-        eyebrow={`Envíos a ${c.nombre}`}
+        eyebrow={envioIncluido ? `Taller y showroom en ${c.nombre}` : `Envíos a ${c.nombre}`}
         title={c.h1}
         subtitle={c.entrada}
         image={`${UPLOADS}/2026/10/sofa-crema-en-sala-moderna-con-tapete-lafab-medellin.webp`}
@@ -270,7 +270,9 @@ export default async function CiudadPage({
         {destacados.length > 0 && (
           <section className="mt-16">
             <h2 className="mb-6 text-2xl font-light text-ink md:text-3xl">
-              Algunos muebles que enviamos a {c.nombre}
+              {envioIncluido
+                ? `Algunos muebles que fabricamos para ${c.nombre}`
+                : `Algunos muebles que enviamos a ${c.nombre}`}
             </h2>
             <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
               {destacados.map((p, i) => (
@@ -293,7 +295,9 @@ export default async function CiudadPage({
         {/* Preguntas de la ciudad */}
         <section className="mt-16 max-w-3xl">
           <h2 className="mb-6 text-2xl font-light text-ink md:text-3xl">
-            Preguntas de quienes compran desde {c.nombre}
+            {envioIncluido
+              ? `Preguntas de quienes compran en ${c.nombre}`
+              : `Preguntas de quienes compran desde ${c.nombre}`}
           </h2>
           <div className="divide-y divide-ink/10 border-y border-ink/10">
             {c.faq.map((item) => (
