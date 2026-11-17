@@ -32,11 +32,14 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   metadataBase: new URL("https://lafab.com.co"),
   title: {
-    default: "LaFab | Muebles a la medida en Medellín",
+    default: "LaFab | Fabricantes de muebles a la medida en Medellín",
     template: "%s | LaFab",
   },
+  // "Fabricantes de muebles en Medellín" es, de lejos, el término con el que
+  // más gente llega a LaFab desde Google. La portada es la página que compite
+  // por él, así que el título y esta descripción lo dicen con esas palabras.
   description:
-    "Fabricamos muebles a la medida en Medellín: sofás, comedores, alcobas y closets. Diseño propio, materiales de calidad y envío a todo el país.",
+    "Fabricantes de muebles a la medida en Medellín: sofás, comedores, alcobas y poltronas de nuestro taller en Itagüí. Envío incluido en el área metropolitana.",
   icons: {
     icon: `${UPLOADS}/2024/11/cropped-favicon-lafab-270x270.png`,
   },

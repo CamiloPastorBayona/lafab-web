@@ -20,12 +20,65 @@ export type Ciudad = {
   entrada: string;
   /** Dos o tres párrafos propios de la ciudad. */
   cuerpo: string[];
+  /** Costo de envío propio de la ciudad. Si no se declara, aplica la
+   *  tarifa nacional de lib/shipping.ts. Itagüí y el área metropolitana van
+   *  en 0 porque el envío ya está incluido en el precio publicado. */
+  envio?: number;
   /** El ángulo práctico que esta página desarrolla mejor que las otras. */
   destacado: { titulo: string; texto: string };
   faq: { q: string; a: string }[];
 };
 
 export const CIUDADES: Ciudad[] = [
+  {
+    slug: "itagui",
+    nombre: "Itagüí",
+    departamento: "Antioquia",
+    gentilicio: "itagüiseños",
+    envio: 0,
+    metaTitle: "Muebles a la medida en Itagüí · Taller y showroom propios",
+    metaDescription:
+      "Fabricamos sofás, comedores, alcobas y poltronas a la medida en nuestro taller de Itagüí. Visítanos en La Esmeralda: envío incluido, 30 días y garantía.",
+    h1: "Muebles a la medida en Itagüí",
+    entrada:
+      "Aquí no hay envío que coordinar ni fotos que interpretar: el taller y el showroom de LaFab quedan en Itagüí, en la Cl. 64 #44-74, y el mueble que te llevas se cortó, se armó y se tapizó en esa misma dirección.",
+    cuerpo: [
+      "Fabricamos nosotros, no revendemos, y en Itagüí eso se nota en algo muy concreto: puedes venir, sentarte en el sofá que estás pensando comprar, tocar la tela, pedir que te muestren la estructura por dentro y preguntarle al que lo fabrica cuánto se demora. El showroom abre de lunes a sábado de 10:00 a.m. a 6:30 p.m. y los domingos de 10:00 a.m. a 5:00 p.m., y no hace falta cita.",
+      "El envío dentro de Itagüí va incluido en el precio publicado. El número que ves en la tienda es el que pagas, sin sumas al final. Si el mueble no entra por la puerta o por el ascensor, eso se resuelve antes de fabricarlo: con el ancho del vano y el largo de la pared te confirmamos qué medida sirve.",
+      "Fabricar a la medida aquí significa que puedes cambiar el largo, el fondo, la altura, la tela y el color sin pagar recargo por salirte del catálogo. La fabricación toma 30 días calendario o menos, y como el taller queda en el mismo municipio, cualquier ajuste posterior se hace sin mandar el mueble a otra ciudad.",
+    ],
+    destacado: {
+      titulo: "Ven al taller antes de decidir",
+      texto:
+        "Estamos en la Cl. 64 #44-74, barrio La Esmeralda. Trae la medida de la pared y, si puedes, una foto del espacio: en la misma visita te decimos qué cabe, en qué tela y en cuánto queda.",
+    },
+    faq: [
+      {
+        q: "¿Cuánto cuesta el envío dentro de Itagüí?",
+        a: "Nada. El envío va incluido en el precio publicado para Itagüí, Medellín y el resto del área metropolitana.",
+      },
+      {
+        q: "¿Puedo ir al showroom sin cita?",
+        a: "Sí. Lunes a sábado de 10:00 a.m. a 6:30 p.m. y domingos de 10:00 a.m. a 5:00 p.m., en la Cl. 64 #44-74, barrio La Esmeralda. En puentes festivos cerramos domingo y lunes.",
+      },
+      {
+        q: "¿El showroom y el taller son el mismo sitio?",
+        a: "Sí, y por eso vale la pena venir: quien te atiende es quien fabrica, y puedes ver cómo se arma un mueble mientras decides el tuyo.",
+      },
+      {
+        q: "¿Hay parqueadero?",
+        a: "Sí, hay dónde parquear y el acceso es apto para silla de ruedas.",
+      },
+      {
+        q: "¿Cuánto se demora la fabricación?",
+        a: "30 días calendario o menos desde que confirmas el pedido. Al terminar te avisamos para coordinar la entrega o para que lo recojas en el taller.",
+      },
+      {
+        q: "¿Qué garantía tiene el mueble?",
+        a: "Tres años en la estructura y un año por desajustes, patas y costuras.",
+      },
+    ],
+  },
   {
     slug: "bogota",
     nombre: "Bogotá",
