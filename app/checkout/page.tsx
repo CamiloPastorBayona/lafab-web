@@ -15,7 +15,7 @@ import Ico from "@/components/LandingIcons";
 import { trackBeginCheckout, guardaCompra } from "@/lib/analytics";
 import { SHIPPING_NOTE, SHIPPING_NATIONAL_COST, cop as copShip } from "@/lib/shipping";
 import { TOPE_BOLD, superaTopeBold, mensajeLimpio } from "@/lib/pagos";
-import { WHATSAPP } from "@/lib/content";
+import { WHATSAPP, whatsappPago } from "@/lib/content";
 import Campo from "@/components/Campo";
 
 export default function CheckoutPage() {
@@ -337,10 +337,21 @@ export default function CheckoutPage() {
                 {envio === null ? "IVA incluido · falta sumar el envío" : "IVA incluido"}
               </p>
 
+              {/* Un error de la pasarela no puede ser un callejón sin salida: al
+                  lado del mensaje va siempre la vía humana. */}
               {error && (
-                <p className="mt-4 rounded-xl bg-sale/10 px-4 py-3 text-sm text-sale">
-                  {error}
-                </p>
+                <div className="mt-4 rounded-xl bg-sale/10 px-4 py-3 text-sm text-sale">
+                  <p>{error}</p>
+                  <a
+                    href={whatsappPago()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 font-semibold text-white transition-transform hover:scale-[1.02]"
+                  >
+                    <Ico name="headset" className="h-4 w-4 text-gold" />
+                    Escríbenos por WhatsApp
+                  </a>
+                </div>
               )}
 
               {sobreTope && (
