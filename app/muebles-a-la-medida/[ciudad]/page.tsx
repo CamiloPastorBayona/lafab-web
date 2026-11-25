@@ -84,6 +84,12 @@ export default async function CiudadPage({
     .sort((a, b) => Number(a.prices.price) - Number(b.prices.price))
     .slice(0, 8);
 
+  // El envío no es el mismo en todas partes: Itagüí y el área metropolitana
+  // ya lo llevan incluido en el precio publicado. Si la ciudad no declara el
+  // suyo, aplica la tarifa nacional.
+  const envio = c.envio ?? SHIPPING_NATIONAL_COST;
+  const envioIncluido = envio === 0;
+
   const migas = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -143,7 +149,7 @@ export default async function CiudadPage({
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(servicioJsonLd) }} />
 
       <PageHeader
-        eyebrow={`Envíos a ${c.nombre}`}
+        eyebrow={envioIncluido ? `Taller y showroom en ${c.nombre}` : `Envíos a ${c.nombre}`}
         title={c.h1}
         subtitle={c.entrada}
         image={`${UPLOADS}/2026/10/sofa-crema-en-sala-moderna-con-tapete-lafab-medellin.webp`}
@@ -159,7 +165,13 @@ export default async function CiudadPage({
         <Reveal>
           <div className="grid gap-4 sm:grid-cols-3">
             {[
-              { icon: "truck", t: `Envío a ${c.nombre}`, s: `${cop(SHIPPING_NATIONAL_COST)} sobre el precio publicado` },
+              {
+                icon: "truck",
+                t: `Envío a ${c.nombre}`,
+                s: envioIncluido
+                  ? "Incluido en el precio publicado"
+                  : `${cop(envio)} sobre el precio publicado`,
+              },
               { icon: "factory", t: "Fabricación", s: "30 días calendario o menos" },
               { icon: "shieldCheck", t: "Garantía", s: "La misma en todo el país" },
             ].map((b, i) => (
@@ -186,9 +198,9 @@ export default async function CiudadPage({
                 Cuánto cuesta puesto en {c.nombre}
               </h2>
               <p className="mt-2 max-w-2xl text-ink/70">
-                El precio de la izquierda es el que ves en la tienda. El de la
-                derecha es lo que pagas con el envío a {c.nombre} ya sumado, que
-                es el número que importa.
+                {envioIncluido
+                  ? `El precio que ves en la tienda es el que pagas en ${c.nombre}: el envío ya va incluido y no se suma nada al final.`
+                  : `El precio de la izquierda es el que ves en la tienda. El de la derecha es lo que pagas con el envío a ${c.nombre} ya sumado, que es el número que importa.`}
               </p>
               <div className="mt-6 overflow-hidden rounded-2xl border border-ink/10">
                 {desdePorCategoria.map((cat, i) => (
@@ -201,12 +213,24 @@ export default async function CiudadPage({
                   >
                     <span className="font-medium text-ink">{cat.nombre}</span>
                     <span className="text-sm text-ink/60">
-                      desde {cop(cat.desde as number)}
-                      <span className="mx-2 text-ink/30">→</span>
-                      <strong className="font-semibold text-ink">
-                        {cop((cat.desde as number) + SHIPPING_NATIONAL_COST)}
-                      </strong>{" "}
-                      en {c.nombre}
+                      {envioIncluido ? (
+                        <>
+                          desde{" "}
+                          <strong className="font-semibold text-ink">
+                            {cop(cat.desde as number)}
+                          </strong>{" "}
+                          con envío incluido
+                        </>
+                      ) : (
+                        <>
+                          desde {cop(cat.desde as number)}
+                          <span className="mx-2 text-ink/30">→</span>
+                          <strong className="font-semibold text-ink">
+                            {cop((cat.desde as number) + envio)}
+                          </strong>{" "}
+                          en {c.nombre}
+                        </>
+                      )}
                     </span>
                   </Link>
                 ))}
@@ -246,7 +270,9 @@ export default async function CiudadPage({
         {destacados.length > 0 && (
           <section className="mt-16">
             <h2 className="mb-6 text-2xl font-light text-ink md:text-3xl">
-              Algunos muebles que enviamos a {c.nombre}
+              {envioIncluido
+                ? `Algunos muebles que fabricamos para ${c.nombre}`
+                : `Algunos muebles que enviamos a ${c.nombre}`}
             </h2>
             <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
               {destacados.map((p, i) => (
@@ -269,7 +295,9 @@ export default async function CiudadPage({
         {/* Preguntas de la ciudad */}
         <section className="mt-16 max-w-3xl">
           <h2 className="mb-6 text-2xl font-light text-ink md:text-3xl">
-            Preguntas de quienes compran desde {c.nombre}
+            {envioIncluido
+              ? `Preguntas de quienes compran en ${c.nombre}`
+              : `Preguntas de quienes compran desde ${c.nombre}`}
           </h2>
           <div className="divide-y divide-ink/10 border-y border-ink/10">
             {c.faq.map((item) => (

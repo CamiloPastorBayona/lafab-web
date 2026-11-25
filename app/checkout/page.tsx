@@ -14,14 +14,23 @@ import {
 import Ico from "@/components/LandingIcons";
 import { trackBeginCheckout, guardaCompra } from "@/lib/analytics";
 import { SHIPPING_NOTE, SHIPPING_NATIONAL_COST, cop as copShip } from "@/lib/shipping";
-import { TOPE_BOLD, superaTopeBold, mensajeLimpio } from "@/lib/pagos";
-import { WHATSAPP } from "@/lib/content";
+import {
+  TOPE_BOLD,
+  superaTopeBold,
+  mensajeLimpio,
+  PASARELAS,
+  type PasarelaId,
+} from "@/lib/pagos";
+import { WHATSAPP, whatsappPago } from "@/lib/content";
 import Campo from "@/components/Campo";
 
 export default function CheckoutPage() {
   const { items, subtotal, count, clear } = useCart();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Pasarela elegida. Bold queda por defecto porque es la que ya venia
+  // cobrando; Wompi es la alternativa cuando una de las dos falla.
+  const [metodo, setMetodo] = useState<PasarelaId>("bold_co");
   const [form, setForm] = useState({
     nombre: "",
     apellidos: "",
@@ -124,8 +133,8 @@ export default function CheckoutPage() {
         await selectShipping(pkg.package_id, pkg.shipping_rates[0].rate_id);
       }
 
-      // 4) Crea el pedido y paga con Bold.
-      const order = await placeOrder(billing, shipping, "bold_co", form.notas);
+      // 4) Crea el pedido con la pasarela elegida.
+      const order = await placeOrder(billing, shipping, metodo, form.notas);
       if (!order.ok || !order.data)
         throw new Error(
           mensajeLimpio(
@@ -149,7 +158,7 @@ export default function CheckoutPage() {
       clear();
       const redirect = order.data.payment_result?.redirect_url;
       if (redirect) {
-        window.location.href = redirect; // → página de pago de Bold
+        window.location.href = redirect; // → página de pago de la pasarela
         return;
       }
       window.location.href = `/gracias?pedido=${order.data.order_id}`;
@@ -337,10 +346,21 @@ export default function CheckoutPage() {
                 {envio === null ? "IVA incluido · falta sumar el envío" : "IVA incluido"}
               </p>
 
+              {/* Un error de la pasarela no puede ser un callejón sin salida: al
+                  lado del mensaje va siempre la vía humana. */}
               {error && (
-                <p className="mt-4 rounded-xl bg-sale/10 px-4 py-3 text-sm text-sale">
-                  {error}
-                </p>
+                <div className="mt-4 rounded-xl bg-sale/10 px-4 py-3 text-sm text-sale">
+                  <p>{error}</p>
+                  <a
+                    href={whatsappPago()}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 font-semibold text-white transition-transform hover:scale-[1.02]"
+                  >
+                    <Ico name="headset" className="h-4 w-4 text-gold" />
+                    Escríbenos por WhatsApp
+                  </a>
+                </div>
               )}
 
               {sobreTope && (
@@ -366,6 +386,45 @@ export default function CheckoutPage() {
                 </div>
               )}
 
+              {/* La forma de pago se elige antes de salir del sitio: si una
+                  pasarela falla, el cliente tiene la otra a la mano. */}
+              {!sobreTope && (
+                <fieldset className="mt-5 border-t border-ink/10 pt-5">
+                  <legend className="mb-3 text-sm font-medium text-ink">
+                    Forma de pago
+                  </legend>
+                  <div className="space-y-2">
+                    {PASARELAS.map((p) => (
+                      <label
+                        key={p.id}
+                        className={`flex cursor-pointer items-start gap-3 rounded-xl border px-4 py-3 transition-colors ${
+                          metodo === p.id
+                            ? "border-gold bg-gold/5"
+                            : "border-ink/15 hover:bg-cream"
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name="pasarela"
+                          value={p.id}
+                          checked={metodo === p.id}
+                          onChange={() => setMetodo(p.id)}
+                          className="mt-1 accent-gold-dark"
+                        />
+                        <span>
+                          <span className="block text-sm font-medium text-ink">
+                            {p.nombre}
+                          </span>
+                          <span className="block text-xs text-ink/55">
+                            {p.detalle}
+                          </span>
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                </fieldset>
+              )}
+
               {/* Por encima del tope no hay botón de pagar: el único camino es
                   el asesor, y un botón apagado al lado solo confunde. */}
               {!sobreTope && (
@@ -375,7 +434,7 @@ export default function CheckoutPage() {
                   className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-ink px-6 py-4 text-sm font-medium uppercase tracking-[0.12em] text-white transition-transform hover:scale-[1.02] disabled:cursor-not-allowed disabled:bg-ink/40"
                 >
                   <Ico name="lock" className="h-4 w-4" />
-                  {loading ? "Procesando…" : "Pagar con Bold"}
+                  {loading ? "Procesando…" : "Pagar"}
                 </button>
               )}
               {!canPay && !sobreTope && (

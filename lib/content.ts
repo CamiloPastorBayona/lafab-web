@@ -6,6 +6,23 @@ import { UPLOADS } from "@/lib/cms";
 export const WHATSAPP =
   "https://api.whatsapp.com/send/?phone=573054602395&text=Hola%20LaFab,%20quiero%20cotizar%20un%20mueble";
 
+/** Teléfono como se escribe y como lo necesita un enlace tel: */
+export const TELEFONO = "+57 305 460 2395";
+export const TELEFONO_TEL = "+573054602395";
+
+/**
+ * WhatsApp con el mensaje ya escrito para un pago que no se completó. Llevar el
+ * número de pedido en el texto evita la primera pregunta de la conversación y
+ * deja al asesor buscando el pedido en vez de pidiéndole datos al cliente.
+ */
+export const whatsappPago = (pedido?: string | null) =>
+  "https://api.whatsapp.com/send/?phone=573054602395&text=" +
+  encodeURIComponent(
+    pedido
+      ? `Hola LaFab, tuve un problema con el pago de mi pedido #${pedido} y quiero completarlo.`
+      : "Hola LaFab, tuve un problema con el pago de mi pedido y quiero completarlo."
+  );
+
 export const GOOGLE_REVIEW_URL = "https://g.page/r/Ccmjjrs-RurKEB0/review";
 
 export const SHOWROOM = {

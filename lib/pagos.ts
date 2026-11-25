@@ -30,3 +30,21 @@ export function mensajeLimpio(texto: string, respaldo: string): string {
   }
   return plano;
 }
+
+// Pasarelas disponibles en el checkout. El id es exactamente el que usa
+// WooCommerce: si aquí se escribe distinto, el pedido se crea sin forma de
+// pago y el cliente queda varado en una página en blanco.
+export type PasarelaId = "bold_co" | "wompi";
+
+export const PASARELAS: { id: PasarelaId; nombre: string; detalle: string }[] = [
+  {
+    id: "bold_co",
+    nombre: "Bold",
+    detalle: "Tarjetas, PSE, Nequi y QR Bre-B",
+  },
+  {
+    id: "wompi",
+    nombre: "Wompi",
+    detalle: "Tarjetas, PSE, Nequi y Bancolombia",
+  },
+];
