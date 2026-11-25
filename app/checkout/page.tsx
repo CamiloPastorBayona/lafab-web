@@ -86,8 +86,6 @@ export default function CheckoutPage() {
   const correoValido = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(form.email.trim());
   const telefonoValido = form.telefono.replace(/\D/g, "").length >= 7;
 
-  const pasarela = PASARELAS.find((p) => p.id === metodo) ?? PASARELAS[0];
-
   const canPay =
     !sobreTope &&
     items.length > 0 &&
@@ -436,7 +434,7 @@ export default function CheckoutPage() {
                   className="mt-5 flex w-full items-center justify-center gap-2 rounded-full bg-ink px-6 py-4 text-sm font-medium uppercase tracking-[0.12em] text-white transition-transform hover:scale-[1.02] disabled:cursor-not-allowed disabled:bg-ink/40"
                 >
                   <Ico name="lock" className="h-4 w-4" />
-                  {loading ? "Procesando…" : `Pagar con ${pasarela.nombre}`}
+                  {loading ? "Procesando…" : "Pagar"}
                 </button>
               )}
               {!canPay && !sobreTope && (
