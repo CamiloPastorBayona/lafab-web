@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useCart } from "@/lib/cart";
@@ -11,6 +11,9 @@ function Gracias() {
   const params = useSearchParams();
   const pedido = params.get("pedido");
   const { clear } = useCart();
+  // El documento con el que se va a facturar, para que el cliente confirme de
+  // una vez que quedó bien y no haya que llamarlo después.
+  const [documento, setDocumento] = useState<string | null>(null);
 
   // Por si el cliente vuelve del pago, aseguramos el carrito vacío.
   useEffect(() => {
@@ -21,7 +24,9 @@ function Gracias() {
   // una sola vez, así recargar esta página no duplica la conversión.
   useEffect(() => {
     const compra = tomaCompra();
-    if (compra) trackPurchase(compra.pedido, compra.items, compra.total);
+    if (!compra) return;
+    trackPurchase(compra.pedido, compra.items, compra.total);
+    if (compra.documento) setDocumento(compra.documento);
   }, []);
 
   return (
@@ -35,7 +40,16 @@ function Gracias() {
         confirmación por correo y te contactaremos para coordinar la fabricación
         y el envío de tu mueble.
       </p>
-      <p className="mt-2 text-sm text-ink/50">
+      {documento && (
+        <p className="mx-auto mt-5 max-w-md rounded-xl border border-ink/10 bg-cream/60 px-4 py-3 text-sm text-ink/70">
+          Facturamos a nombre del documento{" "}
+          <strong className="font-semibold text-ink">{documento}</strong>. Si no
+          es el correcto, escríbenos por WhatsApp y lo corregimos antes de
+          emitir la factura.
+        </p>
+      )}
+
+      <p className="mt-4 text-sm text-ink/50">
         ¿Dudas sobre tu pedido? Escríbenos por WhatsApp y con gusto te ayudamos.
       </p>
 
