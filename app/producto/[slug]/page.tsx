@@ -29,7 +29,7 @@ import { WHATSAPP } from "@/lib/content";
 import { catLabel, rutaDeCategoria } from "@/lib/categories";
 import ShippingPrice from "@/components/ShippingPrice";
 import ShareButtons from "@/components/ShareButtons";
-import { SHIPPING_INLINE } from "@/lib/shipping";
+import { shippingInline } from "@/lib/shipping";
 import { landingFor } from "@/lib/landings";
 import ProductTabs from "@/components/ProductTabs";
 import { splitDescription } from "@/lib/productContent";
@@ -313,7 +313,7 @@ export default async function ProductPage({
               </div>
               {tienePrecio(p) && (
                 <p className="mt-1 text-sm text-ink/50">
-                  IVA incluido · {SHIPPING_INLINE}
+                  IVA incluido · {shippingInline(product.slug)}
                 </p>
               )}
             </>
@@ -398,7 +398,7 @@ export default async function ProductPage({
           />
 
           {/* Envío: precio base + costo adicional (criterio San Diego) */}
-          <ShippingPrice className="mt-6" />
+          <ShippingPrice className="mt-6" slug={product.slug} />
 
           {/* Franja de confianza */}
           <TrustStrip className="mt-4" />

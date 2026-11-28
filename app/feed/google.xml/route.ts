@@ -1,5 +1,5 @@
 import { getProducts, type WCProduct } from "@/lib/woocommerce";
-import { SHIPPING_NATIONAL_COST } from "@/lib/shipping";
+import { envioUnitario } from "@/lib/shipping";
 import { catLabel } from "@/lib/categories";
 
 // Catálogo para Google Merchant Center, que es lo que alimenta las fichas
@@ -82,7 +82,7 @@ ${extras}
     <g:shipping>
       <g:country>CO</g:country>
       <g:service>Envío a domicilio</g:service>
-      <g:price>${precio(SHIPPING_NATIONAL_COST)}</g:price>
+      <g:price>${precio(envioUnitario(p.slug))}</g:price>
     </g:shipping>
     <g:shipping_label>mueble</g:shipping_label>
   </item>`;

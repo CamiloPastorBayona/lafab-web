@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useCart, formatCOP } from "@/lib/cart";
 import TrustStrip from "@/components/TrustStrip";
-import { SHIPPING_NATIONAL_COST, cop as copShip } from "@/lib/shipping";
+import { envioNacional, cop as copShip } from "@/lib/shipping";
 
 export default function CartPage() {
   const { items, subtotal, setQty, remove } = useCart();
@@ -113,7 +113,7 @@ export default function CartPage() {
                   Incluido en Medellín
                   <br />
                   <span className="text-xs text-ink/45">
-                    +{copShip(SHIPPING_NATIONAL_COST)} otras ciudades
+                    +{copShip(envioNacional(items))} otras ciudades
                   </span>
                 </span>
               </div>
@@ -126,7 +126,7 @@ export default function CartPage() {
             </div>
             <p className="mt-1 text-xs text-ink/40">
               IVA incluido · A otra ciudad el total es{" "}
-              {formatCOP(subtotal + SHIPPING_NATIONAL_COST)}
+              {formatCOP(subtotal + envioNacional(items))}
             </p>
             <Link
               href="/checkout"

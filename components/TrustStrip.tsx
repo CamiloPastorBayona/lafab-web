@@ -3,7 +3,7 @@ import Ico from "@/components/LandingIcons";
 import { SHIPPING_NATIONAL_COST, cop } from "@/lib/shipping";
 
 const ITEMS = [
-  { i: "truck", t: `Envío incluido en Medellín · +${cop(SHIPPING_NATIONAL_COST)} otras ciudades` },
+  { i: "truck", t: `Envío incluido en Medellín · desde +${cop(SHIPPING_NATIONAL_COST)} por mueble a otras ciudades` },
   { i: "factory", t: "Fabricación propia · plazo confirmado al cotizar" },
   { i: "lock", t: "Pago 100% seguro" },
   { i: "shieldCheck", t: "Garantía por fabricación" },

@@ -127,7 +127,7 @@ export const BF_FAQ = [
   },
   {
     q: "¿El envío tiene costo?",
-    a: "En Medellín y el área metropolitana está incluido. A otras ciudades del país tiene un costo adicional de $200.000, que se ve en el checkout antes de pagar.",
+    a: "En Medellín y el área metropolitana está incluido. A otras ciudades del país tiene un costo adicional de $200.000 por mueble, y de $350.000 por mueble en sofás en L y comedores, que se ve en el checkout antes de pagar.",
   },
   {
     q: "¿Puedo pedir asesoría antes de comprar?",
