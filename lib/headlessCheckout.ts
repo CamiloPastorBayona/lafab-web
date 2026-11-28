@@ -80,7 +80,10 @@ export async function placeOrder(
   billing: Address,
   shipping: Address,
   payment_method: string,
-  customer_note?: string
+  customer_note?: string,
+  // Campos adicionales registrados en WooCommerce. Hoy solo el documento, que
+  // facturación necesita y antes tocaba pedir por WhatsApp después de pagar.
+  additional_fields?: Record<string, string>
 ) {
   return api<CheckoutResponse>("checkout", {
     method: "POST",
@@ -89,6 +92,7 @@ export async function placeOrder(
       shipping_address: shipping,
       payment_method,
       customer_note: customer_note || "",
+      ...(additional_fields ? { additional_fields } : {}),
     }),
   });
 }

@@ -93,7 +93,13 @@ export function trackPurchase(pedido: string, items: LineItem[], value: number) 
 
 // Lo que el checkout guarda justo antes de mandar al cliente a pagar.
 export const CLAVE_COMPRA = "lafab_compra";
-export type CompraPendiente = { pedido: string; items: LineItem[]; total: number };
+export type CompraPendiente = {
+  pedido: string;
+  items: LineItem[];
+  total: number;
+  /** Cédula o NIT con el que se factura. Se le muestra al cliente al volver. */
+  documento?: string;
+};
 
 export function guardaCompra(c: CompraPendiente) {
   try {

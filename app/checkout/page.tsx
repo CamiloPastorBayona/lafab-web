@@ -37,6 +37,7 @@ export default function CheckoutPage() {
     apellidos: "",
     email: "",
     telefono: "",
+    documento: "",
     departamento: "",
     ciudad: "",
     direccion: "",
@@ -90,6 +91,13 @@ export default function CheckoutPage() {
   const correoValido = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(form.email.trim());
   const telefonoValido = form.telefono.replace(/\D/g, "").length >= 7;
 
+  // La misma regla que valida WooCommerce al crear el pedido: solo dígitos,
+  // entre 6 y 12. Si aquí pasara algo que allá no, el cliente vería el botón
+  // activo y el pedido reventaría al final.
+  const documentoLimpio = form.documento.replace(/\D/g, "");
+  const documentoValido =
+    documentoLimpio.length >= 6 && documentoLimpio.length <= 12;
+
   const canPay =
     !sobreTope &&
     items.length > 0 &&
@@ -97,6 +105,7 @@ export default function CheckoutPage() {
     Boolean(form.apellidos.trim()) &&
     correoValido &&
     telefonoValido &&
+    documentoValido &&
     Boolean(form.departamento) &&
     Boolean(form.ciudad.trim()) &&
     Boolean(form.direccion.trim());
@@ -138,7 +147,9 @@ export default function CheckoutPage() {
       }
 
       // 4) Crea el pedido con la pasarela elegida.
-      const order = await placeOrder(billing, shipping, metodo, form.notas);
+      const order = await placeOrder(billing, shipping, metodo, form.notas, {
+        "lafab/documento": documentoLimpio,
+      });
       if (!order.ok || !order.data)
         throw new Error(
           mensajeLimpio(
@@ -158,6 +169,7 @@ export default function CheckoutPage() {
           qty: i.qty,
         })),
         total,
+        documento: documentoLimpio,
       });
       clear();
       const redirect = order.data.payment_result?.redirect_url;
@@ -235,6 +247,14 @@ export default function CheckoutPage() {
                 </Campo>
                 <Campo id="telefono" etiqueta="Teléfono o WhatsApp" requerido>
                   <input id="telefono" name="tel" type="tel" autoComplete="tel" inputMode="tel" aria-invalid={form.telefono.length > 0 && !telefonoValido} className={field} placeholder="Teléfono / WhatsApp *" value={form.telefono} onChange={set("telefono")} />
+                </Campo>
+                {/* Facturación no puede emitir sin documento, y pedirlo por
+                    WhatsApp cuando el cliente ya pagó es tarde. */}
+                <Campo id="documento" etiqueta="Cédula o NIT" requerido className="sm:col-span-2">
+                  <input id="documento" name="documento" inputMode="numeric" autoComplete="off" aria-invalid={form.documento.length > 0 && !documentoValido} className={field} placeholder="Cédula o NIT *" value={form.documento} onChange={set("documento")} />
+                  <p className="mt-1.5 text-xs text-ink/45">
+                    Lo necesitamos para la factura. Sin puntos ni guiones.
+                  </p>
                 </Campo>
               </div>
             </div>
