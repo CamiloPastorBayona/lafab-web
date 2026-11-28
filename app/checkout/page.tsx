@@ -13,7 +13,7 @@ import {
 } from "@/lib/headlessCheckout";
 import Ico from "@/components/LandingIcons";
 import { trackBeginCheckout, guardaCompra } from "@/lib/analytics";
-import { SHIPPING_NOTE, SHIPPING_NATIONAL_COST, cop as copShip } from "@/lib/shipping";
+import { SHIPPING_NOTE, envioNacional, cop as copShip } from "@/lib/shipping";
 import {
   TOPE_BOLD,
   superaTopeBold,
@@ -23,6 +23,7 @@ import {
 } from "@/lib/pagos";
 import { WHATSAPP, whatsappPago } from "@/lib/content";
 import Campo from "@/components/Campo";
+import AvisoTemporada from "@/components/AvisoTemporada";
 
 export default function CheckoutPage() {
   const { items, subtotal, count, clear } = useCart();
@@ -68,12 +69,15 @@ export default function CheckoutPage() {
   // Sin departamento no se puede saber el envío. Antes el formulario venía con
   // Antioquia puesto de entrada: quien no lo cambiaba se llevaba el envío
   // gratis aunque despachara a Bogotá, y nadie lo advertía.
+  // El envio se cobra por mueble, no por pedido: tres sofas a Bogota son tres
+  // fletes. Esta cuenta tiene que dar lo mismo que liquida WooCommerce, o el
+  // cliente ve un total en el resumen y otro en la pasarela.
   const envio =
     form.departamento === ""
       ? null
       : form.departamento === "CO-ANT"
         ? 0
-        : SHIPPING_NATIONAL_COST;
+        : envioNacional(items);
   const total = subtotal + (envio ?? 0);
 
   // Bold no acepta transacciones de más de diez millones, y una compra de ese
@@ -385,6 +389,11 @@ export default function CheckoutPage() {
                   </a>
                 </div>
               )}
+
+              {/* El plazo de entrega se dice antes de pagar, no en el correo
+                  de confirmacion: enterarse despues de pagar siete millones
+                  es la forma mas cara de perder a un cliente. */}
+              <AvisoTemporada donde="checkout" />
 
               {/* La forma de pago se elige antes de salir del sitio: si una
                   pasarela falla, el cliente tiene la otra a la mano. */}

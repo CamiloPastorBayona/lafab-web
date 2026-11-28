@@ -9,7 +9,7 @@ import Ico from "@/components/LandingIcons";
 import { CIUDADES, CIUDAD_POR_SLUG } from "@/lib/ciudades";
 import { CATEGORIES } from "@/lib/categories";
 import { getProducts } from "@/lib/woocommerce";
-import { SHIPPING_NATIONAL_COST, cop } from "@/lib/shipping";
+import { SHIPPING_NATIONAL_COST, envioUnitario, cop } from "@/lib/shipping";
 import { WHATSAPP } from "@/lib/content";
 import { UPLOADS, OG_IMAGE } from "@/lib/cms";
 import { jsonLd } from "@/components/RatingJsonLd";
@@ -71,12 +71,20 @@ export default async function CiudadPage({
     console.error("[lafab] ciudad sin productos en el build:", c.slug, e);
     return [];
   });
+  // Se guarda tambien el mueble mas barato de cada categoria, no solo su
+  // precio: el flete depende del mueble (un comedor cuesta mas de llevar que
+  // una poltrona), asi que la columna de la derecha necesita saber cual es.
   const desdePorCategoria = CATEGORIAS.map((cat) => {
-    const precios = todos
+    const enCat = todos
       .filter((p) => p.categories.some((x) => x.id === cat.catId))
-      .map((p) => Number(p.prices.price) || 0)
-      .filter(Boolean);
-    return { ...cat, desde: precios.length ? Math.min(...precios) : null };
+      .filter((p) => Number(p.prices.price) > 0)
+      .sort((a, b) => Number(a.prices.price) - Number(b.prices.price));
+    const barato = enCat[0];
+    return {
+      ...cat,
+      desde: barato ? Number(barato.prices.price) : null,
+      slug: barato ? barato.slug : null,
+    };
   }).filter((x) => x.desde !== null);
 
   const destacados = [...todos]
@@ -170,7 +178,7 @@ export default async function CiudadPage({
                 t: `Envío a ${c.nombre}`,
                 s: envioIncluido
                   ? "Incluido en el precio publicado"
-                  : `${cop(envio)} sobre el precio publicado`,
+                  : `${cop(envio)} por mueble sobre el precio publicado`,
               },
               { icon: "factory", t: "Fabricación", s: "30 días calendario o menos" },
               { icon: "shieldCheck", t: "Garantía", s: "La misma en todo el país" },
@@ -226,7 +234,10 @@ export default async function CiudadPage({
                           desde {cop(cat.desde as number)}
                           <span className="mx-2 text-ink/30">→</span>
                           <strong className="font-semibold text-ink">
-                            {cop((cat.desde as number) + envio)}
+                            {cop(
+                              (cat.desde as number) +
+                                (cat.slug ? envioUnitario(cat.slug) : envio)
+                            )}
                           </strong>{" "}
                           en {c.nombre}
                         </>
