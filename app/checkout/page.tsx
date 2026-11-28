@@ -260,7 +260,7 @@ export default function CheckoutPage() {
                       </option>
                     ))}
                   </select>
-                  <span className="pointer-events-none absolute right-4 top-[calc(50%+10px)] -translate-y-1/2 text-ink/40">
+                  <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-ink/40">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                       <path d="m6 9 6 6 6-6" />
                     </svg>
@@ -293,10 +293,12 @@ export default function CheckoutPage() {
               <div className="mt-4 max-h-72 divide-y divide-ink/10 overflow-y-auto">
                 {items.map((it) => (
                   <div key={it.id} className="flex gap-3 py-3">
-                    <div className="relative h-16 w-14 shrink-0 overflow-hidden rounded-lg bg-cream">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={it.image} alt={it.name} className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
-                      <span className="absolute -right-1 -top-1 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-ink px-1 text-xs font-bold text-white">
+                    <div className="relative h-16 w-14 shrink-0">
+                      <div className="absolute inset-0 overflow-hidden rounded-lg bg-cream">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={it.image} alt={it.name} className="h-full w-full object-cover" loading="lazy" />
+                      </div>
+                      <span className="absolute -right-1.5 -top-1.5 z-10 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-ink px-1 text-xs font-bold leading-none text-white ring-2 ring-white">
                         {it.qty}
                       </span>
                     </div>
