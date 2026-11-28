@@ -35,6 +35,7 @@ import ProductTabs from "@/components/ProductTabs";
 import { splitDescription } from "@/lib/productContent";
 import { jsonLd } from "@/components/RatingJsonLd";
 import AvisoPromo from "@/components/AvisoPromo";
+import AvisoTemporada from "@/components/AvisoTemporada";
 
 export const revalidate = 300;
 
@@ -319,6 +320,10 @@ export default async function ProductPage({
           )}
 
           <AvisoPromo slug={product.slug} pct={descuento(p)} />
+
+          {/* El plazo de entrega va junto al precio: es parte de lo que se
+              está comprando, no una nota al pie. */}
+          <AvisoTemporada />
 
           {landing && (
             <Link

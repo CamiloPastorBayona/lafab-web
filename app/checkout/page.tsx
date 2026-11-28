@@ -23,6 +23,7 @@ import {
 } from "@/lib/pagos";
 import { WHATSAPP, whatsappPago } from "@/lib/content";
 import Campo from "@/components/Campo";
+import AvisoTemporada from "@/components/AvisoTemporada";
 
 export default function CheckoutPage() {
   const { items, subtotal, count, clear } = useCart();
@@ -385,6 +386,11 @@ export default function CheckoutPage() {
                   </a>
                 </div>
               )}
+
+              {/* El plazo de entrega se dice antes de pagar, no en el correo
+                  de confirmacion: enterarse despues de pagar siete millones
+                  es la forma mas cara de perder a un cliente. */}
+              <AvisoTemporada donde="checkout" />
 
               {/* La forma de pago se elige antes de salir del sitio: si una
                   pasarela falla, el cliente tiene la otra a la mano. */}
